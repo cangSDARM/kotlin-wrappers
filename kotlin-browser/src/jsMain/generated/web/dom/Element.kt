@@ -5,6 +5,7 @@ package web.dom
 import js.array.ReadonlyArray
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.aria.ARIAMixin
 import web.components.ShadowRoot
 import web.components.ShadowRootInit
@@ -37,7 +38,6 @@ abstract external class Element :
     ARIAMixin,
     Animatable,
     ChildNode,
-    InnerHTML,
     NonDocumentTypeChildNode,
     ParentNode,
     Slottable {
@@ -88,6 +88,11 @@ abstract external class Element :
     var id: String
 
     /**
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/innerHTML)
+     */
+    var innerHTML: String
+
+    /**
      * Returns the local name.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/localName)
@@ -104,12 +109,12 @@ abstract external class Element :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/fullscreenchange_event)
      */
-    var onfullscreenchange: EventHandler<Event, Element>?
+    var onfullscreenchange: EventHandler<Event, Element, Node>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/fullscreenerror_event)
      */
-    var onfullscreenerror: EventHandler<Event, Element>?
+    var onfullscreenerror: EventHandler<Event, Element, Node>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/outerHTML)
@@ -273,6 +278,8 @@ abstract external class Element :
         localName: String,
     ): HTMLCollectionOf<Element>
 
+    fun getHTML(options: GetHTMLOptions = definedExternally): String
+
     /**
      * Returns true if element has an attribute whose qualified name is qualifiedName, and false otherwise.
      *
@@ -315,7 +322,7 @@ abstract external class Element :
      */
     fun insertAdjacentHTML(
         position: InsertPosition,
-        text: String,
+        string: String,
     )
 
     /**
@@ -367,12 +374,20 @@ abstract external class Element :
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/requestFullscreen)
      */
-    fun requestFullscreen(options: FullscreenOptions = definedExternally): Promise<Void>
+    @JsAsync
+    suspend fun requestFullscreen(options: FullscreenOptions = definedExternally)
+
+    @JsName("requestFullscreen")
+    fun requestFullscreenAsync(options: FullscreenOptions = definedExternally): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/requestPointerLock)
      */
-    fun requestPointerLock()
+    @JsAsync
+    suspend fun requestPointerLock(options: PointerLockOptions = definedExternally)
+
+    @JsName("requestPointerLock")
+    fun requestPointerLockAsync(options: PointerLockOptions = definedExternally): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/scroll)

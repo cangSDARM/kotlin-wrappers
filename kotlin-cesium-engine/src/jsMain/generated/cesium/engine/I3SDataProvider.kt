@@ -2,16 +2,14 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
 import js.core.Void
-import js.objects.jso
 import js.promise.Promise
+import js.promise.PromiseResult
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * An I3SDataProvider is the main public class for I3S support. The url option
@@ -48,7 +46,9 @@ import js.promise.Promise
  * @param [options] An object describing initialization options
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/I3SDataProvider.html">Online Documentation</a>
  */
-external class I3SDataProvider(options: ConstructorOptions) {
+external class I3SDataProvider(
+    options: ConstructorOptions,
+) {
     /**
      * Gets a human-readable name for this dataset.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/I3SDataProvider.html#name">Online Documentation</a>
@@ -164,7 +164,11 @@ external class I3SDataProvider(options: ConstructorOptions) {
      * @return A promise that is resolved when the filter is applied
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/I3SDataProvider.html#filterByAttributes">Online Documentation</a>
      */
-    fun filterByAttributes(filters: ReadonlyArray<I3SNode.AttributeFilter>? = definedExternally): Promise<Void>
+    @JsAsync
+    suspend fun filterByAttributes(filters: ReadonlyArray<I3SNode.AttributeFilter>? = definedExternally)
+
+    @JsName("filterByAttributes")
+    fun filterByAttributesAsync(filters: ReadonlyArray<I3SNode.AttributeFilter>? = definedExternally): Promise<Void>
 
     /**
      * Initialization options for the I3SDataProvider constructor
@@ -202,10 +206,11 @@ external class I3SDataProvider(options: ConstructorOptions) {
      *   Default value - `false`
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/I3SDataProvider.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var name: String?
         var show: Boolean?
-        var geoidTiledTerrainProvider: dynamic
+        var geoidTiledTerrainProvider: PromiseResult<ArcGISTiledElevationTerrainProvider>?
         var cesium3dTilesetOptions: Cesium3DTileset.ConstructorOptions?
         var showFeatures: Boolean?
         var adjustMaterialAlphaMode: Boolean?
@@ -245,14 +250,16 @@ external class I3SDataProvider(options: ConstructorOptions) {
          * @param [options] An object describing initialization options
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/I3SDataProvider.html#.fromUrl">Online Documentation</a>
          */
-        fun fromUrl(
+        @JsAsync
+        suspend fun fromUrl(
+            url: Resource,
+            options: ConstructorOptions,
+        ): I3SDataProvider
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
             url: Resource,
             options: ConstructorOptions,
         ): Promise<I3SDataProvider>
     }
 }
-
-inline fun I3SDataProvider(
-    block: I3SDataProvider.ConstructorOptions.() -> Unit,
-): I3SDataProvider =
-    I3SDataProvider(options = jso(block))

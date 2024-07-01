@@ -7,6 +7,7 @@ import js.buffer.AllowSharedBufferSource
 import js.core.JsLong
 import js.promise.Promise
 import js.transferable.Transferable
+import seskar.js.JsAsync
 import web.canvas.CanvasImageSource
 import web.geometry.DOMRectReadOnly
 import web.gl.TexImageSource
@@ -89,7 +90,15 @@ external class VideoFrame(
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoFrame/close)
      */
     fun close()
-    fun copyTo(
+
+    @JsAsync
+    suspend fun copyTo(
+        destination: AllowSharedBufferSource,
+        options: VideoFrameCopyToOptions = definedExternally,
+    ): ReadonlyArray<PlaneLayout>
+
+    @JsName("copyTo")
+    fun copyToAsync(
         destination: AllowSharedBufferSource,
         options: VideoFrameCopyToOptions = definedExternally,
     ): Promise<ReadonlyArray<PlaneLayout>>

@@ -6,6 +6,7 @@ package cesium.engine
 
 import js.buffer.ArrayBuffer
 import js.promise.Promise
+import seskar.js.JsAsync
 
 /**
  * <div class="notice">
@@ -16,7 +17,8 @@ import js.promise.Promise
  *  and GoogleEarthEnterpriseTerrainProvider to share metadata requests.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseMetadata.html">Online Documentation</a>
  */
-sealed external class GoogleEarthEnterpriseMetadata {
+external class GoogleEarthEnterpriseMetadata
+private constructor() {
     /**
      * True if imagery is available.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseMetadata.html#imageryPresent">Online Documentation</a>
@@ -85,9 +87,17 @@ sealed external class GoogleEarthEnterpriseMetadata {
          * @return A promise which resolves to the created GoogleEarthEnterpriseMetadata instance/
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseMetadata.html#.fromUrl">Online Documentation</a>
          */
-        fun fromUrl(resourceOrUrl: Resource): Promise<GoogleEarthEnterpriseMetadata>
+        @JsAsync
+        suspend fun fromUrl(resourceOrUrl: Resource): GoogleEarthEnterpriseMetadata
 
-        fun fromUrl(resourceOrUrl: String): Promise<GoogleEarthEnterpriseMetadata>
+        @JsName("fromUrl")
+        fun fromUrlAsync(resourceOrUrl: Resource): Promise<GoogleEarthEnterpriseMetadata>
+
+        @JsAsync
+        suspend fun fromUrl(resourceOrUrl: String): GoogleEarthEnterpriseMetadata
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(resourceOrUrl: String): Promise<GoogleEarthEnterpriseMetadata>
 
         /**
          * Converts a tiles (x, y, level) position into a quadkey used to request an image

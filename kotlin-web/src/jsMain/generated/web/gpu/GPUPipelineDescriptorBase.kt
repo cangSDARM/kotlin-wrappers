@@ -2,7 +2,10 @@
 
 package web.gpu
 
-sealed external interface GPUPipelineDescriptorBase :
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
+external interface GPUPipelineDescriptorBase :
     GPUObjectDescriptorBase {
     var layout: Any /* GPUPipelineLayout | GPUAutoLayoutMode */
 }

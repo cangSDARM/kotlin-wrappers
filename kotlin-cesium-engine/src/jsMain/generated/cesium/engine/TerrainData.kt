@@ -6,6 +6,7 @@ package cesium.engine
 
 import js.array.ReadonlyArray
 import js.promise.Promise
+import seskar.js.JsAsync
 
 /**
  * Terrain data for a single tile.  This type describes an
@@ -25,7 +26,7 @@ abstract external class TerrainData {
      * Values in between 0 and 255 are allowed as well to smoothly blend between land and water.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/TerrainData.html#waterMask">Online Documentation</a>
      */
-    abstract var waterMask: dynamic
+    abstract var waterMask: Any /* Uint8Array | HTMLImageElement | HTMLCanvasElement */
 
     /**
      * Computes the terrain height at a specified longitude and latitude.
@@ -76,7 +77,19 @@ abstract external class TerrainData {
      *   deferred.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/TerrainData.html#upsample">Online Documentation</a>
      */
-    abstract fun upsample(
+    @JsAsync(optional = true)
+    suspend fun upsample(
+        tilingScheme: TilingScheme,
+        thisX: Double,
+        thisY: Double,
+        thisLevel: Int,
+        descendantX: Double,
+        descendantY: Double,
+        descendantLevel: Int,
+    ): TerrainData?
+
+    @JsName("upsample")
+    abstract fun upsampleAsync(
         tilingScheme: TilingScheme,
         thisX: Double,
         thisY: Double,

@@ -2,15 +2,12 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * Provides tiled imagery hosted by a Web Map Service (WMS) server.
@@ -25,7 +22,9 @@ import js.promise.Promise
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/WebMapServiceImageryProvider.html">Online Documentation</a>
  */
-external class WebMapServiceImageryProvider(options: ConstructorOptions) {
+external class WebMapServiceImageryProvider(
+    options: ConstructorOptions,
+) {
     /**
      * Gets the URL of the WMS server.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/WebMapServiceImageryProvider.html#url">Online Documentation</a>
@@ -167,7 +166,16 @@ external class WebMapServiceImageryProvider(options: ConstructorOptions) {
      *   undefined if there are too many active requests to the server, and the request should be retried later.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/WebMapServiceImageryProvider.html#requestImage">Online Documentation</a>
      */
-    fun requestImage(
+    @JsAsync(optional = true)
+    suspend fun requestImage(
+        x: Double,
+        y: Double,
+        level: Int,
+        request: Request? = definedExternally,
+    ): ImageryTypes?
+
+    @JsName("requestImage")
+    fun requestImageAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -187,7 +195,17 @@ external class WebMapServiceImageryProvider(options: ConstructorOptions) {
      *   instances.  The array may be empty if no features are found at the given location.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/WebMapServiceImageryProvider.html#pickFeatures">Online Documentation</a>
      */
-    fun pickFeatures(
+    @JsAsync(optional = true)
+    suspend fun pickFeatures(
+        x: Double,
+        y: Double,
+        level: Int,
+        longitude: Double,
+        latitude: Double,
+    ): ReadonlyArray<ImageryLayerFeatureInfo>?
+
+    @JsName("pickFeatures")
+    fun pickFeaturesAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -242,7 +260,8 @@ external class WebMapServiceImageryProvider(options: ConstructorOptions) {
      * @property [getFeatureInfoUrl] The getFeatureInfo URL of the WMS service. If the property is not defined then we use the property value of url.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/WebMapServiceImageryProvider.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var url: Resource
         var layers: String
         var parameters: Any?
@@ -287,8 +306,3 @@ external class WebMapServiceImageryProvider(options: ConstructorOptions) {
         val GetFeatureInfoDefaultParameters: Any
     }
 }
-
-inline fun WebMapServiceImageryProvider(
-    block: WebMapServiceImageryProvider.ConstructorOptions.() -> Unit,
-): WebMapServiceImageryProvider =
-    WebMapServiceImageryProvider(options = jso(block))

@@ -2,13 +2,9 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A renderable collection of labels.  Labels are viewport-aligned text positioned in the 3D scene.
@@ -30,7 +26,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/LabelCollection.html">Online Documentation</a>
  */
-external class LabelCollection(options: ConstructorOptions? = definedExternally) {
+external class LabelCollection(
+    options: ConstructorOptions? = definedExternally,
+) {
     /**
      * @property [modelMatrix] The 4x4 transformation matrix that transforms each label from model to world coordinates.
      *   Default value - [Matrix4.IDENTITY]
@@ -44,7 +42,8 @@ external class LabelCollection(options: ConstructorOptions? = definedExternally)
      * @property [show] Determines if the labels in the collection will be shown.
      *   Default value - `true`
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var modelMatrix: Matrix4?
         var debugShowBoundingVolume: Boolean?
         var scene: Scene?
@@ -230,8 +229,3 @@ external class LabelCollection(options: ConstructorOptions? = definedExternally)
      */
     fun destroy()
 }
-
-inline fun LabelCollection(
-    block: LabelCollection.ConstructorOptions.() -> Unit,
-): LabelCollection =
-    LabelCollection(options = jso(block))

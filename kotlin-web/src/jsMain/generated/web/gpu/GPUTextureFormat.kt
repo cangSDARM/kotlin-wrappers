@@ -3,9 +3,7 @@
 package web.gpu
 
 import seskar.js.JsValue
-import seskar.js.JsVirtual
 
-@JsVirtual
 sealed external interface GPUTextureFormat {
     companion object {
         @JsValue("r8unorm")
@@ -82,6 +80,9 @@ sealed external interface GPUTextureFormat {
 
         @JsValue("rgb9e5ufloat")
         val rgb9e5ufloat: GPUTextureFormat
+
+        @JsValue("rgb10a2uint")
+        val rgb10a2uint: GPUTextureFormat
 
         @JsValue("rgb10a2unorm")
         val rgb10a2unorm: GPUTextureFormat

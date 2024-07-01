@@ -2,13 +2,9 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * An appearance for geometry on the surface of the ellipsoid like [PolygonGeometry]
@@ -31,7 +27,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/EllipsoidSurfaceAppearance.html">Online Documentation</a>
  */
-external class EllipsoidSurfaceAppearance(options: ConstructorOptions? = definedExternally) {
+external class EllipsoidSurfaceAppearance(
+    options: ConstructorOptions? = definedExternally,
+) {
     /**
      * @property [flat] When `true`, flat shading is used in the fragment shader, which means lighting is not taking into account.
      *   Default value - `false`
@@ -47,7 +45,8 @@ external class EllipsoidSurfaceAppearance(options: ConstructorOptions? = defined
      * @property [fragmentShaderSource] Optional GLSL fragment shader source to override the default fragment shader.
      * @property [renderState] Optional render state to override the default render state.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var flat: Boolean?
         var faceForward: Boolean?
         var translucent: Boolean?
@@ -171,8 +170,3 @@ external class EllipsoidSurfaceAppearance(options: ConstructorOptions? = defined
         val VERTEX_FORMAT: VertexFormat
     }
 }
-
-inline fun EllipsoidSurfaceAppearance(
-    block: EllipsoidSurfaceAppearance.ConstructorOptions.() -> Unit,
-): EllipsoidSurfaceAppearance =
-    EllipsoidSurfaceAppearance(options = jso(block))

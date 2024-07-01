@@ -2,8 +2,6 @@
 
 package node.fs
 
-import js.promise.await
-
 
 suspend fun realpath(path: PathLike): String =
     realpathAsync(

@@ -3,6 +3,7 @@
 package web.fs
 
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.file.File
 
 /**
@@ -17,15 +18,27 @@ sealed external class FileSystemFileHandle :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemFileHandle/createSyncAccessHandle)
      */
-    fun createSyncAccessHandle(): Promise<FileSystemSyncAccessHandle>
+    @JsAsync
+    suspend fun createSyncAccessHandle(): FileSystemSyncAccessHandle
+
+    @JsName("createSyncAccessHandle")
+    fun createSyncAccessHandleAsync(): Promise<FileSystemSyncAccessHandle>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemFileHandle/createWritable)
      */
-    fun createWritable(options: FileSystemCreateWritableOptions = definedExternally): Promise<FileSystemWritableFileStream>
+    @JsAsync
+    suspend fun createWritable(options: FileSystemCreateWritableOptions = definedExternally): FileSystemWritableFileStream
+
+    @JsName("createWritable")
+    fun createWritableAsync(options: FileSystemCreateWritableOptions = definedExternally): Promise<FileSystemWritableFileStream>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemFileHandle/getFile)
      */
-    fun getFile(): Promise<File>
+    @JsAsync
+    suspend fun getFile(): File
+
+    @JsName("getFile")
+    fun getFileAsync(): Promise<File>
 }

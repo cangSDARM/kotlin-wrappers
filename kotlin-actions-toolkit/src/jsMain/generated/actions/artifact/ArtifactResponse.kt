@@ -2,6 +2,9 @@
 
 package actions.artifact
 
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
 sealed external interface ArtifactResponse {
     var containerId: String
     var size: Number

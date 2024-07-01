@@ -2,14 +2,10 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A spline that linearly interpolates over an array of weight values used by morph targets.
@@ -25,7 +21,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/MorphWeightSpline.html">Online Documentation</a>
  */
-external class MorphWeightSpline(options: ConstructorOptions) {
+external class MorphWeightSpline(
+    options: ConstructorOptions,
+) {
     /**
      * @property [times] An array of strictly increasing, unit-less, floating-point times at each point.
      *   The values are in no way connected to the clock time. They are the parameterization for the curve.
@@ -34,7 +32,8 @@ external class MorphWeightSpline(options: ConstructorOptions) {
      *   the glTF from which the morph targets come. This means for 2 targets, weights = [w(0,0), w(0,1), w(1,0), w(1,1) ...]
      *   where i and j in w(i,j) are the time indices and target indices, respectively.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var times: ReadonlyArray<Double>
         var weights: ReadonlyArray<Double>
     }
@@ -76,8 +75,3 @@ external class MorphWeightSpline(options: ConstructorOptions) {
         result: ReadonlyArray<Double>? = definedExternally,
     ): ReadonlyArray<Double>
 }
-
-inline fun MorphWeightSpline(
-    block: MorphWeightSpline.ConstructorOptions.() -> Unit,
-): MorphWeightSpline =
-    MorphWeightSpline(options = jso(block))

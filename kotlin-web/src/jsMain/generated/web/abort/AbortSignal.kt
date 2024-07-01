@@ -26,7 +26,7 @@ sealed external class AbortSignal :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbortSignal/abort_event)
      */
-    var onabort: EventHandler<Event, AbortSignal>?
+    var onabort: EventHandler<Event, AbortSignal, AbortSignal>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbortSignal/reason)
@@ -42,7 +42,7 @@ sealed external class AbortSignal :
         /**
          * [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbortSignal/abort_static)
          */
-        fun abort(reason: JsError = definedExternally): AbortSignal
+        fun abort(reason: JsError? = definedExternally): AbortSignal
 
         /**
          * [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbortSignal/any_static)

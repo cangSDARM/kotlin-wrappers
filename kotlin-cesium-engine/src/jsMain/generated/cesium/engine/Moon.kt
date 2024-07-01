@@ -2,13 +2,9 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * Draws the Moon in 3D.
@@ -17,7 +13,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Moon.html">Online Documentation</a>
  */
-external class Moon(options: ConstructorOptions? = definedExternally) {
+external class Moon(
+    options: ConstructorOptions? = definedExternally,
+) {
     /**
      * @property [show] Determines whether the moon will be rendered.
      *   Default value - `true`
@@ -28,7 +26,8 @@ external class Moon(options: ConstructorOptions? = definedExternally) {
      * @property [onlySunLighting] Use the sun as the only light source.
      *   Default value - `true`
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var show: Boolean?
         var textureUrl: String?
         var ellipsoid: Ellipsoid?
@@ -83,8 +82,3 @@ external class Moon(options: ConstructorOptions? = definedExternally) {
      */
     fun destroy()
 }
-
-inline fun Moon(
-    block: Moon.ConstructorOptions.() -> Unit,
-): Moon =
-    Moon(options = jso(block))

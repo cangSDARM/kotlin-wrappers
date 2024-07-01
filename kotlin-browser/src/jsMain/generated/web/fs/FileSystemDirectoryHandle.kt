@@ -6,6 +6,7 @@ import js.array.ReadonlyArray
 import js.collections.AsyncMapLike
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 
 /**
  * Available only in secure contexts.
@@ -20,7 +21,14 @@ sealed external class FileSystemDirectoryHandle :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryHandle/getDirectoryHandle)
      */
-    fun getDirectoryHandle(
+    @JsAsync
+    suspend fun getDirectoryHandle(
+        name: String,
+        options: FileSystemGetDirectoryOptions = definedExternally,
+    ): FileSystemDirectoryHandle
+
+    @JsName("getDirectoryHandle")
+    fun getDirectoryHandleAsync(
         name: String,
         options: FileSystemGetDirectoryOptions = definedExternally,
     ): Promise<FileSystemDirectoryHandle>
@@ -28,7 +36,14 @@ sealed external class FileSystemDirectoryHandle :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryHandle/getFileHandle)
      */
-    fun getFileHandle(
+    @JsAsync
+    suspend fun getFileHandle(
+        name: String,
+        options: FileSystemGetFileOptions = definedExternally,
+    ): FileSystemFileHandle
+
+    @JsName("getFileHandle")
+    fun getFileHandleAsync(
         name: String,
         options: FileSystemGetFileOptions = definedExternally,
     ): Promise<FileSystemFileHandle>
@@ -36,7 +51,14 @@ sealed external class FileSystemDirectoryHandle :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryHandle/removeEntry)
      */
-    fun removeEntry(
+    @JsAsync
+    suspend fun removeEntry(
+        name: String,
+        options: FileSystemRemoveOptions = definedExternally,
+    )
+
+    @JsName("removeEntry")
+    fun removeEntryAsync(
         name: String,
         options: FileSystemRemoveOptions = definedExternally,
     ): Promise<Void>
@@ -44,5 +66,9 @@ sealed external class FileSystemDirectoryHandle :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryHandle/resolve)
      */
-    fun resolve(possibleDescendant: FileSystemHandle): Promise<ReadonlyArray<String>?>
+    @JsAsync
+    suspend fun resolve(possibleDescendant: FileSystemHandle): ReadonlyArray<String>?
+
+    @JsName("resolve")
+    fun resolveAsync(possibleDescendant: FileSystemHandle): Promise<ReadonlyArray<String>?>
 }

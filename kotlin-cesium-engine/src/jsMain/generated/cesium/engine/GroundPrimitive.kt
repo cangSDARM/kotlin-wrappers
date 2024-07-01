@@ -2,15 +2,12 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.core.Void
-import js.objects.jso
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * A ground primitive represents geometry draped over terrain or 3D Tiles in the [Scene].
@@ -73,7 +70,9 @@ import js.promise.Promise
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GroundPrimitive.html">Online Documentation</a>
  */
-external class GroundPrimitive(options: ConstructorOptions? = definedExternally) {
+external class GroundPrimitive(
+    options: ConstructorOptions? = definedExternally,
+) {
     /**
      * @property [geometryInstances] The geometry instances to render.
      * @property [appearance] The appearance used to render the primitive. Defaults to a flat PerInstanceColorAppearance when GeometryInstances have a color attribute.
@@ -99,7 +98,8 @@ external class GroundPrimitive(options: ConstructorOptions? = definedExternally)
      *   creation for the volumes to be created before the geometry is released or options.releaseGeometryInstance must be `false`.
      *   Default value - `false`
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var geometryInstances: GeometryInstance?
         var appearance: Appearance?
         var show: Boolean?
@@ -268,7 +268,11 @@ external class GroundPrimitive(options: ConstructorOptions? = definedExternally)
          * @return A promise that will resolve once the terrain heights have been loaded.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GroundPrimitive.html#.initializeTerrainHeights">Online Documentation</a>
          */
-        fun initializeTerrainHeights(): Promise<Void>
+        @JsAsync
+        suspend fun initializeTerrainHeights()
+
+        @JsName("initializeTerrainHeights")
+        fun initializeTerrainHeightsAsync(): Promise<Void>
 
         /**
          * Checks if the given Scene supports materials on GroundPrimitives.
@@ -280,8 +284,3 @@ external class GroundPrimitive(options: ConstructorOptions? = definedExternally)
         fun supportsMaterials(scene: Scene): Boolean
     }
 }
-
-inline fun GroundPrimitive(
-    block: GroundPrimitive.ConstructorOptions.() -> Unit,
-): GroundPrimitive =
-    GroundPrimitive(options = jso(block))

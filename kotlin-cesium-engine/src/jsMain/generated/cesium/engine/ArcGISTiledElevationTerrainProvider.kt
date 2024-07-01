@@ -2,15 +2,12 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "VAR_OVERRIDDEN_BY_VAL",
-    "VAR_TYPE_MISMATCH_ON_OVERRIDE",
-)
-
 package cesium.engine
 
 import js.core.Void
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * <div class="notice">
@@ -31,7 +28,9 @@ import js.promise.Promise
  * @param [options] A url or an object describing initialization options
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/ArcGISTiledElevationTerrainProvider.html">Online Documentation</a>
  */
-sealed external class ArcGISTiledElevationTerrainProvider : TerrainProvider {
+external class ArcGISTiledElevationTerrainProvider
+private constructor() :
+    TerrainProvider {
     /**
      * Gets an event that is raised when the terrain provider encounters an asynchronous error.  By subscribing
      * to the event, you will be notified of the error and can potentially recover from it.  Event listeners
@@ -87,7 +86,7 @@ sealed external class ArcGISTiledElevationTerrainProvider : TerrainProvider {
      *   pending and the request will be retried later.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/ArcGISTiledElevationTerrainProvider.html#requestTileGeometry">Online Documentation</a>
      */
-    override fun requestTileGeometry(
+    override fun requestTileGeometryAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -124,7 +123,7 @@ sealed external class ArcGISTiledElevationTerrainProvider : TerrainProvider {
      * @return This provider does not support loading availability.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/ArcGISTiledElevationTerrainProvider.html#loadTileDataAvailability">Online Documentation</a>
      */
-    override fun loadTileDataAvailability(
+    override fun loadTileDataAvailabilityAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -135,10 +134,12 @@ sealed external class ArcGISTiledElevationTerrainProvider : TerrainProvider {
      * @property [token] The authorization token to use to connect to the service.
      * @property [ellipsoid] The ellipsoid.  If the tilingScheme is specified,
      *   this parameter is ignored and the tiling scheme's ellipsoid is used instead.
-     *   If neither parameter is specified, the WGS84 ellipsoid is used.
+     *   If neither parameter is specified, the default ellipsoid is used.
+     *   Default value - [Ellipsoid.default]
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/ArcGISTiledElevationTerrainProvider.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var token: String?
         var ellipsoid: Ellipsoid?
     }
@@ -157,8 +158,15 @@ sealed external class ArcGISTiledElevationTerrainProvider : TerrainProvider {
          * @param [options] A url or an object describing initialization options.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/ArcGISTiledElevationTerrainProvider.html#.fromUrl">Online Documentation</a>
          */
-        fun fromUrl(
-            url: dynamic,
+        @JsAsync
+        suspend fun fromUrl(
+            url: Any, /* Resource | string | Promise<Resource> | Promise<string> */
+            options: ConstructorOptions? = definedExternally,
+        ): ArcGISTiledElevationTerrainProvider
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
+            url: Any, /* Resource | string | Promise<Resource> | Promise<string> */
             options: ConstructorOptions? = definedExternally,
         ): Promise<ArcGISTiledElevationTerrainProvider>
     }

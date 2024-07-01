@@ -7,6 +7,7 @@ package cesium.engine
 import js.array.ReadonlyArray
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 
 /**
  * This class implements an I3S layer. In CesiumJS each I3SLayer creates a Cesium3DTileset.
@@ -14,7 +15,8 @@ import js.promise.Promise
  * Do not construct this directly, instead access layers through [I3SDataProvider].
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/I3SLayer.html">Online Documentation</a>
  */
-sealed external class I3SLayer {
+external class I3SLayer
+private constructor() {
     /**
      * Gets the resource for the layer.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/I3SLayer.html#resource">Online Documentation</a>
@@ -70,5 +72,9 @@ sealed external class I3SLayer {
      * @return A promise that is resolved when the filter is applied
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/I3SLayer.html#filterByAttributes">Online Documentation</a>
      */
-    fun filterByAttributes(filters: ReadonlyArray<I3SNode.AttributeFilter>? = definedExternally): Promise<Void>
+    @JsAsync
+    suspend fun filterByAttributes(filters: ReadonlyArray<I3SNode.AttributeFilter>? = definedExternally)
+
+    @JsName("filterByAttributes")
+    fun filterByAttributesAsync(filters: ReadonlyArray<I3SNode.AttributeFilter>? = definedExternally): Promise<Void>
 }

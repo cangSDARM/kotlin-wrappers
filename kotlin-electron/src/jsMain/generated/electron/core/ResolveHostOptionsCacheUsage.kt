@@ -3,8 +3,6 @@
 package electron.core
 
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-@seskar.js.JsVirtual
 sealed external interface ResolveHostOptionsCacheUsage {
     companion object {
         @seskar.js.JsValue("allowed")

@@ -3,7 +3,6 @@
 @file:JsModule("@cesium/widgets")
 
 @file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
     "EXTERNAL_CLASS_CONSTRUCTOR_PROPERTY_PARAMETER",
 )
 
@@ -11,7 +10,7 @@ package cesium.widgets
 
 import cesium.engine.Globe
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 import web.dom.Element
 
 /**
@@ -94,7 +93,8 @@ external class BaseLayerPicker(
      *   Default value - `[]`
      * @property [selectedTerrainProviderViewModel] The view model for the current base terrain layer, if not supplied the first available terrain layer is used.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var globe: Globe
         var imageryProviderViewModels: ReadonlyArray<ProviderViewModel>?
         var selectedImageryProviderViewModel: ProviderViewModel?
@@ -121,9 +121,3 @@ external class BaseLayerPicker(
      */
     fun destroy()
 }
-
-inline fun BaseLayerPicker(
-    container: Element,
-    block: BaseLayerPicker.ConstructorOptions.() -> Unit,
-): BaseLayerPicker =
-    BaseLayerPicker(container, options = jso(block))

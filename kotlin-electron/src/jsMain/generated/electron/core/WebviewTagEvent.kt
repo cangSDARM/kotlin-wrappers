@@ -3,8 +3,6 @@
 package electron.core
 
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-@seskar.js.JsVirtual
 sealed external interface WebviewTagEvent {
     companion object {
 // Docs: https://electronjs.org/docs/api/webview-tag

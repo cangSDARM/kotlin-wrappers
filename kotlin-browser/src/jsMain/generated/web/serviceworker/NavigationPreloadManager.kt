@@ -4,6 +4,7 @@ package web.serviceworker
 
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 
 /**
  * Available only in secure contexts.
@@ -14,20 +15,36 @@ sealed external class NavigationPreloadManager {
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager/disable)
      */
-    fun disable(): Promise<Void>
+    @JsAsync
+    suspend fun disable()
+
+    @JsName("disable")
+    fun disableAsync(): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager/enable)
      */
-    fun enable(): Promise<Void>
+    @JsAsync
+    suspend fun enable()
+
+    @JsName("enable")
+    fun enableAsync(): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager/getState)
      */
-    fun getState(): Promise<NavigationPreloadState>
+    @JsAsync
+    suspend fun getState(): NavigationPreloadState
+
+    @JsName("getState")
+    fun getStateAsync(): Promise<NavigationPreloadState>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager/setHeaderValue)
      */
-    fun setHeaderValue(value: String): Promise<Void>
+    @JsAsync
+    suspend fun setHeaderValue(value: String)
+
+    @JsName("setHeaderValue")
+    fun setHeaderValueAsync(value: String): Promise<Void>
 }

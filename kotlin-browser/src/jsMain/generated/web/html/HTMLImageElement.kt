@@ -4,6 +4,7 @@ package web.html
 
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.dom.HTMLOrSVGImageElement
 import web.gl.TexImageSource
 import web.http.CrossOrigin
@@ -51,7 +52,7 @@ protected constructor() :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/fetchPriority)
      */
-    var fetchPriority: String
+    var fetchPriority: FetchPriority
 
     /**
      * Sets or retrieves the height of the object.
@@ -137,5 +138,9 @@ protected constructor() :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/decode)
      */
-    fun decode(): Promise<Void>
+    @JsAsync
+    suspend fun decode()
+
+    @JsName("decode")
+    fun decodeAsync(): Promise<Void>
 }

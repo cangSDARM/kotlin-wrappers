@@ -1,9 +1,9 @@
-import org.jetbrains.kotlin.gradle.dsl.JsModuleKind
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.js-plain-objects")
     id("npm-conventions")
 }
 
@@ -47,8 +47,11 @@ tasks.withType<KotlinCompilationTask<*>>().configureEach {
 
 tasks.withType<Kotlin2JsCompile>().configureEach {
     compilerOptions {
-        moduleKind = JsModuleKind.MODULE_ES
-        useEsClasses = true
+        target = "es2015"
+
+        freeCompilerArgs.addAll(
+            "-Xdont-warn-on-error-suppression",
+        )
 
         // TODO: Enable after resolving
         //  https://youtrack.jetbrains.com/issue/KT-67355
@@ -58,8 +61,4 @@ tasks.withType<Kotlin2JsCompile>().configureEach {
         )
         */
     }
-}
-
-if (k2mode) {
-    apply(plugin = "k2-conventions")
 }

@@ -5,6 +5,7 @@ package web.navigator
 import js.array.ReadonlyArray
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.clipboard.Clipboard
 import web.credentials.CredentialsContainer
 import web.gamepad.Gamepad
@@ -123,14 +124,25 @@ sealed external class Navigator :
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/requestMIDIAccess)
      */
-    fun requestMIDIAccess(options: MIDIOptions = definedExternally): Promise<MIDIAccess>
+    @JsAsync
+    suspend fun requestMIDIAccess(options: MIDIOptions = definedExternally): MIDIAccess
+
+    @JsName("requestMIDIAccess")
+    fun requestMIDIAccessAsync(options: MIDIOptions = definedExternally): Promise<MIDIAccess>
 
     /**
      * Available only in secure contexts.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/requestMediaKeySystemAccess)
      */
-    fun requestMediaKeySystemAccess(
+    @JsAsync
+    suspend fun requestMediaKeySystemAccess(
+        keySystem: String,
+        supportedConfigurations: ReadonlyArray<MediaKeySystemConfiguration>,
+    ): MediaKeySystemAccess
+
+    @JsName("requestMediaKeySystemAccess")
+    fun requestMediaKeySystemAccessAsync(
         keySystem: String,
         supportedConfigurations: ReadonlyArray<MediaKeySystemConfiguration>,
     ): Promise<MediaKeySystemAccess>
@@ -153,7 +165,11 @@ sealed external class Navigator :
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/share)
      */
-    fun share(data: ShareData = definedExternally): Promise<Void>
+    @JsAsync
+    suspend fun share(data: ShareData = definedExternally)
+
+    @JsName("share")
+    fun shareAsync(data: ShareData = definedExternally): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/vibrate)

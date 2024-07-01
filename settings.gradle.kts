@@ -26,7 +26,7 @@ dependencyResolutionManagement {
 }
 
 // Examples
-include("examples")
+include("examples:old")
 
 // Kotlin/JS: GitHub Actions Toolkit wrappers
 include("kotlin-actions-toolkit")
@@ -58,9 +58,6 @@ include("kotlin-emotion")
 // Kotlin/JS: various helpers
 include("kotlin-extensions")
 
-// Kotlin/JS: History wrappers
-include("kotlin-history")
-
 // Kotlin/JS: APIs missing from the standard library
 include("kotlin-js")
 
@@ -90,6 +87,12 @@ include("kotlin-node")
 
 // Kotlin/JS: Popper wrappers
 include("kotlin-popper")
+
+// Kotlin/JS: Preact Signals Core wrappers
+include("kotlin-preact-signals-core")
+
+// Kotlin/JS: Preact Signals React wrappers
+include("kotlin-preact-signals-react")
 
 // Kotlin/JS: React wrappers
 include("kotlin-react")

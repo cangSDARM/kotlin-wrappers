@@ -1,8 +1,14 @@
 // Automatically generated - do not modify!
 
+@file:JsModule("@actions/cache")
+
 package actions.cache
 
-import js.promise.await
+import js.promise.Promise
+import seskar.js.JsAsync
 
-suspend fun createTempDirectory(): String =
-    createTempDirectoryAsync().await()
+@JsAsync
+external suspend fun createTempDirectory(): String
+
+@JsName("createTempDirectory")
+external fun createTempDirectoryAsync(): Promise<String>

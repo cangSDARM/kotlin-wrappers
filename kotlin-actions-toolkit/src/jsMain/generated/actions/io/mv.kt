@@ -1,27 +1,23 @@
 // Automatically generated - do not modify!
 
+@file:JsModule("@actions/io")
+
 package actions.io
 
-import js.promise.await
+import js.core.Void
+import js.promise.Promise
+import seskar.js.JsAsync
 
-suspend fun mv(
+@JsAsync
+external suspend fun mv(
     source: String,
     dest: String,
-) {
-    mvAsync(
-        source = source,
-        dest = dest,
-    ).await()
-}
+    options: MoveOptions = definedExternally,
+)
 
-suspend fun mv(
+@JsName("mv")
+external fun mvAsync(
     source: String,
     dest: String,
-    options: MoveOptions,
-) {
-    mvAsync(
-        source = source,
-        dest = dest,
-        options = options,
-    ).await()
-}
+    options: MoveOptions = definedExternally,
+): Promise<Void>

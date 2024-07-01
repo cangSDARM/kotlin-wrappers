@@ -2,10 +2,10 @@
 
 package web.media.streams
 
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @JsPlainObject
-sealed external interface MediaTrackConstraintSet {
+external interface MediaTrackConstraintSet {
     var aspectRatio: ConstrainDouble?
     var autoGainControl: ConstrainBoolean?
     var channelCount: ConstrainULong?

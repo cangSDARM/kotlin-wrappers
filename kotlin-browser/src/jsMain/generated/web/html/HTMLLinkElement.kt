@@ -25,12 +25,16 @@ protected constructor() :
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/crossOrigin)
      */
     var crossOrigin: CrossOrigin?
+
+    /**
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/disabled)
+     */
     var disabled: Boolean
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/fetchPriority)
      */
-    var fetchPriority: String
+    var fetchPriority: FetchPriority
 
     /**
      * Sets or retrieves a destination URL or an anchor point.
@@ -47,10 +51,16 @@ protected constructor() :
     var hreflang: String
     var imageSizes: String
     var imageSrcset: String
+
+    /**
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/integrity)
+     */
     var integrity: String
 
     /**
      * Sets or retrieves the media type.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/media)
      */
     var media: String
 
@@ -78,6 +88,8 @@ protected constructor() :
 
     /**
      * Sets or retrieves the MIME type of the object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/type)
      */
     var type: String
 }

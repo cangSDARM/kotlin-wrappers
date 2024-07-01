@@ -6,6 +6,8 @@ package cesium.engine
 
 import js.array.ReadonlyArray
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * <div class="notice">
@@ -19,7 +21,8 @@ import js.promise.Promise
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/IonImageryProvider.html">Online Documentation</a>
  */
-sealed external class IonImageryProvider {
+external class IonImageryProvider
+private constructor() {
     /**
      * Gets the rectangle, in radians, of the imagery provided by the instance.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/IonImageryProvider.html#rectangle">Online Documentation</a>
@@ -123,7 +126,16 @@ sealed external class IonImageryProvider {
      *   undefined if there are too many active requests to the server, and the request should be retried later.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/IonImageryProvider.html#requestImage">Online Documentation</a>
      */
-    fun requestImage(
+    @JsAsync(optional = true)
+    suspend fun requestImage(
+        x: Double,
+        y: Double,
+        level: Int,
+        request: Request? = definedExternally,
+    ): ImageryTypes?
+
+    @JsName("requestImage")
+    fun requestImageAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -144,7 +156,17 @@ sealed external class IonImageryProvider {
      *   It may also be undefined if picking is not supported.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/IonImageryProvider.html#pickFeatures">Online Documentation</a>
      */
-    fun pickFeatures(
+    @JsAsync(optional = true)
+    suspend fun pickFeatures(
+        x: Double,
+        y: Double,
+        level: Int,
+        longitude: Double,
+        latitude: Double,
+    ): ReadonlyArray<ImageryLayerFeatureInfo>?
+
+    @JsName("pickFeatures")
+    fun pickFeaturesAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -160,7 +182,8 @@ sealed external class IonImageryProvider {
      *   Default value - [Ion.defaultServer]
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/IonImageryProvider.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var accessToken: String?
         var server: Resource?
     }
@@ -177,7 +200,14 @@ sealed external class IonImageryProvider {
          * @return A promise which resolves to the created IonImageryProvider.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/IonImageryProvider.html#.fromAssetId">Online Documentation</a>
          */
-        fun fromAssetId(
+        @JsAsync
+        suspend fun fromAssetId(
+            assetId: Int,
+            options: ConstructorOptions? = definedExternally,
+        ): IonImageryProvider
+
+        @JsName("fromAssetId")
+        fun fromAssetIdAsync(
             assetId: Int,
             options: ConstructorOptions? = definedExternally,
         ): Promise<IonImageryProvider>

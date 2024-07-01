@@ -2,13 +2,9 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * An imagery provider that provides tiled imagery hosted by OpenStreetMap
@@ -22,7 +18,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/OpenStreetMapImageryProvider.html">Online Documentation</a>
  */
-external class OpenStreetMapImageryProvider(options: ConstructorOptions) {
+external class OpenStreetMapImageryProvider(
+    options: ConstructorOptions,
+) {
     /**
      * Initialization options for the OpenStreetMapImageryProvider constructor
      * @property [url] The OpenStreetMap server url.
@@ -41,7 +39,8 @@ external class OpenStreetMapImageryProvider(options: ConstructorOptions) {
      *   Default value - `'MapQuest, Open Street Map and contributors, CC-BY-SA'`
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/OpenStreetMapImageryProvider.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var url: String?
         var fileExtension: String?
         var retinaTiles: Boolean?
@@ -52,8 +51,3 @@ external class OpenStreetMapImageryProvider(options: ConstructorOptions) {
         var credit: Credit?
     }
 }
-
-inline fun OpenStreetMapImageryProvider(
-    block: OpenStreetMapImageryProvider.ConstructorOptions.() -> Unit,
-): OpenStreetMapImageryProvider =
-    OpenStreetMapImageryProvider(options = jso(block))

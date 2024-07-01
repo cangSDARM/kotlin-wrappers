@@ -4,6 +4,7 @@
 
 package mui.material
 
+import js.array.ReadonlyArray
 import mui.material.styles.Theme
 import mui.system.SxProps
 import web.cssom.ClassName
@@ -51,8 +52,7 @@ external interface SliderOwnProps :
     /**
      * The components used for each slot inside.
      *
-     * This prop is an alias for the `slots` prop.
-     * It's recommended to use the `slots` prop instead.
+     * @deprecated use the `slots` prop instead. This prop will be removed in v7. [How to migrate](/material-ui/migration/migrating-from-deprecated-apis/).
      *
      * @default {}
      */
@@ -73,8 +73,7 @@ external interface SliderOwnProps :
      * The extra props for the slot components.
      * You can override the existing props or add new ones.
      *
-     * This prop is an alias for the `slotProps` prop.
-     * It's recommended to use the `slotProps` prop instead, as `componentsProps` will be deprecated in the future.
+     * @deprecated use the `slotProps` prop instead. This prop will be removed in v7. [How to migrate](/material-ui/migration/migrating-from-deprecated-apis/).
      *
      * @default {}
      */
@@ -175,7 +174,7 @@ external interface SliderOwnProps :
      * @param {number | number[]} value The new value.
      * @param {number} activeThumb Index of the currently moved thumb.
      */
-    var onChange: ((event: Event, value: dynamic, activeThumb: Number) -> Unit)?
+    var onChange: ((event: Event, value: ReadonlyArray<Number>, activeThumb: Number) -> Unit)?
 
     /**
      * Callback function that is fired when the `mouseup` is triggered.
@@ -183,7 +182,7 @@ external interface SliderOwnProps :
      * @param {React.SyntheticEvent | Event} event The event source of the callback. **Warning**: This is a generic event not a change event.
      * @param {number | number[]} value The new value.
      */
-    var onChangeCommitted: ((event: react.dom.events.SyntheticEvent<*, *>, value: dynamic) -> Unit)?
+    var onChangeCommitted: ((event: react.dom.events.SyntheticEvent<*, *>, value: ReadonlyArray<Number>) -> Unit)?
 
     /**
      * The component orientation.

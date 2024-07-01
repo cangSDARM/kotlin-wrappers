@@ -3,8 +3,6 @@
 package electron.core
 
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-@seskar.js.JsVirtual
 sealed external interface SessionEvent {
     sealed interface EXTENSION_LOADED : node.events.LegacyEventType
     sealed interface EXTENSION_READY : node.events.LegacyEventType

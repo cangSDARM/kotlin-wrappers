@@ -7,6 +7,7 @@ import js.core.Void
 import js.errors.JsError
 import js.promise.Promise
 import js.transferable.Transferable
+import seskar.js.JsAsync
 
 /**
  * This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object.
@@ -30,7 +31,11 @@ external class ReadableStream<R>(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/cancel)
      */
-    fun cancel(reason: JsError = definedExternally): Promise<Void>
+    @JsAsync
+    suspend fun cancel(reason: JsError? = definedExternally)
+
+    @JsName("cancel")
+    fun cancelAsync(reason: JsError? = definedExternally): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/getReader)
@@ -49,7 +54,14 @@ external class ReadableStream<R>(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/pipeTo)
      */
-    fun pipeTo(
+    @JsAsync
+    suspend fun pipeTo(
+        destination: WritableStream<R>,
+        options: StreamPipeOptions = definedExternally,
+    )
+
+    @JsName("pipeTo")
+    fun pipeToAsync(
         destination: WritableStream<R>,
         options: StreamPipeOptions = definedExternally,
     ): Promise<Void>

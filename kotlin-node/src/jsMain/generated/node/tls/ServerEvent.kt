@@ -3,8 +3,6 @@
 package node.tls
 
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-@seskar.js.JsVirtual
 sealed external interface ServerEvent {
     sealed interface TLSCLIENTERROR : node.events.LegacyEventType
     sealed interface NEWSESSION : node.events.LegacyEventType

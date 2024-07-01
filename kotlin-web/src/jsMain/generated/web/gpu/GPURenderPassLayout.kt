@@ -3,8 +3,10 @@
 package web.gpu
 
 import js.array.ReadonlyArray
+import kotlinx.js.JsPlainObject
 
-sealed external interface GPURenderPassLayout :
+@JsPlainObject
+external interface GPURenderPassLayout :
     GPUObjectDescriptorBase {
     var colorFormats: ReadonlyArray<GPUTextureFormat?>
     var depthStencilFormat: GPUTextureFormat?

@@ -4,6 +4,8 @@
 
 package cesium.engine
 
+import kotlinx.js.JsPlainObject
+
 /**
  * <div class="notice">
  * Create labels by calling [LabelCollection.add]. Do not call the constructor directly.
@@ -14,7 +16,8 @@ package cesium.engine
  * @param [labelCollection] Instance of LabelCollection
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Label.html">Online Documentation</a>
  */
-sealed external class Label {
+external class Label
+private constructor() {
     /**
      * Determines if this label will be shown.  Use this to hide or show a label, instead
      * of removing it and re-adding it to the collection.
@@ -314,9 +317,10 @@ sealed external class Label {
      * @property [disableDepthTestDistance] A number specifying the distance from the camera at which to disable the depth test to, for example, prevent clipping against terrain.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Label.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var position: Cartesian3
-        var id: String?
+        var id: Any?
         var show: Boolean?
         var text: String?
         var font: String?

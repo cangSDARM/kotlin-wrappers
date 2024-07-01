@@ -2,27 +2,26 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A description of the outline of a frustum with the given the origin and orientation.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/FrustumOutlineGeometry.html">Online Documentation</a>
  */
-external class FrustumOutlineGeometry(options: ConstructorOptions) {
+external class FrustumOutlineGeometry(
+    options: ConstructorOptions,
+) {
     /**
      * @property [frustum] The frustum.
      * @property [origin] The origin of the frustum.
      * @property [orientation] The orientation of the frustum.
      */
-    interface ConstructorOptions {
-        var frustum: dynamic
+    @JsPlainObject
+    sealed interface ConstructorOptions {
+        var frustum: Any /* PerspectiveFrustum | OrthographicFrustum */
         var origin: Cartesian3
         var orientation: Quaternion
     }
@@ -72,8 +71,3 @@ external class FrustumOutlineGeometry(options: ConstructorOptions) {
         fun createGeometry(frustumGeometry: FrustumOutlineGeometry): Geometry?
     }
 }
-
-inline fun FrustumOutlineGeometry(
-    block: FrustumOutlineGeometry.ConstructorOptions.() -> Unit,
-): FrustumOutlineGeometry =
-    FrustumOutlineGeometry(options = jso(block))

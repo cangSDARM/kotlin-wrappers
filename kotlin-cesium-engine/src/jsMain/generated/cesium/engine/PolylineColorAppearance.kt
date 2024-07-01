@@ -2,13 +2,9 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * An appearance for [GeometryInstance] instances with color attributes and
@@ -38,7 +34,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/PolylineColorAppearance.html">Online Documentation</a>
  */
-external class PolylineColorAppearance(options: ConstructorOptions? = definedExternally) {
+external class PolylineColorAppearance(
+    options: ConstructorOptions? = definedExternally,
+) {
     /**
      * @property [translucent] When `true`, the geometry is expected to appear translucent so [PolylineColorAppearance.renderState] has alpha blending enabled.
      *   Default value - `true`
@@ -46,7 +44,8 @@ external class PolylineColorAppearance(options: ConstructorOptions? = definedExt
      * @property [fragmentShaderSource] Optional GLSL fragment shader source to override the default fragment shader.
      * @property [renderState] Optional render state to override the default render state.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var translucent: Boolean?
         var vertexShaderSource: String?
         var fragmentShaderSource: String?
@@ -136,8 +135,3 @@ external class PolylineColorAppearance(options: ConstructorOptions? = definedExt
         val VERTEX_FORMAT: VertexFormat
     }
 }
-
-inline fun PolylineColorAppearance(
-    block: PolylineColorAppearance.ConstructorOptions.() -> Unit,
-): PolylineColorAppearance =
-    PolylineColorAppearance(options = jso(block))

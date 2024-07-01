@@ -48,7 +48,7 @@ export default {
             sourceFileName.endsWith("stream.d.ts")
             && ts.isClassDeclaration(node)
             && node?.name.text === "Duplex"
-            && !context.static
+            && context.type === karakum.InjectionType.MEMBER
         ) {
             return this.readableMemberNodes
                 .map(member => {
@@ -64,6 +64,27 @@ export default {
 
                     const returnType = member.type && render(member.type)
 
+                    if (member.questionToken) {
+                        const typeScriptService = context.lookupService(karakum.typeScriptServiceKey)
+
+                        return karakum.convertParameterDeclarations(member, context, render, {
+                            strategy: "lambda",
+                            template: parameters => {
+                                let functionType
+
+                                if (member.typeParameters) {
+                                    functionType = `Function<Any?> /* ${typeScriptService?.printNode(member)} */`
+                                } else if (member.parameters.some(parameter => parameter.dotDotDotToken)) {
+                                    functionType = `Function<${returnType}> /* ${typeScriptService?.printNode(member)} */`
+                                } else {
+                                    functionType = `(${parameters}) -> ${returnType ?? "Any?"}`
+                                }
+
+                                return `override val ${name}: (${functionType})?`
+                            }
+                        })
+                    }
+
                     return karakum.convertParameterDeclarations(member, context, render, {
                         strategy: "function",
                         defaultValue: "",
@@ -73,10 +94,9 @@ export default {
                     })
                 })
                 .concat("override fun destroy(): Unit /* this */")
-                .join("\n")
         }
 
-        return null
+        return []
     },
 
     generate(context) {

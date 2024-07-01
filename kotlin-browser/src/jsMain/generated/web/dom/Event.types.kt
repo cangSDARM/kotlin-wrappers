@@ -22,6 +22,12 @@ inline fun <C : EventTarget> Event.Companion.canPlay(): EventType<Event, C> =
 inline fun <C : EventTarget> Event.Companion.canPlayThrough(): EventType<Event, C> =
     EventType("canplaythrough")
 
+inline fun <C : EventTarget> Event.Companion.contextLost(): EventType<Event, C> =
+    EventType("contextlost")
+
+inline fun <C : EventTarget> Event.Companion.contextRestored(): EventType<Event, C> =
+    EventType("contextrestored")
+
 inline fun <C : EventTarget> Event.Companion.cueChange(): EventType<Event, C> =
     EventType("cuechange")
 
@@ -81,6 +87,9 @@ inline fun <C : EventTarget> Event.Companion.readyStateChange(): EventType<Event
 
 inline fun <C : EventTarget> Event.Companion.reset(): EventType<Event, C> =
     EventType("reset")
+
+inline fun <C : EventTarget> Event.Companion.resume(): EventType<Event, C> =
+    EventType("resume")
 
 inline fun <C : EventTarget> Event.Companion.scroll(): EventType<Event, C> =
     EventType("scroll")

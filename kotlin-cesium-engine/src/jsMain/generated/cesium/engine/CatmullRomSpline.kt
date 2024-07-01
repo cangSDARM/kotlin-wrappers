@@ -2,14 +2,10 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A Catmull-Rom spline is a cubic spline where the tangent at control points,
@@ -33,7 +29,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/CatmullRomSpline.html">Online Documentation</a>
  */
-external class CatmullRomSpline(options: ConstructorOptions) {
+external class CatmullRomSpline(
+    options: ConstructorOptions,
+) {
     /**
      * @property [times] An array of strictly increasing, unit-less, floating-point times at each point.
      *   The values are in no way connected to the clock time. They are the parameterization for the curve.
@@ -43,7 +41,8 @@ external class CatmullRomSpline(options: ConstructorOptions) {
      * @property [lastTangent] The tangent of the curve at the last control point.
      *   If the tangent is not given, it will be estimated.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var times: ReadonlyArray<Double>
         var points: ReadonlyArray<Cartesian3>
         var firstTangent: Cartesian3?
@@ -111,8 +110,3 @@ external class CatmullRomSpline(options: ConstructorOptions) {
         result: Cartesian3? = definedExternally,
     ): Cartesian3
 }
-
-inline fun CatmullRomSpline(
-    block: CatmullRomSpline.ConstructorOptions.() -> Unit,
-): CatmullRomSpline =
-    CatmullRomSpline(options = jso(block))

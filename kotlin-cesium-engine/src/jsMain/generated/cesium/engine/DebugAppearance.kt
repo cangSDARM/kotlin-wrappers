@@ -2,13 +2,9 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * Visualizes a vertex attribute by displaying it as a color for debugging.
@@ -26,7 +22,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/DebugAppearance.html">Online Documentation</a>
  */
-external class DebugAppearance(options: ConstructorOptions) {
+external class DebugAppearance(
+    options: ConstructorOptions,
+) {
     /**
      * @property [attributeName] The name of the attribute to visualize.
      * @property [perInstanceAttribute] Boolean that determines whether this attribute is a per-instance geometry attribute.
@@ -37,7 +35,8 @@ external class DebugAppearance(options: ConstructorOptions) {
      * @property [fragmentShaderSource] Optional GLSL fragment shader source to override the default fragment shader.
      * @property [renderState] Optional render state to override the default render state.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var attributeName: String
         var perInstanceAttribute: Boolean?
         var glslDatatype: String?
@@ -121,8 +120,3 @@ external class DebugAppearance(options: ConstructorOptions) {
      */
     fun getRenderState(): Any
 }
-
-inline fun DebugAppearance(
-    block: DebugAppearance.ConstructorOptions.() -> Unit,
-): DebugAppearance =
-    DebugAppearance(options = jso(block))

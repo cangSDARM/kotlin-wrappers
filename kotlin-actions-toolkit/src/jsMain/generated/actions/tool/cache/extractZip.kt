@@ -1,21 +1,20 @@
 // Automatically generated - do not modify!
 
+@file:JsModule("@actions/tool-cache")
+
 package actions.tool.cache
 
-import js.promise.await
+import js.promise.Promise
+import seskar.js.JsAsync
 
-suspend fun extractZip(
+@JsAsync
+external suspend fun extractZip(
     file: String,
-): String =
-    extractZipAsync(
-        file = file,
-    ).await()
+    dest: String = definedExternally,
+): String
 
-suspend fun extractZip(
+@JsName("extractZip")
+external fun extractZipAsync(
     file: String,
-    dest: String,
-): String =
-    extractZipAsync(
-        file = file,
-        dest = dest,
-    ).await()
+    dest: String = definedExternally,
+): Promise<String>

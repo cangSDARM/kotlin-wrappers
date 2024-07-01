@@ -2,20 +2,18 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * An abstract class for updating geometry entities.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GeometryUpdater.html">Online Documentation</a>
  */
-external class GeometryUpdater(options: ConstructorOptions) {
+external class GeometryUpdater(
+    options: ConstructorOptions,
+) {
     /**
      * @property [entity] The entity containing the geometry to be visualized.
      * @property [scene] The scene where visualization is taking place.
@@ -23,7 +21,8 @@ external class GeometryUpdater(options: ConstructorOptions) {
      * @property [geometryPropertyName] The geometry property name
      * @property [observedPropertyNames] The entity properties this geometry cares about
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var entity: Entity
         var scene: Scene
         var geometryOptions: Any
@@ -170,8 +169,3 @@ external class GeometryUpdater(options: ConstructorOptions) {
      */
     fun destroy()
 }
-
-inline fun GeometryUpdater(
-    block: GeometryUpdater.ConstructorOptions.() -> Unit,
-): GeometryUpdater =
-    GeometryUpdater(options = jso(block))

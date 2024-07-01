@@ -2,13 +2,9 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A renderable collection of billboards.  Billboards are viewport-aligned
@@ -31,7 +27,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/BillboardCollection.html">Online Documentation</a>
  */
-external class BillboardCollection(options: ConstructorOptions? = definedExternally) {
+external class BillboardCollection(
+    options: ConstructorOptions? = definedExternally,
+) {
     /**
      * @property [modelMatrix] The 4x4 transformation matrix that transforms each billboard from model to world coordinates.
      *   Default value - [Matrix4.IDENTITY]
@@ -45,7 +43,8 @@ external class BillboardCollection(options: ConstructorOptions? = definedExterna
      * @property [show] Determines if the billboards in the collection will be shown.
      *   Default value - `true`
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var modelMatrix: Matrix4?
         var debugShowBoundingVolume: Boolean?
         var scene: Scene?
@@ -247,8 +246,3 @@ external class BillboardCollection(options: ConstructorOptions? = definedExterna
      */
     fun destroy()
 }
-
-inline fun BillboardCollection(
-    block: BillboardCollection.ConstructorOptions.() -> Unit,
-): BillboardCollection =
-    BillboardCollection(options = jso(block))

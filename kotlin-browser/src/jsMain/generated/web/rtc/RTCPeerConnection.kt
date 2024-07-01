@@ -5,6 +5,7 @@ package web.rtc
 import js.array.ReadonlyArray
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.crypto.Algorithm
 import web.events.Event
 import web.events.EventHandler
@@ -17,7 +18,7 @@ import web.media.streams.MediaStreamTrack
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection)
  */
-external class RTCPeerConnection(
+open external class RTCPeerConnection(
     configuration: RTCConfiguration = definedExternally,
 ) : EventTarget {
     /**
@@ -58,47 +59,47 @@ external class RTCPeerConnection(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/connectionstatechange_event)
      */
-    var onconnectionstatechange: EventHandler<Event, RTCPeerConnection>?
+    var onconnectionstatechange: EventHandler<Event, RTCPeerConnection, RTCPeerConnection>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/datachannel_event)
      */
-    var ondatachannel: EventHandler<RTCDataChannelEvent, RTCPeerConnection>?
+    var ondatachannel: EventHandler<RTCDataChannelEvent, RTCPeerConnection, RTCPeerConnection>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/icecandidate_event)
      */
-    var onicecandidate: EventHandler<RTCPeerConnectionIceEvent, RTCPeerConnection>?
+    var onicecandidate: EventHandler<RTCPeerConnectionIceEvent, RTCPeerConnection, RTCPeerConnection>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/icecandidateerror_event)
      */
-    var onicecandidateerror: EventHandler<RTCPeerConnectionIceErrorEvent, RTCPeerConnection>?
+    var onicecandidateerror: EventHandler<RTCPeerConnectionIceErrorEvent, RTCPeerConnection, RTCPeerConnection>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/iceconnectionstatechange_event)
      */
-    var oniceconnectionstatechange: EventHandler<Event, RTCPeerConnection>?
+    var oniceconnectionstatechange: EventHandler<Event, RTCPeerConnection, RTCPeerConnection>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/icegatheringstatechange_event)
      */
-    var onicegatheringstatechange: EventHandler<Event, RTCPeerConnection>?
+    var onicegatheringstatechange: EventHandler<Event, RTCPeerConnection, RTCPeerConnection>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/negotiationneeded_event)
      */
-    var onnegotiationneeded: EventHandler<Event, RTCPeerConnection>?
+    var onnegotiationneeded: EventHandler<Event, RTCPeerConnection, RTCPeerConnection>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/signalingstatechange_event)
      */
-    var onsignalingstatechange: EventHandler<Event, RTCPeerConnection>?
+    var onsignalingstatechange: EventHandler<Event, RTCPeerConnection, RTCPeerConnection>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/track_event)
      */
-    var ontrack: EventHandler<RTCTrackEvent, RTCPeerConnection>?
+    var ontrack: EventHandler<RTCTrackEvent, RTCPeerConnection, RTCPeerConnection>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/pendingLocalDescription)
@@ -128,7 +129,11 @@ external class RTCPeerConnection(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/addIceCandidate)
      */
-    fun addIceCandidate(candidate: RTCIceCandidateInit = definedExternally): Promise<Void>
+    @JsAsync
+    suspend fun addIceCandidate(candidate: RTCIceCandidateInit = definedExternally)
+
+    @JsName("addIceCandidate")
+    fun addIceCandidateAsync(candidate: RTCIceCandidateInit = definedExternally): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/addTrack)
@@ -159,7 +164,11 @@ external class RTCPeerConnection(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/createAnswer)
      */
-    fun createAnswer(options: RTCAnswerOptions = definedExternally): Promise<RTCSessionDescriptionInit>
+    @JsAsync
+    suspend fun createAnswer(options: RTCAnswerOptions = definedExternally): RTCSessionDescriptionInit
+
+    @JsName("createAnswer")
+    fun createAnswerAsync(options: RTCAnswerOptions = definedExternally): Promise<RTCSessionDescriptionInit>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/createDataChannel)
@@ -172,7 +181,11 @@ external class RTCPeerConnection(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/createOffer)
      */
-    fun createOffer(options: RTCOfferOptions = definedExternally): Promise<RTCSessionDescriptionInit>
+    @JsAsync
+    suspend fun createOffer(options: RTCOfferOptions = definedExternally): RTCSessionDescriptionInit
+
+    @JsName("createOffer")
+    fun createOfferAsync(options: RTCOfferOptions = definedExternally): Promise<RTCSessionDescriptionInit>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/getConfiguration)
@@ -192,7 +205,11 @@ external class RTCPeerConnection(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/getStats)
      */
-    fun getStats(selector: MediaStreamTrack? = definedExternally): Promise<RTCStatsReport>
+    @JsAsync
+    suspend fun getStats(selector: MediaStreamTrack? = definedExternally): RTCStatsReport
+
+    @JsName("getStats")
+    fun getStatsAsync(selector: MediaStreamTrack? = definedExternally): Promise<RTCStatsReport>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/getTransceivers)
@@ -217,18 +234,35 @@ external class RTCPeerConnection(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/setLocalDescription)
      */
-    fun setLocalDescription(description: RTCLocalSessionDescriptionInit = definedExternally): Promise<Void>
+    @JsAsync
+    suspend fun setLocalDescription(description: RTCLocalSessionDescriptionInit = definedExternally)
+
+    @JsName("setLocalDescription")
+    fun setLocalDescriptionAsync(description: RTCLocalSessionDescriptionInit = definedExternally): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/setRemoteDescription)
      */
-    fun setRemoteDescription(description: RTCSessionDescriptionInit): Promise<Void>
+    @JsAsync
+    suspend fun setRemoteDescription(description: RTCSessionDescriptionInit)
+
+    @JsName("setRemoteDescription")
+    fun setRemoteDescriptionAsync(description: RTCSessionDescriptionInit): Promise<Void>
 
     companion object {
         /**
          * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/generateCertificate_static)
          */
-        fun generateCertificate(keygenAlgorithm: Algorithm): Promise<RTCCertificate>
-        fun generateCertificate(keygenAlgorithm: String): Promise<RTCCertificate>
+        @JsAsync
+        suspend fun generateCertificate(keygenAlgorithm: Algorithm): RTCCertificate
+
+        @JsName("generateCertificate")
+        fun generateCertificateAsync(keygenAlgorithm: Algorithm): Promise<RTCCertificate>
+
+        @JsAsync
+        suspend fun generateCertificate(keygenAlgorithm: String): RTCCertificate
+
+        @JsName("generateCertificate")
+        fun generateCertificateAsync(keygenAlgorithm: String): Promise<RTCCertificate>
     }
 }

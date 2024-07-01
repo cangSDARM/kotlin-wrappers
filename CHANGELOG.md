@@ -1,3 +1,86 @@
+## pre.758
+
+**BREAKING CHANGE**
+
+* Tanstack Query `skipToken` support fixed
+    * To construct `QueryFunction` please use factory function `QueryFunction`
+
+## pre.756
+
+* Kotlin `2.0.0`
+* Real `@JsPlainObject`
+    * With factory methods
+    * With `copy` method
+
+## pre.755
+
+* `JsContextFunction` - function with `this` access
+
+## pre.752
+
+* Auto cancellation support for suspend adapters (marked with `@JsAsync`)
+
+```kotlin
+import web.abort.Abortable
+
+// ORIGINAL
+external class Loader {
+    @JsAsync
+    suspend fun load(
+        options: Abortable /* or child interface */ = definedExternally,
+    ) T
+
+    fun loadAsync(
+        options: Abortable /* or child interface */ = definedExternally,
+    ): Promise<T>
+}
+
+// GENERATED
+external class Loader {
+    @JsAsync
+    suspend fun load(
+        options: Abortable /* or child interface */ = definedExternally,
+    ) T
+    {
+        /* GENERATED CODE START */
+        val controller = AbortController()
+        val abortOptions = jso {
+            signal = anyOf(options?.signal, controller.signal)
+        }
+        val newOptions = Object.assign(jso(), options, abortOptions)
+
+        invokeOnCancellation {
+            controller.abort()
+        }
+
+        return loadAsync(newOptions).await()
+        /* GENERATED CODE END */
+    }
+
+    fun loadAsync(
+        options: Abortable /* or child interface */ = definedExternally,
+    ): Promise<T>
+}
+```
+
+## pre.742
+
+**BREAKING CHANGE**
+
+* Browser. Suspend adapters for async functions (marked with `@JsAsync`)
+  * The original Promise-based functions are available with the `Async` suffix
+
+## pre.738
+
+**BREAKING CHANGE**
+
+* React. Align `ForwardRef` and `FC` signatures
+    * Preparing to remove `ForwardRef` (redundant in React 19)
+
+## pre.737
+
+* Preact Signals declarations
+
 ## pre.730
 
 * `Temporal`. Initial implementation

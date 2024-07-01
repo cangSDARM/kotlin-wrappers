@@ -2,14 +2,10 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A description of a circle on the ellipsoid. Circle geometry can be rendered with both [Primitive] and [GroundPrimitive].
@@ -23,12 +19,14 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/CircleGeometry.html">Online Documentation</a>
  */
-external class CircleGeometry(options: ConstructorOptions) {
+external class CircleGeometry(
+    options: ConstructorOptions,
+) {
     /**
      * @property [center] The circle's center point in the fixed frame.
      * @property [radius] The radius in meters.
      * @property [ellipsoid] The ellipsoid the circle will be on.
-     *   Default value - [Ellipsoid.WGS84]
+     *   Default value - [Ellipsoid.default]
      * @property [height] The distance in meters between the circle and the ellipsoid surface.
      *   Default value - `0.0`
      * @property [granularity] The angular distance between points on the circle in radians.
@@ -40,7 +38,8 @@ external class CircleGeometry(options: ConstructorOptions) {
      * @property [stRotation] The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise.
      *   Default value - `0.0`
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var center: Cartesian3
         var radius: Double
         var ellipsoid: Ellipsoid?
@@ -97,8 +96,3 @@ external class CircleGeometry(options: ConstructorOptions) {
         fun createGeometry(circleGeometry: CircleGeometry): Geometry?
     }
 }
-
-inline fun CircleGeometry(
-    block: CircleGeometry.ConstructorOptions.() -> Unit,
-): CircleGeometry =
-    CircleGeometry(options = jso(block))

@@ -2,15 +2,12 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "VAR_OVERRIDDEN_BY_VAL",
-    "VAR_TYPE_MISMATCH_ON_OVERRIDE",
-)
-
 package cesium.engine
 
 import js.core.Void
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * <div class="notice">
@@ -31,7 +28,9 @@ import js.promise.Promise
  * @param [options] An object describing initialization options.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/VRTheWorldTerrainProvider.html">Online Documentation</a>
  */
-sealed external class VRTheWorldTerrainProvider : TerrainProvider {
+external class VRTheWorldTerrainProvider
+private constructor() :
+    TerrainProvider {
     /**
      * Gets an event that is raised when the terrain provider encounters an asynchronous error.  By subscribing
      * to the event, you will be notified of the error and can potentially recover from it.  Event listeners
@@ -87,7 +86,7 @@ sealed external class VRTheWorldTerrainProvider : TerrainProvider {
      *   pending and the request will be retried later.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/VRTheWorldTerrainProvider.html#requestTileGeometry">Online Documentation</a>
      */
-    override fun requestTileGeometry(
+    override fun requestTileGeometryAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -124,7 +123,7 @@ sealed external class VRTheWorldTerrainProvider : TerrainProvider {
      * @return Undefined if nothing need to be loaded or a Promise that resolves when all required tiles are loaded
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/VRTheWorldTerrainProvider.html#loadTileDataAvailability">Online Documentation</a>
      */
-    override fun loadTileDataAvailability(
+    override fun loadTileDataAvailabilityAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -132,11 +131,13 @@ sealed external class VRTheWorldTerrainProvider : TerrainProvider {
 
     /**
      * Initialization options for the VRTheWorldTerrainProvider constructor
-     * @property [ellipsoid] The ellipsoid.  If not specified, the WGS84 ellipsoid is used.
+     * @property [ellipsoid] The ellipsoid.  If not specified, the default ellipsoid is used.
+     *   Default value - [Ellipsoid.default]
      * @property [credit] A credit for the data source, which is displayed on the canvas.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/VRTheWorldTerrainProvider.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var ellipsoid: Ellipsoid?
         var credit: Credit?
     }
@@ -155,12 +156,26 @@ sealed external class VRTheWorldTerrainProvider : TerrainProvider {
          * @param [options] An object describing initialization options.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/VRTheWorldTerrainProvider.html#.fromUrl">Online Documentation</a>
          */
-        fun fromUrl(
+        @JsAsync
+        suspend fun fromUrl(
+            url: Resource,
+            options: ConstructorOptions? = definedExternally,
+        ): VRTheWorldTerrainProvider
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
             url: Resource,
             options: ConstructorOptions? = definedExternally,
         ): Promise<VRTheWorldTerrainProvider>
 
-        fun fromUrl(
+        @JsAsync
+        suspend fun fromUrl(
+            url: String,
+            options: ConstructorOptions? = definedExternally,
+        ): VRTheWorldTerrainProvider
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
             url: String,
             options: ConstructorOptions? = definedExternally,
         ): Promise<VRTheWorldTerrainProvider>

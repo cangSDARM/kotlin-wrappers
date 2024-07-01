@@ -2,20 +2,18 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A primitive that renders voxel data from a [VoxelProvider].
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/VoxelPrimitive.html">Online Documentation</a>
  */
-external class VoxelPrimitive(options: ConstructorOptions? = definedExternally) {
+external class VoxelPrimitive(
+    options: ConstructorOptions? = definedExternally,
+) {
     /**
      * @property [provider] The voxel provider that supplies the primitive with tile data.
      * @property [modelMatrix] The model matrix used to transform the primitive.
@@ -23,7 +21,8 @@ external class VoxelPrimitive(options: ConstructorOptions? = definedExternally) 
      * @property [customShader] The custom shader used to style the primitive.
      * @property [clock] The clock used to control time dynamic behavior.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var provider: VoxelProvider?
         var modelMatrix: Matrix4?
         var customShader: CustomShader?
@@ -208,8 +207,3 @@ external class VoxelPrimitive(options: ConstructorOptions? = definedExternally) 
      */
     fun destroy()
 }
-
-inline fun VoxelPrimitive(
-    block: VoxelPrimitive.ConstructorOptions.() -> Unit,
-): VoxelPrimitive =
-    VoxelPrimitive(options = jso(block))

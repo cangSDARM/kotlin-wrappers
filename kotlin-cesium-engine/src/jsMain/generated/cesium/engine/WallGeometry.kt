@@ -2,14 +2,10 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A description of a wall, which is similar to a KML line string. A wall is defined by a series of points,
@@ -29,7 +25,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/WallGeometry.html">Online Documentation</a>
  */
-external class WallGeometry(options: ConstructorOptions) {
+external class WallGeometry(
+    options: ConstructorOptions,
+) {
     /**
      * @property [positions] An array of Cartesian objects, which are the points of the wall.
      * @property [granularity] The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer.
@@ -39,11 +37,12 @@ external class WallGeometry(options: ConstructorOptions) {
      * @property [minimumHeights] An array parallel to `positions` that give the minimum height of the
      *   wall at `positions`. If undefined, the height at each position is 0.0.
      * @property [ellipsoid] The ellipsoid for coordinate manipulation
-     *   Default value - [Ellipsoid.WGS84]
+     *   Default value - [Ellipsoid.default]
      * @property [vertexFormat] The vertex attributes to be computed.
      *   Default value - [VertexFormat.DEFAULT]
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var positions: ReadonlyArray<Cartesian3>
         var granularity: Double?
         var maximumHeights: ReadonlyArray<Double>?
@@ -118,11 +117,12 @@ external class WallGeometry(options: ConstructorOptions) {
          * @property [minimumHeight] A constant that defines the minimum height of the
          *   wall at `positions`. If undefined, the height at each position is 0.0.
          * @property [ellipsoid] The ellipsoid for coordinate manipulation
-         *   Default value - [Ellipsoid.WGS84]
+         *   Default value - [Ellipsoid.default]
          * @property [vertexFormat] The vertex attributes to be computed.
          *   Default value - [VertexFormat.DEFAULT]
          */
-        interface FromConstantHeightsOptions {
+        @JsPlainObject
+        sealed interface FromConstantHeightsOptions {
             var positions: ReadonlyArray<Cartesian3>
             var maximumHeight: Double?
             var minimumHeight: Double?
@@ -139,8 +139,3 @@ external class WallGeometry(options: ConstructorOptions) {
         fun createGeometry(wallGeometry: WallGeometry): Geometry?
     }
 }
-
-inline fun WallGeometry(
-    block: WallGeometry.ConstructorOptions.() -> Unit,
-): WallGeometry =
-    WallGeometry(options = jso(block))

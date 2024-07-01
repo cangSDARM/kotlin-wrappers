@@ -9,6 +9,7 @@ package web.streams
 import js.core.Void
 import js.errors.JsError
 import js.promise.Promise
+import seskar.js.JsAsync
 
 sealed external interface ReadableStreamGenericReader {
     /**
@@ -20,5 +21,9 @@ sealed external interface ReadableStreamGenericReader {
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/cancel)
      */
-    fun cancel(reason: JsError = definedExternally): Promise<Void> = definedExternally
+    @JsAsync
+    suspend fun cancel(reason: JsError? = definedExternally): Unit = definedExternally
+
+    @JsName("cancel")
+    fun cancelAsync(reason: JsError? = definedExternally): Promise<Void> = definedExternally
 }

@@ -7,6 +7,8 @@ package cesium.engine
 import js.array.ReadonlyArray
 import js.core.Void
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * This class implements an I3S Node. In CesiumJS each I3SNode creates a Cesium3DTile.
@@ -14,7 +16,8 @@ import js.promise.Promise
  * Do not construct this directly, instead access tiles through [I3SLayer].
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/I3SNode.html">Online Documentation</a>
  */
-sealed external class I3SNode {
+external class I3SNode
+private constructor() {
     /**
      * Gets the resource for the node.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/I3SNode.html#resource">Online Documentation</a>
@@ -74,7 +77,11 @@ sealed external class I3SNode {
      * @return A promise that is resolved when the I3S Node fields are loaded
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/I3SNode.html#loadFields">Online Documentation</a>
      */
-    fun loadFields(): Promise<Void>
+    @JsAsync
+    suspend fun loadFields()
+
+    @JsName("loadFields")
+    fun loadFieldsAsync(): Promise<Void>
 
     /**
      * Loads the node field.
@@ -82,7 +89,11 @@ sealed external class I3SNode {
      * @return A promise that is resolved when the I3S Node field is loaded
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/I3SNode.html#loadField">Online Documentation</a>
      */
-    fun loadField(name: String): Promise<Void>
+    @JsAsync
+    suspend fun loadField(name: String)
+
+    @JsName("loadField")
+    fun loadFieldAsync(name: String): Promise<Void>
 
     /**
      * Returns the fields for a given picked position
@@ -107,8 +118,9 @@ sealed external class I3SNode {
      * @property [values] The collection of values
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/I3SNode.html#.AttributeFilter">Online Documentation</a>
      */
-    interface AttributeFilter {
+    @JsPlainObject
+    sealed interface AttributeFilter {
         var name: String
-        var values: dynamic
+        var values: ReadonlyArray<Comparable<*>> /* string[] | number[] */
     }
 }

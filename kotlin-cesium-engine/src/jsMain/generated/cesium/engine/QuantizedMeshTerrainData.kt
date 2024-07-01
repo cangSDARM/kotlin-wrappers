@@ -2,17 +2,14 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
 import js.promise.Promise
+import js.typedarrays.TypedArray
 import js.typedarrays.Uint16Array
 import js.typedarrays.Uint8Array
+import kotlinx.js.JsPlainObject
 
 /**
  * Terrain data for a single tile where the terrain data is represented as a quantized mesh.  A quantized
@@ -48,7 +45,9 @@ import js.typedarrays.Uint8Array
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/QuantizedMeshTerrainData.html">Online Documentation</a>
  */
-external class QuantizedMeshTerrainData(options: ConstructorOptions) : TerrainData {
+external class QuantizedMeshTerrainData(
+    options: ConstructorOptions,
+) : TerrainData {
     /**
      * @property [quantizedVertices] The buffer containing the quantized mesh.
      * @property [indices] The indices specifying how the quantized vertices are linked
@@ -80,9 +79,10 @@ external class QuantizedMeshTerrainData(options: ConstructorOptions) : TerrainDa
      * @property [waterMask] The buffer containing the watermask.
      * @property [credits] Array of credits for this tile.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var quantizedVertices: Uint16Array
-        var indices: dynamic
+        var indices: TypedArray<*, *> /* Uint16Array | Uint32Array */
         var minimumHeight: Double
         var maximumHeight: Double
         var boundingSphere: BoundingSphere
@@ -115,7 +115,7 @@ external class QuantizedMeshTerrainData(options: ConstructorOptions) : TerrainDa
      * Values in between 0 and 255 are allowed as well to smoothly blend between land and water.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/QuantizedMeshTerrainData.html#waterMask">Online Documentation</a>
      */
-    override var waterMask: dynamic
+    override var waterMask: Any /* Uint8Array | HTMLImageElement | HTMLCanvasElement */
 
     /**
      * Upsamples this terrain data for use by a descendant tile.  The resulting instance will contain a subset of the
@@ -132,7 +132,7 @@ external class QuantizedMeshTerrainData(options: ConstructorOptions) : TerrainDa
      *   deferred.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/QuantizedMeshTerrainData.html#upsample">Online Documentation</a>
      */
-    override fun upsample(
+    override fun upsampleAsync(
         tilingScheme: TilingScheme,
         thisX: Double,
         thisY: Double,
@@ -186,8 +186,3 @@ external class QuantizedMeshTerrainData(options: ConstructorOptions) : TerrainDa
      */
     override fun wasCreatedByUpsampling(): Boolean
 }
-
-inline fun QuantizedMeshTerrainData(
-    block: QuantizedMeshTerrainData.ConstructorOptions.() -> Unit,
-): QuantizedMeshTerrainData =
-    QuantizedMeshTerrainData(options = jso(block))

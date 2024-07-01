@@ -6,6 +6,8 @@ package cesium.engine
 
 import js.array.ReadonlyArray
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * A [VoxelProvider] that fetches voxel data from a 3D Tiles tileset.
@@ -13,7 +15,9 @@ import js.promise.Promise
  * Implements the [VoxelProvider] interface.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTilesVoxelProvider.html">Online Documentation</a>
  */
-external class Cesium3DTilesVoxelProvider(options: Any) {
+external class Cesium3DTilesVoxelProvider(
+    options: Any,
+) {
     /**
      * A transform from local space to global space. If undefined, the identity matrix will be used instead.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTilesVoxelProvider.html#globalTransform">Online Documentation</a>
@@ -118,7 +122,11 @@ external class Cesium3DTilesVoxelProvider(options: Any) {
      * @return A promise to an array of typed arrays containing the requested voxel data or undefined if there was a problem loading the data.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTilesVoxelProvider.html#requestData">Online Documentation</a>
      */
-    fun requestData(options: RequestDataOptions? = definedExternally): Promise<ReadonlyArray<ReadonlyArray<Any>>>?
+    @JsAsync(optional = true)
+    suspend fun requestData(options: RequestDataOptions? = definedExternally): ReadonlyArray<ReadonlyArray<Any>>?
+
+    @JsName("requestData")
+    fun requestDataAsync(options: RequestDataOptions? = definedExternally): Promise<ReadonlyArray<ReadonlyArray<Any>>>?
 
     /**
      * @property [tileLevel] The tile's level.
@@ -130,7 +138,8 @@ external class Cesium3DTilesVoxelProvider(options: Any) {
      * @property [tileZ] The tile's Z coordinate.
      *   Default value - `0`
      */
-    interface RequestDataOptions {
+    @JsPlainObject
+    sealed interface RequestDataOptions {
         var tileLevel: Int?
         var tileX: Double?
         var tileY: Double?
@@ -144,8 +153,16 @@ external class Cesium3DTilesVoxelProvider(options: Any) {
          * @return The created provider
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTilesVoxelProvider.html#.fromUrl">Online Documentation</a>
          */
-        fun fromUrl(url: Resource): Promise<Cesium3DTilesVoxelProvider>
+        @JsAsync
+        suspend fun fromUrl(url: Resource): Cesium3DTilesVoxelProvider
 
-        fun fromUrl(url: String): Promise<Cesium3DTilesVoxelProvider>
+        @JsName("fromUrl")
+        fun fromUrlAsync(url: Resource): Promise<Cesium3DTilesVoxelProvider>
+
+        @JsAsync
+        suspend fun fromUrl(url: String): Cesium3DTilesVoxelProvider
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(url: String): Promise<Cesium3DTilesVoxelProvider>
     }
 }

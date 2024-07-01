@@ -2,15 +2,11 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "VAR_OVERRIDDEN_BY_VAL",
-    "VAR_TYPE_MISMATCH_ON_OVERRIDE",
-)
-
 package cesium.engine
 
 import js.core.Void
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
 
 /**
  * <div class="notice">
@@ -28,7 +24,9 @@ import js.promise.Promise
  * @param [options] An object describing initialization options
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseTerrainProvider.html">Online Documentation</a>
  */
-sealed external class GoogleEarthEnterpriseTerrainProvider : TerrainProvider {
+external class GoogleEarthEnterpriseTerrainProvider
+private constructor() :
+    TerrainProvider {
     /**
      * Gets the name of the Google Earth Enterprise server url hosting the imagery.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseTerrainProvider.html#url">Online Documentation</a>
@@ -96,7 +94,7 @@ sealed external class GoogleEarthEnterpriseTerrainProvider : TerrainProvider {
      *   pending and the request will be retried later.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseTerrainProvider.html#requestTileGeometry">Online Documentation</a>
      */
-    override fun requestTileGeometry(
+    override fun requestTileGeometryAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -132,7 +130,7 @@ sealed external class GoogleEarthEnterpriseTerrainProvider : TerrainProvider {
      * @param [level] The level of the tile for which to request geometry.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseTerrainProvider.html#loadTileDataAvailability">Online Documentation</a>
      */
-    override fun loadTileDataAvailability(
+    override fun loadTileDataAvailabilityAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -140,11 +138,13 @@ sealed external class GoogleEarthEnterpriseTerrainProvider : TerrainProvider {
 
     /**
      * Initialization options for GoogleEarthEnterpriseTerrainProvider constructor
-     * @property [ellipsoid] The ellipsoid.  If not specified, the WGS84 ellipsoid is used.
+     * @property [ellipsoid] The ellipsoid.  If not specified, the default ellipsoid is used.
+     *   Default value - [Ellipsoid.default]
      * @property [credit] A credit for the data source, which is displayed on the canvas.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseTerrainProvider.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var ellipsoid: Ellipsoid?
         var credit: Credit?
     }

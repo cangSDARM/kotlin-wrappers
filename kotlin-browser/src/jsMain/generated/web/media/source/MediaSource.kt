@@ -11,7 +11,7 @@ import web.events.EventTarget
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSource)
  */
-external class MediaSource :
+open external class MediaSource :
     EventTarget {
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSource/activeSourceBuffers)
@@ -26,17 +26,17 @@ external class MediaSource :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSource/sourceclose_event)
      */
-    var onsourceclose: EventHandler<Event, MediaSource>?
+    var onsourceclose: EventHandler<Event, MediaSource, MediaSource>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSource/sourceended_event)
      */
-    var onsourceended: EventHandler<Event, MediaSource>?
+    var onsourceended: EventHandler<Event, MediaSource, MediaSource>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSource/sourceopen_event)
      */
-    var onsourceopen: EventHandler<Event, MediaSource>?
+    var onsourceopen: EventHandler<Event, MediaSource, MediaSource>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSource/readyState)
@@ -77,6 +77,11 @@ external class MediaSource :
     )
 
     companion object {
+        /**
+         * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSource/canConstructInDedicatedWorker_static)
+         */
+        val canConstructInDedicatedWorker: Boolean
+
         /**
          * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSource/isTypeSupported_static)
          */

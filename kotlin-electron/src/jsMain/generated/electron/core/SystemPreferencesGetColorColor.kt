@@ -3,8 +3,6 @@
 package electron.core
 
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-@seskar.js.JsVirtual
 sealed external interface SystemPreferencesGetColorColor {
     companion object {
         @seskar.js.JsValue("3d-dark-shadow")

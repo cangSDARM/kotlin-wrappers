@@ -2,6 +2,9 @@
 
 package actions.http.client
 
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
 sealed external interface RequestOptions {
     var headers: node.http.OutgoingHttpHeaders?
     var socketTimeout: Number?

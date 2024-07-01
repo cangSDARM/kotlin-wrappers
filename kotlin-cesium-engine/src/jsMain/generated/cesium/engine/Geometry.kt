@@ -2,14 +2,11 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import js.typedarrays.TypedArray
+import kotlinx.js.JsPlainObject
 
 /**
  * A geometry representation with attributes forming vertices and optional index data
@@ -41,7 +38,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Geometry.html">Online Documentation</a>
  */
-external class Geometry(options: ConstructorOptions) {
+external class Geometry(
+    options: ConstructorOptions,
+) {
     /**
      * @property [attributes] Attributes, which make up the geometry's vertices.
      * @property [primitiveType] The type of primitives in the geometry.
@@ -49,10 +48,11 @@ external class Geometry(options: ConstructorOptions) {
      * @property [indices] Optional index data that determines the primitives in the geometry.
      * @property [boundingSphere] An optional bounding sphere that fully enclosed the geometry.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var attributes: GeometryAttributes
         var primitiveType: PrimitiveType?
-        var indices: dynamic
+        var indices: TypedArray<*, *> /* Uint16Array | Uint32Array */?
         var boundingSphere: BoundingSphere?
     }
 
@@ -125,8 +125,3 @@ external class Geometry(options: ConstructorOptions) {
         fun computeNumberOfVertices(geometry: Geometry): Int
     }
 }
-
-inline fun Geometry(
-    block: Geometry.ConstructorOptions.() -> Unit,
-): Geometry =
-    Geometry(options = jso(block))

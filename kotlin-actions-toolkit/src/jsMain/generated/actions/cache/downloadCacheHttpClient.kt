@@ -1,15 +1,21 @@
 // Automatically generated - do not modify!
 
+@file:JsModule("@actions/cache")
+
 package actions.cache
 
-import js.promise.await
+import js.core.Void
+import js.promise.Promise
+import seskar.js.JsAsync
 
-suspend fun downloadCacheHttpClient(
+@JsAsync
+external suspend fun downloadCacheHttpClient(
     archiveLocation: String,
     archivePath: String,
-) {
-    downloadCacheHttpClientAsync(
-        archiveLocation = archiveLocation,
-        archivePath = archivePath,
-    ).await()
-}
+)
+
+@JsName("downloadCacheHttpClient")
+external fun downloadCacheHttpClientAsync(
+    archiveLocation: String,
+    archivePath: String,
+): Promise<Void>

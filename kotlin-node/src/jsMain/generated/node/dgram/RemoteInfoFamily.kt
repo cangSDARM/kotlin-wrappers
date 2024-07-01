@@ -2,9 +2,6 @@
 
 package node.dgram
 
-
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-@seskar.js.JsVirtual
 sealed external interface RemoteInfoFamily {
     companion object {
         @seskar.js.JsValue("IPv4")

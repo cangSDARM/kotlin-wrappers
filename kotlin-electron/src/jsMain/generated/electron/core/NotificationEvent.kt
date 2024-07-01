@@ -3,8 +3,6 @@
 package electron.core
 
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-@seskar.js.JsVirtual
 sealed external interface NotificationEvent {
     sealed interface ACTION : node.events.LegacyEventType
     sealed interface CLICK : node.events.LegacyEventType

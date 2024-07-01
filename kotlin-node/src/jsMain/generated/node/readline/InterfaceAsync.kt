@@ -5,7 +5,6 @@
 package node.readline
 
 import js.promise.Promise
-import js.promise.await
 import web.abort.Abortable
 
 /**
@@ -15,7 +14,6 @@ import web.abort.Abortable
  * and is read from, the `input` stream.
  * @since v17.0.0
  */
-
 external class Interface : _Interface {
     /**
      * The `rl.question()` method displays the `query` by writing it to the `output`,
@@ -56,31 +54,15 @@ external class Interface : _Interface {
     fun questionAsync(query: String): Promise<String>
 
 
-    @Suppress(
-        "WRONG_BODY_OF_EXTERNAL_DECLARATION",
-        "INLINE_EXTERNAL_DECLARATION",
-        "NON_ABSTRACT_MEMBER_OF_EXTERNAL_INTERFACE",
-        "DECLARATION_CANT_BE_INLINED",
-    )
-    suspend inline fun question(query: String): String =
-        questionAsync(
-            query
-        ).await()
+    @seskar.js.JsAsync
+    suspend fun question(query: String): String
 
 
     @JsName("question")
     fun questionAsync(query: String, options: Abortable): Promise<String>
 
 
-    @Suppress(
-        "WRONG_BODY_OF_EXTERNAL_DECLARATION",
-        "INLINE_EXTERNAL_DECLARATION",
-        "NON_ABSTRACT_MEMBER_OF_EXTERNAL_INTERFACE",
-        "DECLARATION_CANT_BE_INLINED",
-    )
-    suspend inline fun question(query: String, options: Abortable): String =
-        questionAsync(
-            query, options
-        ).await()
+    @seskar.js.JsAsync
+    suspend fun question(query: String, options: Abortable): String
 
 }

@@ -2,6 +2,9 @@
 
 package cesium.engine
 
+import kotlinx.js.JsPlainObject
+import web.gl.WebGLPowerPreference
+
 /**
  * WebGL options to be passed on to HTMLCanvasElement.getContext().
  * See [WebGLContextAttributes](https://registry.khronos.org/webgl/specs/latest/1.0/#5.2)
@@ -12,13 +15,14 @@ package cesium.engine
  * to composite Cesium above other HTML elements using alpha-blending, set
  * `alpha` to true.
  */
-external interface WebGLOptions {
+@JsPlainObject
+sealed external interface WebGLOptions {
     var alpha: Boolean?
     var depth: Boolean?
     var stencil: Boolean?
     var antialias: Boolean?
     var premultipliedAlpha: Boolean?
     var preserveDrawingBuffer: Boolean?
-    var powerPreference: dynamic
+    var powerPreference: WebGLPowerPreference?
     var failIfMajorPerformanceCaveat: Boolean?
 }

@@ -2,6 +2,9 @@
 
 package actions.artifact
 
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
 sealed external interface PatchArtifactSizeSuccessResponse {
     var containerId: Number
     var size: Number

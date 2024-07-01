@@ -3,6 +3,7 @@
 package web.notifications
 
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.events.Event
 import web.events.EventHandler
 import web.events.EventTarget
@@ -12,7 +13,7 @@ import web.events.EventTarget
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Notification)
  */
-external class Notification(
+open external class Notification(
     title: String,
     options: NotificationOptions = definedExternally,
 ) : EventTarget {
@@ -49,22 +50,22 @@ external class Notification(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Notification/click_event)
      */
-    var onclick: EventHandler<Event, Notification>?
+    var onclick: EventHandler<Event, Notification, Notification>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Notification/close_event)
      */
-    var onclose: EventHandler<Event, Notification>?
+    var onclose: EventHandler<Event, Notification, Notification>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Notification/error_event)
      */
-    var onerror: EventHandler<Event, Notification>?
+    var onerror: EventHandler<Event, Notification, Notification>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Notification/show_event)
      */
-    var onshow: EventHandler<Event, Notification>?
+    var onshow: EventHandler<Event, Notification, Notification>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Notification/requireInteraction)
@@ -100,6 +101,10 @@ external class Notification(
         /**
          * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Notification/requestPermission_static)
          */
-        fun requestPermission(deprecatedCallback: NotificationPermissionCallback = definedExternally): Promise<NotificationPermission>
+        @JsAsync
+        suspend fun requestPermission(deprecatedCallback: NotificationPermissionCallback = definedExternally): NotificationPermission
+
+        @JsName("requestPermission")
+        fun requestPermissionAsync(deprecatedCallback: NotificationPermissionCallback = definedExternally): Promise<NotificationPermission>
     }
 }

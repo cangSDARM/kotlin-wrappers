@@ -2,13 +2,9 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * An appearance defines the full GLSL vertex and fragment shaders and the
@@ -16,7 +12,9 @@ import js.objects.jso
  * this base `Appearance` interface.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Appearance.html">Online Documentation</a>
  */
-external class Appearance(options: ConstructorOptions? = definedExternally) {
+external class Appearance(
+    options: ConstructorOptions? = definedExternally,
+) {
     /**
      * @property [translucent] When `true`, the geometry is expected to appear translucent so [Appearance.renderState] has alpha blending enabled.
      *   Default value - `true`
@@ -28,7 +26,8 @@ external class Appearance(options: ConstructorOptions? = definedExternally) {
      * @property [fragmentShaderSource] Optional GLSL fragment shader source to override the default fragment shader.
      * @property [renderState] Optional render state to override the default render state.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var translucent: Boolean?
         var closed: Boolean?
         var material: Material?
@@ -100,8 +99,3 @@ external class Appearance(options: ConstructorOptions? = definedExternally) {
      */
     fun getRenderState(): Any
 }
-
-inline fun Appearance(
-    block: Appearance.ConstructorOptions.() -> Unit,
-): Appearance =
-    Appearance(options = jso(block))

@@ -2,14 +2,10 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A description of a sphere centered at the origin.
@@ -22,7 +18,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/SphereGeometry.html">Online Documentation</a>
  */
-external class SphereGeometry(options: ConstructorOptions? = definedExternally) {
+external class SphereGeometry(
+    options: ConstructorOptions? = definedExternally,
+) {
     /**
      * @property [radius] The radius of the sphere.
      *   Default value - `1.0`
@@ -33,7 +31,8 @@ external class SphereGeometry(options: ConstructorOptions? = definedExternally) 
      * @property [vertexFormat] The vertex attributes to be computed.
      *   Default value - [VertexFormat.DEFAULT]
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var radius: Double?
         var stackPartitions: Int?
         var slicePartitions: Int?
@@ -86,8 +85,3 @@ external class SphereGeometry(options: ConstructorOptions? = definedExternally) 
         fun createGeometry(sphereGeometry: SphereGeometry): Geometry?
     }
 }
-
-inline fun SphereGeometry(
-    block: SphereGeometry.ConstructorOptions.() -> Unit,
-): SphereGeometry =
-    SphereGeometry(options = jso(block))

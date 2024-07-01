@@ -2,9 +2,6 @@
 
 package node.dns
 
-
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-@seskar.js.JsVirtual
 sealed external interface SetDefaultResultOrderOrder {
     companion object {
         @seskar.js.JsValue("ipv4first")

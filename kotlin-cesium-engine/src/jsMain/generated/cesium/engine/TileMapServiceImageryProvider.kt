@@ -5,6 +5,8 @@
 package cesium.engine
 
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * <div class="notice">
@@ -27,7 +29,8 @@ import js.promise.Promise
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/TileMapServiceImageryProvider.html">Online Documentation</a>
  */
-sealed external class TileMapServiceImageryProvider {
+external class TileMapServiceImageryProvider
+private constructor() {
     /**
      * Initialization options for the TileMapServiceImageryProvider constructor
      * @property [fileExtension] The file extension for images on the server.
@@ -56,7 +59,8 @@ sealed external class TileMapServiceImageryProvider {
      *   Specifying this option will do the same, allowing for loading of these incorrect tilesets.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/TileMapServiceImageryProvider.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var fileExtension: String?
         var credit: Credit?
         var minimumLevel: Int?
@@ -90,12 +94,26 @@ sealed external class TileMapServiceImageryProvider {
          * @return A promise that resolves to the created TileMapServiceImageryProvider.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/TileMapServiceImageryProvider.html#.fromUrl">Online Documentation</a>
          */
-        fun fromUrl(
+        @JsAsync
+        suspend fun fromUrl(
+            url: Resource,
+            options: ConstructorOptions? = definedExternally,
+        ): TileMapServiceImageryProvider
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
             url: Resource,
             options: ConstructorOptions? = definedExternally,
         ): Promise<TileMapServiceImageryProvider>
 
-        fun fromUrl(
+        @JsAsync
+        suspend fun fromUrl(
+            url: String,
+            options: ConstructorOptions? = definedExternally,
+        ): TileMapServiceImageryProvider
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
             url: String,
             options: ConstructorOptions? = definedExternally,
         ): Promise<TileMapServiceImageryProvider>

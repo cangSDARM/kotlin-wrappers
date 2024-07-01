@@ -2,16 +2,13 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
 import js.core.Void
-import js.objects.jso
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * Provides tiled imagery served by [WMTS 1.0.0](http://www.opengeospatial.org/standards/wmts) compliant servers.
@@ -68,7 +65,9 @@ import js.promise.Promise
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/WebMapTileServiceImageryProvider.html">Online Documentation</a>
  */
-external class WebMapTileServiceImageryProvider(options: ConstructorOptions) {
+external class WebMapTileServiceImageryProvider(
+    options: ConstructorOptions,
+) {
     /**
      * Gets the URL of the service hosting the imagery.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/WebMapTileServiceImageryProvider.html#url">Online Documentation</a>
@@ -200,7 +199,16 @@ external class WebMapTileServiceImageryProvider(options: ConstructorOptions) {
      *   undefined if there are too many active requests to the server, and the request should be retried later.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/WebMapTileServiceImageryProvider.html#requestImage">Online Documentation</a>
      */
-    fun requestImage(
+    @JsAsync(optional = true)
+    suspend fun requestImage(
+        x: Double,
+        y: Double,
+        level: Int,
+        request: Request? = definedExternally,
+    ): ImageryTypes?
+
+    @JsName("requestImage")
+    fun requestImageAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -256,7 +264,8 @@ external class WebMapTileServiceImageryProvider(options: ConstructorOptions) {
      *   Default value - `'abc'`
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/WebMapTileServiceImageryProvider.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var url: Resource
         var format: String?
         var layer: String
@@ -277,8 +286,3 @@ external class WebMapTileServiceImageryProvider(options: ConstructorOptions) {
         var subdomains: ReadonlyArray<String>?
     }
 }
-
-inline fun WebMapTileServiceImageryProvider(
-    block: WebMapTileServiceImageryProvider.ConstructorOptions.() -> Unit,
-): WebMapTileServiceImageryProvider =
-    WebMapTileServiceImageryProvider(options = jso(block))

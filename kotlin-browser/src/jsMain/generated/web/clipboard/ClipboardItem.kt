@@ -5,6 +5,7 @@ package web.clipboard
 import js.array.ReadonlyArray
 import js.objects.ReadonlyRecord
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.blob.Blob
 
 /**
@@ -17,6 +18,11 @@ external class ClipboardItem(
     options: ClipboardItemOptions = definedExternally,
 ) {
     /**
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ClipboardItem/presentationStyle)
+     */
+    val presentationStyle: PresentationStyle
+
+    /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ClipboardItem/types)
      */
     val types: ReadonlyArray<String>
@@ -24,5 +30,13 @@ external class ClipboardItem(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ClipboardItem/getType)
      */
-    fun getType(type: String): Promise<Blob>
+    @JsAsync
+    suspend fun getType(type: String): Blob
+
+    @JsName("getType")
+    fun getTypeAsync(type: String): Promise<Blob>
+
+    companion object {
+        fun supports(type: String): Boolean
+    }
 }

@@ -7,6 +7,8 @@ package cesium.engine
 import js.array.ReadonlyArray
 import js.core.Void
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * <div class="notice">
@@ -23,7 +25,8 @@ import js.promise.Promise
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseImageryProvider.html">Online Documentation</a>
  */
-sealed external class GoogleEarthEnterpriseImageryProvider {
+external class GoogleEarthEnterpriseImageryProvider
+private constructor() {
     /**
      * Gets the name of the Google Earth Enterprise server url hosting the imagery.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseImageryProvider.html#url">Online Documentation</a>
@@ -129,7 +132,16 @@ sealed external class GoogleEarthEnterpriseImageryProvider {
      *   undefined if there are too many active requests to the server, and the request should be retried later.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseImageryProvider.html#requestImage">Online Documentation</a>
      */
-    fun requestImage(
+    @JsAsync(optional = true)
+    suspend fun requestImage(
+        x: Double,
+        y: Double,
+        level: Int,
+        request: Request? = definedExternally,
+    ): ImageryTypes?
+
+    @JsName("requestImage")
+    fun requestImageAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -157,14 +169,16 @@ sealed external class GoogleEarthEnterpriseImageryProvider {
 
     /**
      * Initialization options for the GoogleEarthEnterpriseImageryProvider constructor
-     * @property [ellipsoid] The ellipsoid.  If not specified, the WGS84 ellipsoid is used.
+     * @property [ellipsoid] The ellipsoid.  If not specified, the default ellipsoid is used.
+     *   Default value - [Ellipsoid.default]
      * @property [tileDiscardPolicy] The policy that determines if a tile
      *   is invalid and should be discarded. If this value is not specified, a default
      *   is to discard tiles that fail to download.
      * @property [credit] A credit for the data source, which is displayed on the canvas.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseImageryProvider.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var ellipsoid: Ellipsoid?
         var tileDiscardPolicy: TileDiscardPolicy?
         var credit: Credit?

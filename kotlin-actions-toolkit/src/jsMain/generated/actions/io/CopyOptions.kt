@@ -2,6 +2,9 @@
 
 package actions.io
 
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
 sealed external interface CopyOptions {
     /** Optional. Whether to recursively copy all subdirectories. Defaults to false */
     var recursive: Boolean?

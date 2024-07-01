@@ -4,6 +4,7 @@ package web.payment
 
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.events.EventTarget
 
 /**
@@ -32,12 +33,20 @@ sealed external class PaymentResponse :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/complete)
      */
-    fun complete(result: PaymentComplete = definedExternally): Promise<Void>
+    @JsAsync
+    suspend fun complete(result: PaymentComplete = definedExternally)
+
+    @JsName("complete")
+    fun completeAsync(result: PaymentComplete = definedExternally): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/retry)
      */
-    fun retry(errorFields: PaymentValidationErrors = definedExternally): Promise<Void>
+    @JsAsync
+    suspend fun retry(errorFields: PaymentValidationErrors = definedExternally)
+
+    @JsName("retry")
+    fun retryAsync(errorFields: PaymentValidationErrors = definedExternally): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/toJSON)

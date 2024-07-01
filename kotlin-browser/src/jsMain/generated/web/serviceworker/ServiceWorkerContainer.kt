@@ -4,6 +4,7 @@ package web.serviceworker
 
 import js.array.ReadonlyArray
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.events.Event
 import web.events.EventHandler
 import web.events.EventTarget
@@ -26,17 +27,17 @@ sealed external class ServiceWorkerContainer :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer/controllerchange_event)
      */
-    var oncontrollerchange: EventHandler<Event, ServiceWorkerContainer>?
+    var oncontrollerchange: EventHandler<Event, ServiceWorkerContainer, ServiceWorkerContainer>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer/message_event)
      */
-    var onmessage: EventHandler<MessageEvent<*>, ServiceWorkerContainer>?
+    var onmessage: EventHandler<MessageEvent<*>, ServiceWorkerContainer, ServiceWorkerContainer>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer/messageerror_event)
      */
-    var onmessageerror: EventHandler<MessageEvent<*>, ServiceWorkerContainer>?
+    var onmessageerror: EventHandler<MessageEvent<*>, ServiceWorkerContainer, ServiceWorkerContainer>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer/ready)
@@ -46,23 +47,50 @@ sealed external class ServiceWorkerContainer :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer/getRegistration)
      */
-    fun getRegistration(clientURL: String = definedExternally): Promise<ServiceWorkerRegistration?>
-    fun getRegistration(clientURL: URL): Promise<ServiceWorkerRegistration?>
+    @JsAsync
+    suspend fun getRegistration(clientURL: String = definedExternally): ServiceWorkerRegistration?
+
+    @JsName("getRegistration")
+    fun getRegistrationAsync(clientURL: String = definedExternally): Promise<ServiceWorkerRegistration?>
+
+    @JsAsync
+    suspend fun getRegistration(clientURL: URL): ServiceWorkerRegistration?
+
+    @JsName("getRegistration")
+    fun getRegistrationAsync(clientURL: URL): Promise<ServiceWorkerRegistration?>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer/getRegistrations)
      */
-    fun getRegistrations(): Promise<ReadonlyArray<ServiceWorkerRegistration>>
+    @JsAsync
+    suspend fun getRegistrations(): ReadonlyArray<ServiceWorkerRegistration>
+
+    @JsName("getRegistrations")
+    fun getRegistrationsAsync(): Promise<ReadonlyArray<ServiceWorkerRegistration>>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer/register)
      */
-    fun register(
+    @JsAsync
+    suspend fun register(
+        scriptURL: String,
+        options: RegistrationOptions = definedExternally,
+    ): ServiceWorkerRegistration
+
+    @JsName("register")
+    fun registerAsync(
         scriptURL: String,
         options: RegistrationOptions = definedExternally,
     ): Promise<ServiceWorkerRegistration>
 
-    fun register(
+    @JsAsync
+    suspend fun register(
+        scriptURL: URL,
+        options: RegistrationOptions = definedExternally,
+    ): ServiceWorkerRegistration
+
+    @JsName("register")
+    fun registerAsync(
         scriptURL: URL,
         options: RegistrationOptions = definedExternally,
     ): Promise<ServiceWorkerRegistration>

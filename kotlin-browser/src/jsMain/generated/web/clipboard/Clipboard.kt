@@ -4,6 +4,7 @@ package web.clipboard
 
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.events.EventTarget
 
 /**
@@ -16,20 +17,36 @@ sealed external class Clipboard :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clipboard/read)
      */
-    fun read(): Promise<ClipboardItems>
+    @JsAsync
+    suspend fun read(): ClipboardItems
+
+    @JsName("read")
+    fun readAsync(): Promise<ClipboardItems>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clipboard/readText)
      */
-    fun readText(): Promise<String>
+    @JsAsync
+    suspend fun readText(): String
+
+    @JsName("readText")
+    fun readTextAsync(): Promise<String>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clipboard/write)
      */
-    fun write(data: ClipboardItems): Promise<Void>
+    @JsAsync
+    suspend fun write(data: ClipboardItems)
+
+    @JsName("write")
+    fun writeAsync(data: ClipboardItems): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clipboard/writeText)
      */
-    fun writeText(data: String): Promise<Void>
+    @JsAsync
+    suspend fun writeText(data: String)
+
+    @JsName("writeText")
+    fun writeTextAsync(data: String): Promise<Void>
 }

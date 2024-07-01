@@ -2,10 +2,10 @@
 
 package js.intl
 
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @JsPlainObject
-sealed external interface NumberFormatOptions {
+external interface NumberFormatOptions {
     var localeMatcher: String?
     var style: String?
     var currency: String?

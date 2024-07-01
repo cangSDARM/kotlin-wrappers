@@ -2,16 +2,13 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
 import js.core.Void
-import js.objects.jso
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * Provides a single, top-level imagery tile.  The single image is assumed to be in
@@ -19,7 +16,9 @@ import js.promise.Promise
  * and will be rendered using a [GeographicTilingScheme].
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/SingleTileImageryProvider.html">Online Documentation</a>
  */
-external class SingleTileImageryProvider(options: ConstructorOptions) {
+external class SingleTileImageryProvider(
+    options: ConstructorOptions,
+) {
     /**
      * Gets the URL of the single, top-level imagery tile.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/SingleTileImageryProvider.html#url">Online Documentation</a>
@@ -124,7 +123,16 @@ external class SingleTileImageryProvider(options: ConstructorOptions) {
      * @return The resolved image
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/SingleTileImageryProvider.html#requestImage">Online Documentation</a>
      */
-    fun requestImage(
+    @JsAsync(optional = true)
+    suspend fun requestImage(
+        x: Double,
+        y: Double,
+        level: Int,
+        request: Request? = definedExternally,
+    ): ImageryTypes?
+
+    @JsName("requestImage")
+    fun requestImageAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -161,7 +169,8 @@ external class SingleTileImageryProvider(options: ConstructorOptions) {
      * @property [ellipsoid] The ellipsoid.  If not specified, the WGS84 ellipsoid is used.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/SingleTileImageryProvider.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var url: Resource
         var tileWidth: Int?
         var tileHeight: Int?
@@ -181,14 +190,28 @@ external class SingleTileImageryProvider(options: ConstructorOptions) {
          * @return The resolved SingleTileImageryProvider.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/SingleTileImageryProvider.html#.fromUrl">Online Documentation</a>
          */
-        fun fromUrl(
+        @JsAsync
+        suspend fun fromUrl(
             url: Resource,
-            options: dynamic = definedExternally,
+            options: fromUrlOptions? = definedExternally,
+        ): SingleTileImageryProvider
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
+            url: Resource,
+            options: fromUrlOptions? = definedExternally,
         ): Promise<SingleTileImageryProvider>
 
-        fun fromUrl(
+        @JsAsync
+        suspend fun fromUrl(
             url: String,
-            options: dynamic = definedExternally,
+            options: fromUrlOptions? = definedExternally,
+        ): SingleTileImageryProvider
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
+            url: String,
+            options: fromUrlOptions? = definedExternally,
         ): Promise<SingleTileImageryProvider>
 
         /**
@@ -199,15 +222,11 @@ external class SingleTileImageryProvider(options: ConstructorOptions) {
          * @property [ellipsoid] The ellipsoid.  If not specified, the WGS84 ellipsoid is used.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/SingleTileImageryProvider.html#.fromUrlOptions">Online Documentation</a>
          */
-        interface fromUrlOptions {
+        @JsPlainObject
+        sealed interface fromUrlOptions {
             var rectangle: Rectangle?
             var credit: Credit?
             var ellipsoid: Ellipsoid?
         }
     }
 }
-
-inline fun SingleTileImageryProvider(
-    block: SingleTileImageryProvider.ConstructorOptions.() -> Unit,
-): SingleTileImageryProvider =
-    SingleTileImageryProvider(options = jso(block))

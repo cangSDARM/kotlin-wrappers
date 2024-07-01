@@ -2,14 +2,10 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A description of the outline of a sphere.
@@ -23,7 +19,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/SphereOutlineGeometry.html">Online Documentation</a>
  */
-external class SphereOutlineGeometry(options: ConstructorOptions? = definedExternally) {
+external class SphereOutlineGeometry(
+    options: ConstructorOptions? = definedExternally,
+) {
     /**
      * @property [radius] The radius of the sphere.
      *   Default value - `1.0`
@@ -34,7 +32,8 @@ external class SphereOutlineGeometry(options: ConstructorOptions? = definedExter
      * @property [subdivisions] The number of points per line, determining the granularity of the curvature .
      *   Default value - `200`
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var radius: Double?
         var stackPartitions: Int?
         var slicePartitions: Int?
@@ -87,8 +86,3 @@ external class SphereOutlineGeometry(options: ConstructorOptions? = definedExter
         fun createGeometry(sphereGeometry: SphereOutlineGeometry): Geometry?
     }
 }
-
-inline fun SphereOutlineGeometry(
-    block: SphereOutlineGeometry.ConstructorOptions.() -> Unit,
-): SphereOutlineGeometry =
-    SphereOutlineGeometry(options = jso(block))

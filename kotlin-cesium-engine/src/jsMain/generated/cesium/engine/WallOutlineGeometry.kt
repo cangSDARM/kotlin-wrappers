@@ -2,14 +2,10 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A description of a wall outline. A wall is defined by a series of points,
@@ -29,7 +25,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/WallOutlineGeometry.html">Online Documentation</a>
  */
-external class WallOutlineGeometry(options: ConstructorOptions) {
+external class WallOutlineGeometry(
+    options: ConstructorOptions,
+) {
     /**
      * @property [positions] An array of Cartesian objects, which are the points of the wall.
      * @property [granularity] The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer.
@@ -39,9 +37,10 @@ external class WallOutlineGeometry(options: ConstructorOptions) {
      * @property [minimumHeights] An array parallel to `positions` that give the minimum height of the
      *   wall at `positions`. If undefined, the height at each position is 0.0.
      * @property [ellipsoid] The ellipsoid for coordinate manipulation
-     *   Default value - [Ellipsoid.WGS84]
+     *   Default value - [Ellipsoid.default]
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var positions: ReadonlyArray<Cartesian3>
         var granularity: Double?
         var maximumHeights: ReadonlyArray<Double>?
@@ -115,9 +114,10 @@ external class WallOutlineGeometry(options: ConstructorOptions) {
          * @property [minimumHeight] A constant that defines the minimum height of the
          *   wall at `positions`. If undefined, the height at each position is 0.0.
          * @property [ellipsoid] The ellipsoid for coordinate manipulation
-         *   Default value - [Ellipsoid.WGS84]
+         *   Default value - [Ellipsoid.default]
          */
-        interface FromConstantHeightsOptions {
+        @JsPlainObject
+        sealed interface FromConstantHeightsOptions {
             var positions: ReadonlyArray<Cartesian3>
             var maximumHeight: Double?
             var minimumHeight: Double?
@@ -133,8 +133,3 @@ external class WallOutlineGeometry(options: ConstructorOptions) {
         fun createGeometry(wallGeometry: WallOutlineGeometry): Geometry?
     }
 }
-
-inline fun WallOutlineGeometry(
-    block: WallOutlineGeometry.ConstructorOptions.() -> Unit,
-): WallOutlineGeometry =
-    WallOutlineGeometry(options = jso(block))

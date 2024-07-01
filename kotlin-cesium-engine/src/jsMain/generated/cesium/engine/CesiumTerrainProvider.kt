@@ -2,15 +2,12 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "VAR_OVERRIDDEN_BY_VAL",
-    "VAR_TYPE_MISMATCH_ON_OVERRIDE",
-)
-
 package cesium.engine
 
 import js.core.Void
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * <div class="notice">
@@ -39,7 +36,9 @@ import js.promise.Promise
  * @param [options] An object describing initialization options
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/CesiumTerrainProvider.html">Online Documentation</a>
  */
-sealed external class CesiumTerrainProvider : TerrainProvider {
+external class CesiumTerrainProvider
+private constructor() :
+    TerrainProvider {
     /**
      * Requests the geometry for a given tile. The result must include terrain data and
      * may optionally include a water mask and an indication of which child tiles are available.
@@ -52,7 +51,7 @@ sealed external class CesiumTerrainProvider : TerrainProvider {
      *   pending and the request will be retried later.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/CesiumTerrainProvider.html#requestTileGeometry">Online Documentation</a>
      */
-    override fun requestTileGeometry(
+    override fun requestTileGeometryAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -165,7 +164,7 @@ sealed external class CesiumTerrainProvider : TerrainProvider {
      * @return Undefined if nothing need to be loaded or a Promise that resolves when all required tiles are loaded
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/CesiumTerrainProvider.html#loadTileDataAvailability">Online Documentation</a>
      */
-    override fun loadTileDataAvailability(
+    override fun loadTileDataAvailabilityAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -179,11 +178,13 @@ sealed external class CesiumTerrainProvider : TerrainProvider {
      *   Default value - `false`
      * @property [requestMetadata] Flag that indicates if the client should request per tile metadata from the server, if available.
      *   Default value - `true`
-     * @property [ellipsoid] The ellipsoid.  If not specified, the WGS84 ellipsoid is used.
+     * @property [ellipsoid] The ellipsoid.  If not specified, the default ellipsoid is used.
+     *   Default value - [Ellipsoid.default]
      * @property [credit] A credit for the data source, which is displayed on the canvas.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/CesiumTerrainProvider.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var requestVertexNormals: Boolean?
         var requestWaterMask: Boolean?
         var requestMetadata: Boolean?
@@ -213,7 +214,14 @@ sealed external class CesiumTerrainProvider : TerrainProvider {
          * @param [options] An object describing initialization options.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/CesiumTerrainProvider.html#.fromIonAssetId">Online Documentation</a>
          */
-        fun fromIonAssetId(
+        @JsAsync
+        suspend fun fromIonAssetId(
+            assetId: Int,
+            options: ConstructorOptions? = definedExternally,
+        ): CesiumTerrainProvider
+
+        @JsName("fromIonAssetId")
+        fun fromIonAssetIdAsync(
             assetId: Int,
             options: ConstructorOptions? = definedExternally,
         ): Promise<CesiumTerrainProvider>
@@ -240,8 +248,15 @@ sealed external class CesiumTerrainProvider : TerrainProvider {
          * @param [options] An object describing initialization options.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/CesiumTerrainProvider.html#.fromUrl">Online Documentation</a>
          */
-        fun fromUrl(
-            url: dynamic,
+        @JsAsync
+        suspend fun fromUrl(
+            url: Any, /* Resource | string | Promise<Resource> | Promise<string> */
+            options: ConstructorOptions? = definedExternally,
+        ): CesiumTerrainProvider
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
+            url: Any, /* Resource | string | Promise<Resource> | Promise<string> */
             options: ConstructorOptions? = definedExternally,
         ): Promise<CesiumTerrainProvider>
     }

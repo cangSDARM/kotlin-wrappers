@@ -2,8 +2,6 @@
 
 package node.test
 
-import js.promise.await
-
 
 suspend fun it(
     name: String = undefined.unsafeCast<Nothing>(),

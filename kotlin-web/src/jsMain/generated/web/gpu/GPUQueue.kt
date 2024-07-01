@@ -6,12 +6,18 @@ import js.array.ReadonlyArray
 import js.buffer.BufferSource
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 
 sealed external class GPUQueue :
     GPUObjectBase {
     override var label: String
     fun submit(commandBuffers: ReadonlyArray<GPUCommandBuffer>)
-    fun onSubmittedWorkDone(): Promise<Void>
+
+    @JsAsync
+    suspend fun onSubmittedWorkDone()
+
+    @JsName("onSubmittedWorkDone")
+    fun onSubmittedWorkDoneAsync(): Promise<Void>
     fun writeBuffer(
         buffer: GPUBuffer,
         bufferOffset: GPUSize64,

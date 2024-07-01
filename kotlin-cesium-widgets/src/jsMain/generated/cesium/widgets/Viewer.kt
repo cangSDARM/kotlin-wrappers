@@ -3,7 +3,6 @@
 @file:JsModule("@cesium/widgets")
 
 @file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
     "EXTERNAL_CLASS_CONSTRUCTOR_PROPERTY_PARAMETER",
 )
 
@@ -11,8 +10,9 @@ package cesium.widgets
 
 import cesium.engine.*
 import js.array.ReadonlyArray
-import js.objects.jso
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 import web.dom.Element
 import web.html.HTMLCanvasElement
 
@@ -228,6 +228,12 @@ external class Viewer(
     val camera: Camera
 
     /**
+     * Gets the default ellipsoid for the scene.
+     * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Viewer.html#ellipsoid">Online Documentation</a>
+     */
+    val ellipsoid: Ellipsoid
+
+    /**
      * Gets the post-process stages.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Viewer.html#postProcessStages">Online Documentation</a>
      */
@@ -406,77 +412,182 @@ external class Viewer(
      * @return A Promise that resolves to true if the zoom was successful or false if the target is not currently visualized in the scene or the zoom was cancelled.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Viewer.html#zoomTo">Online Documentation</a>
      */
-    fun zoomTo(
+    @JsAsync
+    suspend fun zoomTo(
+        target: Entity,
+        offset: HeadingPitchRange? = definedExternally,
+    ): Boolean
+
+    @JsName("zoomTo")
+    fun zoomToAsync(
         target: Entity,
         offset: HeadingPitchRange? = definedExternally,
     ): Promise<Boolean>
 
-    fun zoomTo(
+    @JsAsync
+    suspend fun zoomTo(
+        target: ReadonlyArray<Entity>,
+        offset: HeadingPitchRange? = definedExternally,
+    ): Boolean
+
+    @JsName("zoomTo")
+    fun zoomToAsync(
         target: ReadonlyArray<Entity>,
         offset: HeadingPitchRange? = definedExternally,
     ): Promise<Boolean>
 
-    fun zoomTo(
+    @JsAsync
+    suspend fun zoomTo(
+        target: EntityCollection,
+        offset: HeadingPitchRange? = definedExternally,
+    ): Boolean
+
+    @JsName("zoomTo")
+    fun zoomToAsync(
         target: EntityCollection,
         offset: HeadingPitchRange? = definedExternally,
     ): Promise<Boolean>
 
-    fun zoomTo(
+    @JsAsync
+    suspend fun zoomTo(
+        target: DataSource,
+        offset: HeadingPitchRange? = definedExternally,
+    ): Boolean
+
+    @JsName("zoomTo")
+    fun zoomToAsync(
         target: DataSource,
         offset: HeadingPitchRange? = definedExternally,
     ): Promise<Boolean>
 
-    fun zoomTo(
+    @JsAsync
+    suspend fun zoomTo(
+        target: ImageryLayer,
+        offset: HeadingPitchRange? = definedExternally,
+    ): Boolean
+
+    @JsName("zoomTo")
+    fun zoomToAsync(
         target: ImageryLayer,
         offset: HeadingPitchRange? = definedExternally,
     ): Promise<Boolean>
 
-    fun zoomTo(
+    @JsAsync
+    suspend fun zoomTo(
+        target: Cesium3DTileset,
+        offset: HeadingPitchRange? = definedExternally,
+    ): Boolean
+
+    @JsName("zoomTo")
+    fun zoomToAsync(
         target: Cesium3DTileset,
         offset: HeadingPitchRange? = definedExternally,
     ): Promise<Boolean>
 
-    fun zoomTo(
+    @JsAsync
+    suspend fun zoomTo(
+        target: TimeDynamicPointCloud,
+        offset: HeadingPitchRange? = definedExternally,
+    ): Boolean
+
+    @JsName("zoomTo")
+    fun zoomToAsync(
         target: TimeDynamicPointCloud,
         offset: HeadingPitchRange? = definedExternally,
     ): Promise<Boolean>
 
-    fun zoomTo(
+    @JsAsync
+    suspend fun zoomTo(
+        target: Promise<Entity>,
+        offset: HeadingPitchRange? = definedExternally,
+    ): Boolean
+
+    @JsName("zoomTo")
+    fun zoomToAsync(
         target: Promise<Entity>,
         offset: HeadingPitchRange? = definedExternally,
     ): Promise<Boolean>
 
-    fun zoomTo(
+    @JsAsync
+    suspend fun zoomTo(
+        target: Promise<ReadonlyArray<Entity>>,
+        offset: HeadingPitchRange? = definedExternally,
+    ): Boolean
+
+    @JsName("zoomTo")
+    fun zoomToAsync(
         target: Promise<ReadonlyArray<Entity>>,
         offset: HeadingPitchRange? = definedExternally,
     ): Promise<Boolean>
 
-    fun zoomTo(
+    @JsAsync
+    suspend fun zoomTo(
+        target: Promise<EntityCollection>,
+        offset: HeadingPitchRange? = definedExternally,
+    ): Boolean
+
+    @JsName("zoomTo")
+    fun zoomToAsync(
         target: Promise<EntityCollection>,
         offset: HeadingPitchRange? = definedExternally,
     ): Promise<Boolean>
 
-    fun zoomTo(
+    @JsAsync
+    suspend fun zoomTo(
+        target: Promise<DataSource>,
+        offset: HeadingPitchRange? = definedExternally,
+    ): Boolean
+
+    @JsName("zoomTo")
+    fun zoomToAsync(
         target: Promise<DataSource>,
         offset: HeadingPitchRange? = definedExternally,
     ): Promise<Boolean>
 
-    fun zoomTo(
+    @JsAsync
+    suspend fun zoomTo(
+        target: Promise<ImageryLayer>,
+        offset: HeadingPitchRange? = definedExternally,
+    ): Boolean
+
+    @JsName("zoomTo")
+    fun zoomToAsync(
         target: Promise<ImageryLayer>,
         offset: HeadingPitchRange? = definedExternally,
     ): Promise<Boolean>
 
-    fun zoomTo(
+    @JsAsync
+    suspend fun zoomTo(
+        target: Promise<Cesium3DTileset>,
+        offset: HeadingPitchRange? = definedExternally,
+    ): Boolean
+
+    @JsName("zoomTo")
+    fun zoomToAsync(
         target: Promise<Cesium3DTileset>,
         offset: HeadingPitchRange? = definedExternally,
     ): Promise<Boolean>
 
-    fun zoomTo(
+    @JsAsync
+    suspend fun zoomTo(
+        target: Promise<TimeDynamicPointCloud>,
+        offset: HeadingPitchRange? = definedExternally,
+    ): Boolean
+
+    @JsName("zoomTo")
+    fun zoomToAsync(
         target: Promise<TimeDynamicPointCloud>,
         offset: HeadingPitchRange? = definedExternally,
     ): Promise<Boolean>
 
-    fun zoomTo(
+    @JsAsync
+    suspend fun zoomTo(
+        target: Promise<VoxelPrimitive>,
+        offset: HeadingPitchRange? = definedExternally,
+    ): Boolean
+
+    @JsName("zoomTo")
+    fun zoomToAsync(
         target: Promise<VoxelPrimitive>,
         offset: HeadingPitchRange? = definedExternally,
     ): Promise<Boolean>
@@ -499,7 +610,14 @@ external class Viewer(
      * @return A Promise that resolves to true if the flight was successful or false if the target is not currently visualized in the scene or the flight was cancelled. //TODO: Cleanup entity mentions
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Viewer.html#flyTo">Online Documentation</a>
      */
-    fun flyTo(
+    @JsAsync
+    suspend fun flyTo(
+        target: Entity,
+        options: FlyToOptions? = definedExternally,
+    ): Boolean
+
+    @JsName("flyTo")
+    fun flyToAsync(
         target: Entity,
         options: FlyToOptions? = definedExternally,
     ): Promise<Boolean>
@@ -510,78 +628,177 @@ external class Viewer(
      * @property [maximumHeight] The maximum height at the peak of the flight.
      * @property [offset] The offset from the target in the local east-north-up reference frame centered at the target.
      */
-    interface FlyToOptions {
+    @JsPlainObject
+    sealed interface FlyToOptions {
         var duration: Double?
         var maximumHeight: Double?
         var offset: HeadingPitchRange?
     }
 
-    fun flyTo(
+    @JsAsync
+    suspend fun flyTo(
+        target: ReadonlyArray<Entity>,
+        options: FlyToOptions? = definedExternally,
+    ): Boolean
+
+    @JsName("flyTo")
+    fun flyToAsync(
         target: ReadonlyArray<Entity>,
         options: FlyToOptions? = definedExternally,
     ): Promise<Boolean>
 
-    fun flyTo(
+    @JsAsync
+    suspend fun flyTo(
+        target: EntityCollection,
+        options: FlyToOptions? = definedExternally,
+    ): Boolean
+
+    @JsName("flyTo")
+    fun flyToAsync(
         target: EntityCollection,
         options: FlyToOptions? = definedExternally,
     ): Promise<Boolean>
 
-    fun flyTo(
+    @JsAsync
+    suspend fun flyTo(
+        target: DataSource,
+        options: FlyToOptions? = definedExternally,
+    ): Boolean
+
+    @JsName("flyTo")
+    fun flyToAsync(
         target: DataSource,
         options: FlyToOptions? = definedExternally,
     ): Promise<Boolean>
 
-    fun flyTo(
+    @JsAsync
+    suspend fun flyTo(
+        target: ImageryLayer,
+        options: FlyToOptions? = definedExternally,
+    ): Boolean
+
+    @JsName("flyTo")
+    fun flyToAsync(
         target: ImageryLayer,
         options: FlyToOptions? = definedExternally,
     ): Promise<Boolean>
 
-    fun flyTo(
+    @JsAsync
+    suspend fun flyTo(
+        target: Cesium3DTileset,
+        options: FlyToOptions? = definedExternally,
+    ): Boolean
+
+    @JsName("flyTo")
+    fun flyToAsync(
         target: Cesium3DTileset,
         options: FlyToOptions? = definedExternally,
     ): Promise<Boolean>
 
-    fun flyTo(
+    @JsAsync
+    suspend fun flyTo(
+        target: TimeDynamicPointCloud,
+        options: FlyToOptions? = definedExternally,
+    ): Boolean
+
+    @JsName("flyTo")
+    fun flyToAsync(
         target: TimeDynamicPointCloud,
         options: FlyToOptions? = definedExternally,
     ): Promise<Boolean>
 
-    fun flyTo(
+    @JsAsync
+    suspend fun flyTo(
+        target: Promise<Entity>,
+        options: FlyToOptions? = definedExternally,
+    ): Boolean
+
+    @JsName("flyTo")
+    fun flyToAsync(
         target: Promise<Entity>,
         options: FlyToOptions? = definedExternally,
     ): Promise<Boolean>
 
-    fun flyTo(
+    @JsAsync
+    suspend fun flyTo(
+        target: Promise<ReadonlyArray<Entity>>,
+        options: FlyToOptions? = definedExternally,
+    ): Boolean
+
+    @JsName("flyTo")
+    fun flyToAsync(
         target: Promise<ReadonlyArray<Entity>>,
         options: FlyToOptions? = definedExternally,
     ): Promise<Boolean>
 
-    fun flyTo(
+    @JsAsync
+    suspend fun flyTo(
+        target: Promise<EntityCollection>,
+        options: FlyToOptions? = definedExternally,
+    ): Boolean
+
+    @JsName("flyTo")
+    fun flyToAsync(
         target: Promise<EntityCollection>,
         options: FlyToOptions? = definedExternally,
     ): Promise<Boolean>
 
-    fun flyTo(
+    @JsAsync
+    suspend fun flyTo(
+        target: Promise<DataSource>,
+        options: FlyToOptions? = definedExternally,
+    ): Boolean
+
+    @JsName("flyTo")
+    fun flyToAsync(
         target: Promise<DataSource>,
         options: FlyToOptions? = definedExternally,
     ): Promise<Boolean>
 
-    fun flyTo(
+    @JsAsync
+    suspend fun flyTo(
+        target: Promise<ImageryLayer>,
+        options: FlyToOptions? = definedExternally,
+    ): Boolean
+
+    @JsName("flyTo")
+    fun flyToAsync(
         target: Promise<ImageryLayer>,
         options: FlyToOptions? = definedExternally,
     ): Promise<Boolean>
 
-    fun flyTo(
+    @JsAsync
+    suspend fun flyTo(
+        target: Promise<Cesium3DTileset>,
+        options: FlyToOptions? = definedExternally,
+    ): Boolean
+
+    @JsName("flyTo")
+    fun flyToAsync(
         target: Promise<Cesium3DTileset>,
         options: FlyToOptions? = definedExternally,
     ): Promise<Boolean>
 
-    fun flyTo(
+    @JsAsync
+    suspend fun flyTo(
+        target: Promise<TimeDynamicPointCloud>,
+        options: FlyToOptions? = definedExternally,
+    ): Boolean
+
+    @JsName("flyTo")
+    fun flyToAsync(
         target: Promise<TimeDynamicPointCloud>,
         options: FlyToOptions? = definedExternally,
     ): Promise<Boolean>
 
-    fun flyTo(
+    @JsAsync
+    suspend fun flyTo(
+        target: Promise<VoxelPrimitive>,
+        options: FlyToOptions? = definedExternally,
+    ): Boolean
+
+    @JsName("flyTo")
+    fun flyToAsync(
         target: Promise<VoxelPrimitive>,
         options: FlyToOptions? = definedExternally,
     ): Promise<Boolean>
@@ -626,11 +843,13 @@ external class Viewer(
      *   Default value - `createDefaultTerrainProviderViewModels()`
      * @property [baseLayer] The bottommost imagery layer applied to the globe. If set to `false`, no imagery provider will be added. This value is only valid if `baseLayerPicker` is set to false.
      *   Default value - `ImageryLayer.fromWorldImagery()`
+     * @property [ellipsoid] The default ellipsoid.
+     *   Default value - [Ellipsoid.default]
      * @property [terrainProvider] The terrain provider to use
      *   Default value - [EllipsoidTerrainProvider()][EllipsoidTerrainProvider]
      * @property [terrain] A terrain object which handles asynchronous terrain provider. Can only specify if options.terrainProvider is undefined.
-     * @property [skyBox] The skybox used to render the stars.  When `undefined`, the default stars are used. If set to `false`, no skyBox, Sun, or Moon will be added.
-     * @property [skyAtmosphere] Blue sky, and the glow around the Earth's limb.  Set to `false` to turn it off.
+     * @property [skyBox] The skybox used to render the stars. When `undefined` and the WGS84 ellipsoid used, the default stars are used. If set to `false`, no skyBox, Sun, or Moon will be added.
+     * @property [skyAtmosphere] Blue sky, and the glow around the Earth's limb. Enabled when the WGS84 ellipsoid used. Set to `false` to turn it off.
      * @property [fullscreenElement] The element or id to be placed into fullscreen mode when the full screen button is pressed.
      *   Default value - `document.body`
      * @property [useDefaultRenderLoop] True if this widget should control the render loop, false otherwise.
@@ -646,9 +865,9 @@ external class Viewer(
      * @property [sceneMode] The initial scene mode.
      *   Default value - [SceneMode.SCENE3D]
      * @property [mapProjection] The map projection to use in 2D and Columbus View modes.
-     *   Default value - [GeographicProjection()][GeographicProjection]
+     *   Default value - [GeographicProjection(options.ellipsoid)][GeographicProjection]
      * @property [globe] The globe to use in the scene.  If set to `false`, no globe will be added and the sky atmosphere will be hidden by default.
-     *   Default value - [Globe(mapProjection.ellipsoid)][Globe]
+     *   Default value - [Globe(options.ellipsoid)][Globe]
      * @property [orderIndependentTranslucency] If true and the configuration supports it, use order independent translucency.
      *   Default value - `true`
      * @property [creditContainer] The DOM element that will contain the [CreditDisplay].  If not specified, the credits are added to the bottom of the widget itself.
@@ -676,12 +895,13 @@ external class Viewer(
      *   Default value - `1`
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Viewer.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var animation: Boolean?
         var baseLayerPicker: Boolean?
         var fullscreenButton: Boolean?
         var vrButton: Boolean?
-        var geocoder: dynamic
+        var geocoder: Any /* boolean | GeocoderService[] */?
         var homeButton: Boolean?
         var infoBox: Boolean?
         var sceneModePicker: Boolean?
@@ -696,11 +916,12 @@ external class Viewer(
         var imageryProviderViewModels: ReadonlyArray<ProviderViewModel>?
         var selectedTerrainProviderViewModel: ProviderViewModel?
         var terrainProviderViewModels: ReadonlyArray<ProviderViewModel>?
-        var baseLayer: dynamic
+        var baseLayer: ImageryLayer /* | false */?
+        var ellipsoid: Ellipsoid?
         var terrainProvider: TerrainProvider?
         var terrain: Terrain?
-        var skyBox: dynamic
-        var skyAtmosphere: dynamic
+        var skyBox: SkyBox /* | false */?
+        var skyAtmosphere: SkyAtmosphere /* | false */?
         var fullscreenElement: Element?
         var useDefaultRenderLoop: Boolean?
         var targetFrameRate: Int?
@@ -710,7 +931,7 @@ external class Viewer(
         var contextOptions: ContextOptions?
         var sceneMode: SceneMode?
         var mapProjection: MapProjection?
-        var globe: dynamic
+        var globe: Globe /* | false */?
         var orderIndependentTranslucency: Boolean?
         var creditContainer: Element?
         var creditViewport: Element?
@@ -726,17 +947,3 @@ external class Viewer(
         var msaaSamples: Double?
     }
 }
-
-/**
- * A function that augments a Viewer instance with additional functionality.
- * @param [viewer] The viewer instance.
- * @param [options] Options object to be passed to the mixin function.
- * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Viewer.html#.ViewerMixin">Online Documentation</a>
- */
-typealias ViewerMixin = (viewer: Viewer, options: Any) -> Unit
-
-inline fun Viewer(
-    container: Element,
-    block: Viewer.ConstructorOptions.() -> Unit,
-): Viewer =
-    Viewer(container, options = jso(block))

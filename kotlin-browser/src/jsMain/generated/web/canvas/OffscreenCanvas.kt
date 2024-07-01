@@ -5,6 +5,7 @@ package web.canvas
 import js.core.JsLong
 import js.promise.Promise
 import js.transferable.Transferable
+import seskar.js.JsAsync
 import web.blob.Blob
 import web.events.Event
 import web.events.EventHandler
@@ -17,7 +18,7 @@ import web.rendering.RenderingContextId
 /**
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/OffscreenCanvas)
  */
-external class OffscreenCanvas(
+open external class OffscreenCanvas(
     width: JsLong,
     height: JsLong,
 ) : EventTarget,
@@ -32,8 +33,8 @@ external class OffscreenCanvas(
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/OffscreenCanvas/height)
      */
     var height: JsLong
-    var oncontextlost: EventHandler<Event, OffscreenCanvas>?
-    var oncontextrestored: EventHandler<Event, OffscreenCanvas>?
+    var oncontextlost: EventHandler<Event, OffscreenCanvas, OffscreenCanvas>?
+    var oncontextrestored: EventHandler<Event, OffscreenCanvas, OffscreenCanvas>?
 
     /**
      * These attributes return the dimensions of the OffscreenCanvas object's bitmap.
@@ -51,7 +52,11 @@ external class OffscreenCanvas(
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/OffscreenCanvas/convertToBlob)
      */
-    fun convertToBlob(options: ImageEncodeOptions = definedExternally): Promise<Blob>
+    @JsAsync
+    suspend fun convertToBlob(options: ImageEncodeOptions = definedExternally): Blob
+
+    @JsName("convertToBlob")
+    fun convertToBlobAsync(options: ImageEncodeOptions = definedExternally): Promise<Blob>
 
     /**
      * Returns an object that exposes an API for drawing on the OffscreenCanvas object. contextId specifies the desired API: "2d", "bitmaprenderer", "webgl", or "webgl2". options is handled by that API.

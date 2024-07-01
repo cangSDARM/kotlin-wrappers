@@ -2,6 +2,9 @@
 
 package actions.artifact
 
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
 sealed external interface DownloadResponse {
     /**
      * The name of the artifact that was downloaded

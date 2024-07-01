@@ -3,13 +3,15 @@
 package cesium.engine
 
 import js.objects.ReadonlyRecord
+import kotlinx.js.JsPlainObject
 import web.blob.Blob
 
 /**
  * @property [kml] The generated KML.
  * @property [externalFiles] An object dictionary of external files
  */
-external interface exportKmlResultKml {
+@JsPlainObject
+sealed external interface exportKmlResultKml {
     var kml: String
     var externalFiles: ReadonlyRecord<String, Blob>
 }

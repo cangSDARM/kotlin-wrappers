@@ -6,6 +6,8 @@ package cesium.engine
 
 import js.array.ReadonlyArray
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * Provides voxel data. Intended to be used with [VoxelPrimitive].
@@ -117,7 +119,11 @@ abstract external class VoxelProvider {
      * @return A promise to an array of typed arrays containing the requested voxel data or undefined if there was a problem loading the data.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/VoxelProvider.html#requestData">Online Documentation</a>
      */
-    abstract fun requestData(options: RequestDataOptions? = definedExternally): Promise<ReadonlyArray<ReadonlyArray<Any>>>?
+    @JsAsync(optional = true)
+    suspend fun requestData(options: RequestDataOptions? = definedExternally): ReadonlyArray<ReadonlyArray<Any>>?
+
+    @JsName("requestData")
+    abstract fun requestDataAsync(options: RequestDataOptions? = definedExternally): Promise<ReadonlyArray<ReadonlyArray<Any>>>?
 
     /**
      * @property [tileLevel] The tile's level.
@@ -129,7 +135,8 @@ abstract external class VoxelProvider {
      * @property [tileZ] The tile's Z coordinate.
      *   Default value - `0`
      */
-    interface RequestDataOptions {
+    @JsPlainObject
+    sealed interface RequestDataOptions {
         var tileLevel: Int?
         var tileX: Double?
         var tileY: Double?

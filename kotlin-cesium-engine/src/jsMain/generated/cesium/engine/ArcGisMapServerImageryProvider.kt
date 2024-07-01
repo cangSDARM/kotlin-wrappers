@@ -2,15 +2,12 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * <div class="notice">
@@ -47,7 +44,9 @@ import js.promise.Promise
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/ArcGisMapServerImageryProvider.html">Online Documentation</a>
  */
-external class ArcGisMapServerImageryProvider(options: ConstructorOptions? = definedExternally) {
+external class ArcGisMapServerImageryProvider(
+    options: ConstructorOptions? = definedExternally,
+) {
     /**
      * Gets or sets a value indicating whether feature picking is enabled.  If true, [ArcGisMapServerImageryProvider.pickFeatures] will
      * invoke the "identify" operation on the ArcGIS server and return the features included in the response.  If false,
@@ -181,7 +180,16 @@ external class ArcGisMapServerImageryProvider(options: ConstructorOptions? = def
      *   undefined if there are too many active requests to the server, and the request should be retried later.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/ArcGisMapServerImageryProvider.html#requestImage">Online Documentation</a>
      */
-    fun requestImage(
+    @JsAsync(optional = true)
+    suspend fun requestImage(
+        x: Double,
+        y: Double,
+        level: Int,
+        request: Request? = definedExternally,
+    ): ImageryTypes?
+
+    @JsName("requestImage")
+    fun requestImageAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -201,7 +209,17 @@ external class ArcGisMapServerImageryProvider(options: ConstructorOptions? = def
      *   instances.  The array may be empty if no features are found at the given location.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/ArcGisMapServerImageryProvider.html#pickFeatures">Online Documentation</a>
      */
-    fun pickFeatures(
+    @JsAsync(optional = true)
+    suspend fun pickFeatures(
+        x: Double,
+        y: Double,
+        level: Int,
+        longitude: Double,
+        latitude: Double,
+    ): ReadonlyArray<ImageryLayerFeatureInfo>?
+
+    @JsName("pickFeatures")
+    fun pickFeaturesAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -240,7 +258,8 @@ external class ArcGisMapServerImageryProvider(options: ConstructorOptions? = def
      *   Default value - [GeographicTilingScheme()][GeographicTilingScheme]
      * @property [ellipsoid] The ellipsoid.  If the tilingScheme is specified and used,
      *   this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither
-     *   parameter is specified, the WGS84 ellipsoid is used.
+     *   parameter is specified, the default ellipsoid is used.
+     *   Default value - [Ellipsoid.default]
      * @property [credit] A credit for the data source, which is displayed on the canvas.  This parameter is ignored when accessing a tiled server.
      * @property [tileWidth] The width of each tile in pixels.  This parameter is ignored when accessing a tiled server.
      *   Default value - `256`
@@ -250,7 +269,8 @@ external class ArcGisMapServerImageryProvider(options: ConstructorOptions? = def
      *   a tiled server.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/ArcGisMapServerImageryProvider.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var tileDiscardPolicy: TileDiscardPolicy?
         var usePreCachedTilesIfAvailable: Boolean?
         var layers: String?
@@ -292,7 +312,14 @@ external class ArcGisMapServerImageryProvider(options: ConstructorOptions? = def
          * @return A promise that resolves to the created ArcGisMapServerImageryProvider.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/ArcGisMapServerImageryProvider.html#.fromBasemapType">Online Documentation</a>
          */
-        fun fromBasemapType(
+        @JsAsync
+        suspend fun fromBasemapType(
+            style: ArcGisBaseMapType,
+            options: ConstructorOptions? = definedExternally,
+        ): ArcGisMapServerImageryProvider
+
+        @JsName("fromBasemapType")
+        fun fromBasemapTypeAsync(
             style: ArcGisBaseMapType,
             options: ConstructorOptions? = definedExternally,
         ): Promise<ArcGisMapServerImageryProvider>
@@ -310,19 +337,28 @@ external class ArcGisMapServerImageryProvider(options: ConstructorOptions? = def
          * @return A promise that resolves to the created ArcGisMapServerImageryProvider.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/ArcGisMapServerImageryProvider.html#.fromUrl">Online Documentation</a>
          */
-        fun fromUrl(
+        @JsAsync
+        suspend fun fromUrl(
+            url: Resource,
+            options: ConstructorOptions? = definedExternally,
+        ): ArcGisMapServerImageryProvider
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
             url: Resource,
             options: ConstructorOptions? = definedExternally,
         ): Promise<ArcGisMapServerImageryProvider>
 
-        fun fromUrl(
+        @JsAsync
+        suspend fun fromUrl(
+            url: String,
+            options: ConstructorOptions? = definedExternally,
+        ): ArcGisMapServerImageryProvider
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
             url: String,
             options: ConstructorOptions? = definedExternally,
         ): Promise<ArcGisMapServerImageryProvider>
     }
 }
-
-inline fun ArcGisMapServerImageryProvider(
-    block: ArcGisMapServerImageryProvider.ConstructorOptions.() -> Unit,
-): ArcGisMapServerImageryProvider =
-    ArcGisMapServerImageryProvider(options = jso(block))

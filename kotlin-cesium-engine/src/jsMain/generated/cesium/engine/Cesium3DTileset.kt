@@ -2,14 +2,11 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
-import js.objects.jso
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * A [3D Tiles tileset](https://github.com/CesiumGS/3d-tiles/tree/main/specification),
@@ -67,7 +64,9 @@ import js.promise.Promise
  * @param [options] An object describing initialization options
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTileset.html">Online Documentation</a>
  */
-external class Cesium3DTileset(options: ConstructorOptions) {
+external class Cesium3DTileset(
+    options: ConstructorOptions,
+) {
     /**
      * Optimization option. Don't request tiles that will likely be unused when they come back because of the camera's movement. This optimization only applies to stationary tilesets.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTileset.html#cullRequestsWhileMoving">Online Documentation</a>
@@ -560,6 +559,12 @@ external class Cesium3DTileset(options: ConstructorOptions) {
     var clippingPlanes: ClippingPlaneCollection
 
     /**
+     * The [ClippingPolygonCollection] used to selectively disable rendering the tileset.
+     * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTileset.html#clippingPolygons">Online Documentation</a>
+     */
+    var clippingPolygons: ClippingPolygonCollection
+
+    /**
      * Gets the tileset's properties dictionary object, which contains metadata about per-feature properties.
      *
      * See the [properties schema reference](https://github.com/CesiumGS/3d-tiles/tree/main/specification#reference-properties)
@@ -978,6 +983,7 @@ external class Cesium3DTileset(options: ConstructorOptions) {
      * @property [loadSiblings] When `skipLevelOfDetail` is `true`, determines whether siblings of visible tiles are always downloaded during traversal.
      *   Default value - `false`
      * @property [clippingPlanes] The [ClippingPlaneCollection] used to selectively disable rendering the tileset.
+     * @property [clippingPolygons] The [ClippingPolygonCollection] used to selectively disable rendering the tileset.
      * @property [classificationType] Determines whether terrain, 3D Tiles or both will be classified by this tileset. See [Cesium3DTileset.classificationType] for details about restrictions and limitations.
      * @property [ellipsoid] The ellipsoid determining the size and shape of the globe.
      *   Default value - [Ellipsoid.WGS84]
@@ -1035,7 +1041,8 @@ external class Cesium3DTileset(options: ConstructorOptions) {
      *   Default value - `false`
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTileset.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var show: Boolean?
         var modelMatrix: Matrix4?
         var modelUpAxis: Axis?
@@ -1067,6 +1074,7 @@ external class Cesium3DTileset(options: ConstructorOptions) {
         var immediatelyLoadDesiredLevelOfDetail: Boolean?
         var loadSiblings: Boolean?
         var clippingPlanes: ClippingPlaneCollection?
+        var clippingPolygons: ClippingPolygonCollection?
         var classificationType: ClassificationType?
         var ellipsoid: Ellipsoid?
         var pointCloudShading: Any?
@@ -1116,7 +1124,14 @@ external class Cesium3DTileset(options: ConstructorOptions) {
          * @param [options] An object describing initialization options
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTileset.html#.fromIonAssetId">Online Documentation</a>
          */
-        fun fromIonAssetId(
+        @JsAsync
+        suspend fun fromIonAssetId(
+            assetId: Int,
+            options: ConstructorOptions? = definedExternally,
+        ): Cesium3DTileset
+
+        @JsName("fromIonAssetId")
+        fun fromIonAssetIdAsync(
             assetId: Int,
             options: ConstructorOptions? = definedExternally,
         ): Promise<Cesium3DTileset>
@@ -1163,12 +1178,26 @@ external class Cesium3DTileset(options: ConstructorOptions) {
          * @param [options] An object describing initialization options
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTileset.html#.fromUrl">Online Documentation</a>
          */
-        fun fromUrl(
+        @JsAsync
+        suspend fun fromUrl(
+            url: Resource,
+            options: ConstructorOptions? = definedExternally,
+        ): Cesium3DTileset
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
             url: Resource,
             options: ConstructorOptions? = definedExternally,
         ): Promise<Cesium3DTileset>
 
-        fun fromUrl(
+        @JsAsync
+        suspend fun fromUrl(
+            url: String,
+            options: ConstructorOptions? = definedExternally,
+        ): Cesium3DTileset
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
             url: String,
             options: ConstructorOptions? = definedExternally,
         ): Promise<Cesium3DTileset>
@@ -1180,23 +1209,16 @@ external class Cesium3DTileset(options: ConstructorOptions) {
          * @return A promise that resolves with the fetched json data
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTileset.html#.loadJson">Online Documentation</a>
          */
-        fun loadJson(tilesetUrl: Resource): Promise<Any>
+        @JsAsync
+        suspend fun loadJson(tilesetUrl: Resource): Any
 
-        fun loadJson(tilesetUrl: String): Promise<Any>
+        @JsName("loadJson")
+        fun loadJsonAsync(tilesetUrl: Resource): Promise<Any>
+
+        @JsAsync
+        suspend fun loadJson(tilesetUrl: String): Any
+
+        @JsName("loadJson")
+        fun loadJsonAsync(tilesetUrl: String): Promise<Any>
     }
 }
-
-/**
- * Optimization option. Used as a callback when [Cesium3DTileset.foveatedScreenSpaceError] is true to control how much to raise the screen space error for tiles outside the foveated cone,
- * interpolating between [Cesium3DTileset.foveatedMinimumScreenSpaceErrorRelaxation] and [Cesium3DTileset.maximumScreenSpaceError].
- * @param [p] The start value to interpolate.
- * @param [q] The end value to interpolate.
- * @param [time] The time of interpolation generally in the range `[0.0, 1.0]`.
- * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTileset.html#.foveatedInterpolationCallback">Online Documentation</a>
- */
-typealias FoveatedInterpolationCallback = (p: Double, q: Double, time: Double) -> Double
-
-inline fun Cesium3DTileset(
-    block: Cesium3DTileset.ConstructorOptions.() -> Unit,
-): Cesium3DTileset =
-    Cesium3DTileset(options = jso(block))

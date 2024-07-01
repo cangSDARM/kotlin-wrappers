@@ -4,6 +4,7 @@ package web.audio
 
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.html.HTMLMediaElement
 import web.media.streams.MediaStream
 
@@ -28,7 +29,11 @@ external class AudioContext(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioContext/close)
      */
-    fun close(): Promise<Void>
+    @JsAsync
+    suspend fun close()
+
+    @JsName("close")
+    fun closeAsync(): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioContext/createMediaElementSource)
@@ -53,10 +58,18 @@ external class AudioContext(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioContext/resume)
      */
-    fun resume(): Promise<Void>
+    @JsAsync
+    suspend fun resume()
+
+    @JsName("resume")
+    fun resumeAsync(): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioContext/suspend)
      */
-    fun suspend(): Promise<Void>
+    @JsAsync
+    suspend fun suspend()
+
+    @JsName("suspend")
+    fun suspendAsync(): Promise<Void>
 }

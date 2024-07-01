@@ -6,6 +6,8 @@ package cesium.engine
 
 import js.array.ReadonlyArray
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * Provides geocoding through an external service. This type describes an interface and
@@ -26,7 +28,14 @@ external class GeocoderService {
      *   Default value - [GeocodeType.SEARCH]
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GeocoderService.html#geocode">Online Documentation</a>
      */
-    fun geocode(
+    @JsAsync
+    suspend fun geocode(
+        query: String,
+        type: GeocodeType? = definedExternally,
+    ): ReadonlyArray<Result>
+
+    @JsName("geocode")
+    fun geocodeAsync(
         query: String,
         type: GeocodeType? = definedExternally,
     ): Promise<ReadonlyArray<Result>>
@@ -36,9 +45,10 @@ external class GeocoderService {
      * @property [destination] The bounding box for a location
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GeocoderService.html#.Result">Online Documentation</a>
      */
-    interface Result {
+    @JsPlainObject
+    sealed interface Result {
         var displayName: String
-        var destination: dynamic
+        var destination: Any /* Rectangle | Cartesian3 */
         var attributions: ReadonlyArray<Any>?
     }
 

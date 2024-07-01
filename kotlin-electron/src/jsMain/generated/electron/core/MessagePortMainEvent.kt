@@ -3,8 +3,6 @@
 package electron.core
 
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-@seskar.js.JsVirtual
 sealed external interface MessagePortMainEvent {
     sealed interface CLOSE : node.events.LegacyEventType
     sealed interface MESSAGE : node.events.LegacyEventType

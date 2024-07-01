@@ -5,6 +5,7 @@ package web.serviceworker
 import js.array.ReadonlyArray
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.events.Event
 import web.events.EventHandler
 import web.events.EventTarget
@@ -38,7 +39,7 @@ sealed external class ServiceWorkerRegistration :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/updatefound_event)
      */
-    var onupdatefound: EventHandler<Event, ServiceWorkerRegistration>?
+    var onupdatefound: EventHandler<Event, ServiceWorkerRegistration, ServiceWorkerRegistration>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/pushManager)
@@ -63,12 +64,23 @@ sealed external class ServiceWorkerRegistration :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/getNotifications)
      */
-    fun getNotifications(filter: GetNotificationOptions = definedExternally): Promise<ReadonlyArray<Notification>>
+    @JsAsync
+    suspend fun getNotifications(filter: GetNotificationOptions = definedExternally): ReadonlyArray<Notification>
+
+    @JsName("getNotifications")
+    fun getNotificationsAsync(filter: GetNotificationOptions = definedExternally): Promise<ReadonlyArray<Notification>>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/showNotification)
      */
-    fun showNotification(
+    @JsAsync
+    suspend fun showNotification(
+        title: String,
+        options: NotificationOptions = definedExternally,
+    )
+
+    @JsName("showNotification")
+    fun showNotificationAsync(
         title: String,
         options: NotificationOptions = definedExternally,
     ): Promise<Void>
@@ -76,10 +88,18 @@ sealed external class ServiceWorkerRegistration :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/unregister)
      */
-    fun unregister(): Promise<Boolean>
+    @JsAsync
+    suspend fun unregister(): Boolean
+
+    @JsName("unregister")
+    fun unregisterAsync(): Promise<Boolean>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/update)
      */
-    fun update(): Promise<Void>
+    @JsAsync
+    suspend fun update()
+
+    @JsName("update")
+    fun updateAsync(): Promise<Void>
 }

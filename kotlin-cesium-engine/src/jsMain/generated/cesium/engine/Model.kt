@@ -2,13 +2,11 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * <div class="notice">
@@ -41,7 +39,8 @@ import js.promise.Promise
  * and KHR_texture_basisu requires multiple of 4 dimensions ([KHR_texture_basisu additional requirements](https://github.com/KhronosGroup/glTF/blob/master/extensions/2.0/Khronos/KHR_texture_basisu/README.md#additional-requirements)).
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Model.html">Online Documentation</a>
  */
-sealed external class Model {
+external class Model
+private constructor() {
     /**
      * The 4x4 transformation matrix that transforms the model from model to world coordinates.
      * When this is the identity matrix, the model is drawn in world coordinates, i.e., Earth's Cartesian WGS84 coordinates.
@@ -165,7 +164,7 @@ sealed external class Model {
      * Defines how the color blends with the model.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Model.html#colorBlendMode">Online Documentation</a>
      */
-    var colorBlendMode: dynamic
+    var colorBlendMode: Any /* Cesium3DTileColorBlendMode | ColorBlendMode */
 
     /**
      * Value used to determine the color strength when the `colorBlendMode` is `MIX`. A value of 0.0 results in the model's rendered color while a value of 1.0 results in a solid color, with any value in-between resulting in a mix of the two.
@@ -249,6 +248,12 @@ sealed external class Model {
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Model.html#clippingPlanes">Online Documentation</a>
      */
     var clippingPlanes: ClippingPlaneCollection
+
+    /**
+     * The [ClippingPolygonCollection] used to selectively disable rendering the model.
+     * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Model.html#clippingPolygons">Online Documentation</a>
+     */
+    var clippingPolygons: ClippingPolygonCollection
 
     /**
      * The light color when shading the model. When `undefined` the scene's light color is used instead.
@@ -492,6 +497,9 @@ sealed external class Model {
          * @return A promise that resolves to the created model when it is ready to render.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Model.html#.fromGltfAsync">Online Documentation</a>
          */
+        @JsAsync
+        suspend fun fromGltf(options: FromGltfAsyncOptions): Model
+
         fun fromGltfAsync(options: FromGltfAsyncOptions): Promise<Model>
 
         /**
@@ -556,6 +564,7 @@ sealed external class Model {
          * @property [outlineColor] The color to use when rendering outlines.
          *   Default value - [Color.BLACK]
          * @property [clippingPlanes] The [ClippingPlaneCollection] used to selectively disable rendering the model.
+         * @property [clippingPolygons] The [ClippingPolygonCollection] used to selectively disable rendering the model.
          * @property [lightColor] The light color when shading the model. When `undefined` the scene's light color is used instead.
          * @property [imageBasedLighting] The properties for managing image-based lighting on this model.
          * @property [backFaceCulling] Whether to cull back-facing geometry. When true, back face culling is determined by the material's doubleSided property; when false, back face culling is disabled. Back faces are not culled if the model's color is translucent.
@@ -577,7 +586,8 @@ sealed external class Model {
          * @property [classificationType] Determines whether terrain, 3D Tiles or both will be classified by this model. This cannot be set after the model has loaded.
          * @property [gltfCallback] A function that is called with the loaded gltf object once loaded.
          */
-        interface FromGltfAsyncOptions {
+        @JsPlainObject
+        sealed interface FromGltfAsyncOptions {
             var url: Resource
             var basePath: Resource?
             var show: Boolean?
@@ -613,6 +623,7 @@ sealed external class Model {
             var showOutline: Boolean?
             var outlineColor: Color?
             var clippingPlanes: ClippingPlaneCollection?
+            var clippingPolygons: ClippingPolygonCollection?
             var lightColor: Cartesian3?
             var imageBasedLighting: ImageBasedLighting?
             var backFaceCulling: Boolean?
@@ -629,10 +640,3 @@ sealed external class Model {
         }
     }
 }
-
-/**
- * Interface for the function that is called with the loaded gltf object once loaded.
- * @param [gltf] The gltf object
- * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Model.html#.GltfCallback">Online Documentation</a>
- */
-typealias GltfCallback = (gltf: Any) -> Unit

@@ -1,13 +1,15 @@
 // Automatically generated - do not modify!
 
+@file:JsModule("@actions/io")
+
 package actions.io
 
-import js.promise.await
+import js.core.Void
+import js.promise.Promise
+import seskar.js.JsAsync
 
-suspend fun rmRF(
-    inputPath: String,
-) {
-    rmRFAsync(
-        inputPath = inputPath,
-    ).await()
-}
+@JsAsync
+external suspend fun rmRF(inputPath: String)
+
+@JsName("rmRF")
+external fun rmRFAsync(inputPath: String): Promise<Void>

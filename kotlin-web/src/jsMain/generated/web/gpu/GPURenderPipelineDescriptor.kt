@@ -2,7 +2,10 @@
 
 package web.gpu
 
-sealed external interface GPURenderPipelineDescriptor :
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
+external interface GPURenderPipelineDescriptor :
     GPUPipelineDescriptorBase {
     var vertex: GPUVertexState
     var primitive: GPUPrimitiveState?

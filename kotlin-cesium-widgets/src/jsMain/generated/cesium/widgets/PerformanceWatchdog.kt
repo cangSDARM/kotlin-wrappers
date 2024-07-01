@@ -2,21 +2,19 @@
 
 @file:JsModule("@cesium/widgets")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.widgets
 
 import cesium.engine.Scene
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 import web.dom.Element
 
 /**
  * Monitors performance of the application and displays a message if poor performance is detected.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/PerformanceWatchdog.html">Online Documentation</a>
  */
-external class PerformanceWatchdog(options: ConstructorOptions? = definedExternally) {
+external class PerformanceWatchdog(
+    options: ConstructorOptions? = definedExternally,
+) {
     /**
      * @property [container] The DOM element that will contain the widget.
      * @property [scene] The [Scene] for which to monitor performance.
@@ -25,7 +23,8 @@ external class PerformanceWatchdog(options: ConstructorOptions? = definedExterna
      *   it comes from a trusted source so that your application is not vulnerable to cross-site scripting attacks.
      *   Default value - `'This application appears to be performing poorly on your system.  Please try using a different web browser or updating your video drivers.'`
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var container: Element
         var scene: Scene
         var lowFrameRateMessage: String?
@@ -56,8 +55,3 @@ external class PerformanceWatchdog(options: ConstructorOptions? = definedExterna
      */
     fun destroy()
 }
-
-inline fun PerformanceWatchdog(
-    block: PerformanceWatchdog.ConstructorOptions.() -> Unit,
-): PerformanceWatchdog =
-    PerformanceWatchdog(options = jso(block))

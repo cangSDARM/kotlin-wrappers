@@ -2,14 +2,10 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A description of the outline of a cube centered at the origin.
@@ -22,12 +18,15 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/BoxOutlineGeometry.html">Online Documentation</a>
  */
-external class BoxOutlineGeometry(options: ConstructorOptions) {
+external class BoxOutlineGeometry(
+    options: ConstructorOptions,
+) {
     /**
      * @property [minimum] The minimum x, y, and z coordinates of the box.
      * @property [maximum] The maximum x, y, and z coordinates of the box.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var minimum: Cartesian3
         var maximum: Cartesian3
     }
@@ -48,7 +47,8 @@ external class BoxOutlineGeometry(options: ConstructorOptions) {
         /**
          * @property [dimensions] The width, depth, and height of the box stored in the x, y, and z coordinates of the `Cartesian3`, respectively.
          */
-        interface FromDimensionsOptions {
+        @JsPlainObject
+        sealed interface FromDimensionsOptions {
             var dimensions: Cartesian3
         }
 
@@ -114,8 +114,3 @@ external class BoxOutlineGeometry(options: ConstructorOptions) {
         fun createGeometry(boxGeometry: BoxOutlineGeometry): Geometry?
     }
 }
-
-inline fun BoxOutlineGeometry(
-    block: BoxOutlineGeometry.ConstructorOptions.() -> Unit,
-): BoxOutlineGeometry =
-    BoxOutlineGeometry(options = jso(block))

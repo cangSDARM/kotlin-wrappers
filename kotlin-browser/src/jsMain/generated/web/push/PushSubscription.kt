@@ -4,6 +4,7 @@ package web.push
 
 import js.buffer.ArrayBuffer
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.time.EpochTimeStamp
 
 /**
@@ -41,5 +42,9 @@ sealed external class PushSubscription {
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PushSubscription/unsubscribe)
      */
-    fun unsubscribe(): Promise<Boolean>
+    @JsAsync
+    suspend fun unsubscribe(): Boolean
+
+    @JsName("unsubscribe")
+    fun unsubscribeAsync(): Promise<Boolean>
 }

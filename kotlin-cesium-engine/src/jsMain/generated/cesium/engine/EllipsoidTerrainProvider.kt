@@ -2,33 +2,31 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "VAR_OVERRIDDEN_BY_VAL",
-    "VAR_TYPE_MISMATCH_ON_OVERRIDE",
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.core.Void
-import js.objects.jso
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
 
 /**
  * A very simple [TerrainProvider] that produces geometry by tessellating an ellipsoidal
  * surface.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/EllipsoidTerrainProvider.html">Online Documentation</a>
  */
-external class EllipsoidTerrainProvider(options: ConstructorOptions? = definedExternally) : TerrainProvider {
+external class EllipsoidTerrainProvider(
+    options: ConstructorOptions? = definedExternally,
+) : TerrainProvider {
     /**
      * @property [tilingScheme] The tiling scheme specifying how the ellipsoidal
      *   surface is broken into tiles.  If this parameter is not provided, a [GeographicTilingScheme]
      *   is used.
      * @property [ellipsoid] The ellipsoid.  If the tilingScheme is specified,
      *   this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither
-     *   parameter is specified, the WGS84 ellipsoid is used.
+     *   parameter is specified, the default ellipsoid is used.
+     *   Default value - [Ellipsoid.default]
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var tilingScheme: TilingScheme?
         var ellipsoid: Ellipsoid?
     }
@@ -88,7 +86,7 @@ external class EllipsoidTerrainProvider(options: ConstructorOptions? = definedEx
      *   pending and the request will be retried later.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/EllipsoidTerrainProvider.html#requestTileGeometry">Online Documentation</a>
      */
-    override fun requestTileGeometry(
+    override fun requestTileGeometryAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -125,14 +123,9 @@ external class EllipsoidTerrainProvider(options: ConstructorOptions? = definedEx
      * @return This provider does not support loading availability.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/EllipsoidTerrainProvider.html#loadTileDataAvailability">Online Documentation</a>
      */
-    override fun loadTileDataAvailability(
+    override fun loadTileDataAvailabilityAsync(
         x: Double,
         y: Double,
         level: Int,
     ): Void
 }
-
-inline fun EllipsoidTerrainProvider(
-    block: EllipsoidTerrainProvider.ConstructorOptions.() -> Unit,
-): EllipsoidTerrainProvider =
-    EllipsoidTerrainProvider(options = jso(block))

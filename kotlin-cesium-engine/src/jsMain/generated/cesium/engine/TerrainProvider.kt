@@ -2,14 +2,12 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.core.Void
 import js.promise.Promise
+import js.typedarrays.TypedArray
+import seskar.js.JsAsync
 
 /**
  * Provides terrain or other geometry for the surface of an ellipsoid.  The surface geometry is
@@ -73,7 +71,16 @@ abstract external class TerrainProvider {
      *   pending and the request will be retried later.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/TerrainProvider.html#requestTileGeometry">Online Documentation</a>
      */
-    abstract fun requestTileGeometry(
+    @JsAsync(optional = true)
+    suspend fun requestTileGeometry(
+        x: Double,
+        y: Double,
+        level: Int,
+        request: Request? = definedExternally,
+    ): TerrainData?
+
+    @JsName("requestTileGeometry")
+    abstract fun requestTileGeometryAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -110,7 +117,15 @@ abstract external class TerrainProvider {
      * @return Undefined if nothing need to be loaded or a Promise that resolves when all required tiles are loaded
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/TerrainProvider.html#loadTileDataAvailability">Online Documentation</a>
      */
-    abstract fun loadTileDataAvailability(
+    @JsAsync(optional = true)
+    suspend fun loadTileDataAvailability(
+        x: Double,
+        y: Double,
+        level: Int,
+    )
+
+    @JsName("loadTileDataAvailability")
+    abstract fun loadTileDataAvailabilityAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -130,7 +145,7 @@ abstract external class TerrainProvider {
         fun getRegularGridIndices(
             width: Double,
             height: Double,
-        ): dynamic
+        ): TypedArray<*, *> /* Uint16Array | Uint32Array */
 
         /**
          * Specifies the quality of terrain created from heightmaps.  A value of 1.0 will
@@ -157,10 +172,3 @@ abstract external class TerrainProvider {
         ): Double
     }
 }
-
-/**
- * A function that is called when an error occurs.
- * @param [err] An object holding details about the error that occurred.
- * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/TerrainProvider.html#.ErrorEvent">Online Documentation</a>
- */
-typealias ErrorEvent = (err: TileProviderError) -> Unit

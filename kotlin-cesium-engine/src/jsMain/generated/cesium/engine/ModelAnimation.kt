@@ -2,10 +2,6 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 /**
@@ -20,7 +16,8 @@ package cesium.engine
  * animations for the same glTF animation, each with a different start time.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/ModelAnimation.html">Online Documentation</a>
  */
-sealed external class ModelAnimation {
+external class ModelAnimation
+private constructor() {
     /**
      * When `true`, the animation is removed after it stops playing.
      * This is slightly more efficient that not removing it, but if, for example,
@@ -129,23 +126,3 @@ sealed external class ModelAnimation {
      */
     var animationTime: AnimationTimeCallback
 }
-
-/**
- * A function used to compute the local animation time for a ModelAnimation.
- * ```
- * // Use real time for model animation (assuming animateWhilePaused was set to true)
- * function animationTime(duration) {
- *     return Date.now() / 1000 / duration;
- * }
- * ```
- * ```
- * // Offset the phase of the animation, so it starts halfway through its cycle.
- * function animationTime(duration, seconds) {
- *     return seconds / duration + 0.5;
- * }
- * ```
- * @param [duration] The animation's original duration in seconds.
- * @param [seconds] The seconds since the animation started, in scene time.
- * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/ModelAnimation.html#.AnimationTimeCallback">Online Documentation</a>
- */
-typealias AnimationTimeCallback = (duration: Double, seconds: Double) -> Double

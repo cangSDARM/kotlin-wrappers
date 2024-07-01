@@ -3,7 +3,9 @@
 package actions.artifact
 
 import js.array.ReadonlyArray
+import kotlinx.js.JsPlainObject
 
+@JsPlainObject
 sealed external interface UploadResponse {
     /**
      * The name of the artifact that was uploaded

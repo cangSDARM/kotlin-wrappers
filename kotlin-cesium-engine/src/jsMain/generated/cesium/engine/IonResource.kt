@@ -6,6 +6,9 @@ package cesium.engine
 
 import js.array.ReadonlyArray
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
+import web.canvas.CanvasImageSource
 
 /**
  * A [Resource] instance that encapsulates Cesium ion asset access.
@@ -55,7 +58,11 @@ external class IonResource(
      * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/IonResource.html#fetchImage">Online Documentation</a>
      */
-    fun fetchImage(options: FetchImageOptions? = definedExternally): dynamic
+    @JsAsync(optional = true)
+    suspend fun fetchImage(options: FetchImageOptions? = definedExternally): CanvasImageSource?
+
+    @JsName("fetchImage")
+    fun fetchImageAsync(options: FetchImageOptions? = definedExternally): Promise<CanvasImageSource>?
 
     /**
      * @property [preferBlob] If true, we will load the image via a blob.
@@ -67,7 +74,8 @@ external class IonResource(
      * @property [skipColorSpaceConversion] If true, any custom gamma or color profiles in the image will be ignored. Only applies if the browser supports `createImageBitmap`.
      *   Default value - `false`
      */
-    interface FetchImageOptions {
+    @JsPlainObject
+    sealed interface FetchImageOptions {
         var preferBlob: Boolean?
         var preferImageBitmap: Boolean?
         var flipY: Boolean?
@@ -98,7 +106,14 @@ external class IonResource(
          * @return A Promise to am instance representing the Cesium ion Asset.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/IonResource.html#.fromAssetId">Online Documentation</a>
          */
-        fun fromAssetId(
+        @JsAsync
+        suspend fun fromAssetId(
+            assetId: Int,
+            options: FromAssetIdOptions? = definedExternally,
+        ): IonResource
+
+        @JsName("fromAssetId")
+        fun fromAssetIdAsync(
             assetId: Int,
             options: FromAssetIdOptions? = definedExternally,
         ): Promise<IonResource>
@@ -109,7 +124,8 @@ external class IonResource(
          * @property [server] The resource to the Cesium ion API server.
          *   Default value - [Ion.defaultServer]
          */
-        interface FromAssetIdOptions {
+        @JsPlainObject
+        sealed interface FromAssetIdOptions {
             var accessToken: String?
             var server: Resource?
         }

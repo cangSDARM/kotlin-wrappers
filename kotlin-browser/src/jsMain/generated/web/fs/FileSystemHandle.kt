@@ -3,6 +3,7 @@
 package web.fs
 
 import js.promise.Promise
+import seskar.js.JsAsync
 
 /**
  * Available only in secure contexts.
@@ -23,5 +24,9 @@ sealed external class FileSystemHandle {
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemHandle/isSameEntry)
      */
-    fun isSameEntry(other: FileSystemHandle): Promise<Boolean>
+    @JsAsync
+    suspend fun isSameEntry(other: FileSystemHandle): Boolean
+
+    @JsName("isSameEntry")
+    fun isSameEntryAsync(other: FileSystemHandle): Promise<Boolean>
 }

@@ -3,13 +3,14 @@
 @file:JsModule("@cesium/engine")
 
 @file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
     "EXTERNAL_CLASS_CONSTRUCTOR_PROPERTY_PARAMETER",
 )
 
 package cesium.engine
 
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * A [DataSource] which processes both
@@ -32,7 +33,9 @@ import js.promise.Promise
  *   the name of the GeoJSON file.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GeoJsonDataSource.html">Online Documentation</a>
  */
-external class GeoJsonDataSource(var name: String = definedExternally) {
+external class GeoJsonDataSource(
+    var name: String = definedExternally,
+) {
     /**
      * This DataSource only defines static data, therefore this property is always undefined.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GeoJsonDataSource.html#clock">Online Documentation</a>
@@ -94,17 +97,38 @@ external class GeoJsonDataSource(var name: String = definedExternally) {
      * @return a promise that will resolve when the GeoJSON is loaded.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GeoJsonDataSource.html#load">Online Documentation</a>
      */
-    fun load(
+    @JsAsync
+    suspend fun load(
+        data: Resource,
+        options: LoadOptions? = definedExternally,
+    ): GeoJsonDataSource
+
+    @JsName("load")
+    fun loadAsync(
         data: Resource,
         options: LoadOptions? = definedExternally,
     ): Promise<GeoJsonDataSource>
 
-    fun load(
+    @JsAsync
+    suspend fun load(
+        data: String,
+        options: LoadOptions? = definedExternally,
+    ): GeoJsonDataSource
+
+    @JsName("load")
+    fun loadAsync(
         data: String,
         options: LoadOptions? = definedExternally,
     ): Promise<GeoJsonDataSource>
 
-    fun load(
+    @JsAsync
+    suspend fun load(
+        data: Any,
+        options: LoadOptions? = definedExternally,
+    ): GeoJsonDataSource
+
+    @JsName("load")
+    fun loadAsync(
         data: Any,
         options: LoadOptions? = definedExternally,
     ): Promise<GeoJsonDataSource>
@@ -116,17 +140,38 @@ external class GeoJsonDataSource(var name: String = definedExternally) {
      * @return a promise that will resolve when the GeoJSON is loaded.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GeoJsonDataSource.html#process">Online Documentation</a>
      */
-    fun process(
+    @JsAsync
+    suspend fun process(
+        data: Resource,
+        options: LoadOptions? = definedExternally,
+    ): GeoJsonDataSource
+
+    @JsName("process")
+    fun processAsync(
         data: Resource,
         options: LoadOptions? = definedExternally,
     ): Promise<GeoJsonDataSource>
 
-    fun process(
+    @JsAsync
+    suspend fun process(
+        data: String,
+        options: LoadOptions? = definedExternally,
+    ): GeoJsonDataSource
+
+    @JsName("process")
+    fun processAsync(
         data: String,
         options: LoadOptions? = definedExternally,
     ): Promise<GeoJsonDataSource>
 
-    fun process(
+    @JsAsync
+    suspend fun process(
+        data: Any,
+        options: LoadOptions? = definedExternally,
+    ): GeoJsonDataSource
+
+    @JsName("process")
+    fun processAsync(
         data: Any,
         options: LoadOptions? = definedExternally,
     ): Promise<GeoJsonDataSource>
@@ -150,17 +195,38 @@ external class GeoJsonDataSource(var name: String = definedExternally) {
          * @return A promise that will resolve when the data is loaded.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GeoJsonDataSource.html#.load">Online Documentation</a>
          */
-        fun load(
+        @JsAsync
+        suspend fun load(
+            data: Resource,
+            options: LoadOptions? = definedExternally,
+        ): GeoJsonDataSource
+
+        @JsName("load")
+        fun loadAsync(
             data: Resource,
             options: LoadOptions? = definedExternally,
         ): Promise<GeoJsonDataSource>
 
-        fun load(
+        @JsAsync
+        suspend fun load(
+            data: String,
+            options: LoadOptions? = definedExternally,
+        ): GeoJsonDataSource
+
+        @JsName("load")
+        fun loadAsync(
             data: String,
             options: LoadOptions? = definedExternally,
         ): Promise<GeoJsonDataSource>
 
-        fun load(
+        @JsAsync
+        suspend fun load(
+            data: Any,
+            options: LoadOptions? = definedExternally,
+        ): GeoJsonDataSource
+
+        @JsName("load")
+        fun loadAsync(
             data: Any,
             options: LoadOptions? = definedExternally,
         ): Promise<GeoJsonDataSource>
@@ -259,7 +325,8 @@ external class GeoJsonDataSource(var name: String = definedExternally) {
          * @property [credit] A credit for the data source, which is displayed on the canvas.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GeoJsonDataSource.html#.LoadOptions">Online Documentation</a>
          */
-        interface LoadOptions {
+        @JsPlainObject
+        sealed interface LoadOptions {
             var sourceUri: String?
             var describe: describe?
             var markerSize: Double?
@@ -273,11 +340,3 @@ external class GeoJsonDataSource(var name: String = definedExternally) {
         }
     }
 }
-
-/**
- * This callback is displayed as part of the GeoJsonDataSource class.
- * @param [properties] The properties of the feature.
- * @param [nameProperty] The property key that Cesium estimates to have the name of the feature.
- * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GeoJsonDataSource.html#.describe">Online Documentation</a>
- */
-typealias describe = (properties: Any, nameProperty: String) -> Unit

@@ -7,6 +7,7 @@ import js.buffer.ArrayBuffer
 import js.core.JsLong
 import js.promise.Promise
 import js.typedarrays.Uint8Array
+import seskar.js.JsAsync
 import web.images.ImageBitmapSource
 import web.streams.ReadableStream
 
@@ -32,7 +33,11 @@ open external class Blob(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/arrayBuffer)
      */
-    fun arrayBuffer(): Promise<ArrayBuffer>
+    @JsAsync
+    suspend fun arrayBuffer(): ArrayBuffer
+
+    @JsName("arrayBuffer")
+    fun arrayBufferAsync(): Promise<ArrayBuffer>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/slice)
@@ -51,5 +56,9 @@ open external class Blob(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/text)
      */
-    fun text(): Promise<String>
+    @JsAsync
+    suspend fun text(): String
+
+    @JsName("text")
+    fun textAsync(): Promise<String>
 }

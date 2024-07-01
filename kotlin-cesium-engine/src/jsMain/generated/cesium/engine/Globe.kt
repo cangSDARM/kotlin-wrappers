@@ -16,10 +16,12 @@ package cesium.engine
  * @constructor
  * @property [ellipsoid] Determines the size and shape of the
  *   globe.
- *   Default value - [Ellipsoid.WGS84]
+ *   Default value - [Ellipsoid.default]
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Globe.html">Online Documentation</a>
  */
-external class Globe(var ellipsoid: Ellipsoid = definedExternally) {
+external class Globe(
+    var ellipsoid: Ellipsoid = definedExternally,
+) {
     /**
      * Determines if the globe will be shown.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Globe.html#show">Online Documentation</a>
@@ -280,6 +282,12 @@ external class Globe(var ellipsoid: Ellipsoid = definedExternally) {
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Globe.html#clippingPlanes">Online Documentation</a>
      */
     var clippingPlanes: ClippingPlaneCollection
+
+    /**
+     * A property specifying a [ClippingPolygonCollection] used to selectively disable rendering inside or outside a list of polygons.
+     * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Globe.html#clippingPolygons">Online Documentation</a>
+     */
+    var clippingPolygons: ClippingPolygonCollection
 
     /**
      * A property specifying a [Rectangle] used to limit globe rendering to a cartographic area.

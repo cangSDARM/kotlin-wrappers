@@ -4,6 +4,7 @@ package web.html
 
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.events.Event
 import web.events.EventHandler
 import web.http.CrossOrigin
@@ -130,12 +131,12 @@ sealed external class HTMLMediaElement :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/encrypted_event)
      */
-    var onencrypted: EventHandler<MediaEncryptedEvent, HTMLMediaElement>?
+    var onencrypted: EventHandler<MediaEncryptedEvent, HTMLMediaElement, HTMLMediaElement>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/waitingforkey_event)
      */
-    var onwaitingforkey: EventHandler<Event, HTMLMediaElement>?
+    var onwaitingforkey: EventHandler<Event, HTMLMediaElement, HTMLMediaElement>?
 
     /**
      * Gets a flag that specifies whether playback is paused.
@@ -265,21 +266,33 @@ sealed external class HTMLMediaElement :
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/play)
      */
-    fun play(): Promise<Void>
+    @JsAsync
+    suspend fun play()
+
+    @JsName("play")
+    fun playAsync(): Promise<Void>
 
     /**
      * Available only in secure contexts.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/setMediaKeys)
      */
-    fun setMediaKeys(mediaKeys: MediaKeys?): Promise<Void>
+    @JsAsync
+    suspend fun setMediaKeys(mediaKeys: MediaKeys?)
+
+    @JsName("setMediaKeys")
+    fun setMediaKeysAsync(mediaKeys: MediaKeys?): Promise<Void>
 
     /**
      * Available only in secure contexts.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/setSinkId)
      */
-    fun setSinkId(sinkId: String): Promise<Void>
+    @JsAsync
+    suspend fun setSinkId(sinkId: String)
+
+    @JsName("setSinkId")
+    fun setSinkIdAsync(sinkId: String): Promise<Void>
     val NETWORK_EMPTY: NetworkState
     val NETWORK_IDLE: NetworkState
     val NETWORK_LOADING: NetworkState

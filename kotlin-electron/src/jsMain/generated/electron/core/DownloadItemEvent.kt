@@ -3,8 +3,6 @@
 package electron.core
 
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-@seskar.js.JsVirtual
 sealed external interface DownloadItemEvent {
     sealed interface DONE : node.events.LegacyEventType
     sealed interface UPDATED : node.events.LegacyEventType

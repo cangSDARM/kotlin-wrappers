@@ -2,13 +2,9 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * Geometry instancing allows one [Geometry] object to be positions in several
@@ -44,7 +40,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GeometryInstance.html">Online Documentation</a>
  */
-external class GeometryInstance(options: ConstructorOptions) {
+external class GeometryInstance(
+    options: ConstructorOptions,
+) {
     /**
      * @property [geometry] The geometry to instance.
      * @property [modelMatrix] The model matrix that transforms to transform the geometry from model to world coordinates.
@@ -52,8 +50,9 @@ external class GeometryInstance(options: ConstructorOptions) {
      * @property [id] A user-defined object to return when the instance is picked with [Scene.pick] or get/set per-instance attributes with [Primitive.getGeometryInstanceAttributes].
      * @property [attributes] Per-instance attributes like a show or color attribute shown in the example below.
      */
-    interface ConstructorOptions {
-        var geometry: dynamic
+    @JsPlainObject
+    sealed interface ConstructorOptions {
+        var geometry: Any /* Geometry | GeometryFactory */
         var modelMatrix: Matrix4?
         var id: Any?
         var attributes: Any?
@@ -87,8 +86,3 @@ external class GeometryInstance(options: ConstructorOptions) {
      */
     var attributes: Any
 }
-
-inline fun GeometryInstance(
-    block: GeometryInstance.ConstructorOptions.() -> Unit,
-): GeometryInstance =
-    GeometryInstance(options = jso(block))

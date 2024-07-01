@@ -1,7 +1,5 @@
 package node.fs
 
-import js.promise.await
-
 /**
  * Returns `true` if the path exists, `false` otherwise.
  */

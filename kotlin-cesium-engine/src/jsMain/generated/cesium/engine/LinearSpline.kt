@@ -2,14 +2,10 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A spline that uses piecewise linear interpolation to create a curve.
@@ -30,13 +26,16 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/LinearSpline.html">Online Documentation</a>
  */
-external class LinearSpline(options: ConstructorOptions) {
+external class LinearSpline(
+    options: ConstructorOptions,
+) {
     /**
      * @property [times] An array of strictly increasing, unit-less, floating-point times at each point.
      *   The values are in no way connected to the clock time. They are the parameterization for the curve.
      * @property [points] The array of control points.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var times: ReadonlyArray<Double>
         var points: ReadonlyArray<Cartesian3 /* or number */>
     }
@@ -88,10 +87,5 @@ external class LinearSpline(options: ConstructorOptions) {
     fun evaluate(
         time: Double,
         result: Cartesian3? = definedExternally,
-    ): dynamic
+    ): Any /* number | Cartesian3 */
 }
-
-inline fun LinearSpline(
-    block: LinearSpline.ConstructorOptions.() -> Unit,
-): LinearSpline =
-    LinearSpline(options = jso(block))

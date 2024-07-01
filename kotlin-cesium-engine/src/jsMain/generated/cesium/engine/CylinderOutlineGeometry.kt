@@ -2,14 +2,10 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A description of the outline of a cylinder.
@@ -24,7 +20,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/CylinderOutlineGeometry.html">Online Documentation</a>
  */
-external class CylinderOutlineGeometry(options: ConstructorOptions) {
+external class CylinderOutlineGeometry(
+    options: ConstructorOptions,
+) {
     /**
      * @property [length] The length of the cylinder.
      * @property [topRadius] The radius of the top of the cylinder.
@@ -34,7 +32,8 @@ external class CylinderOutlineGeometry(options: ConstructorOptions) {
      * @property [numberOfVerticalLines] Number of lines to draw between the top and bottom surfaces of the cylinder.
      *   Default value - `16`
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var length: Int
         var topRadius: Double
         var bottomRadius: Double
@@ -88,8 +87,3 @@ external class CylinderOutlineGeometry(options: ConstructorOptions) {
         fun createGeometry(cylinderGeometry: CylinderOutlineGeometry): Geometry?
     }
 }
-
-inline fun CylinderOutlineGeometry(
-    block: CylinderOutlineGeometry.ConstructorOptions.() -> Unit,
-): CylinderOutlineGeometry =
-    CylinderOutlineGeometry(options = jso(block))

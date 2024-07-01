@@ -5,6 +5,8 @@
 package cesium.engine
 
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * Exports an EntityCollection as a KML document. Only Point, Billboard, Model, Path, Polygon, Polyline geometries
@@ -32,12 +34,16 @@ import js.promise.Promise
  * @return A promise that resolved to an object containing the KML string and a dictionary of external file blobs, or a kmz file as a blob if options.kmz is true.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/global.html#exportKml">Online Documentation</a>
  */
-external fun exportKml(options: ExportKmlOptions): Promise<dynamic>
+@JsAsync
+external suspend fun exportKml(options: ExportKmlOptions): Any /* exportKmlResultKml | exportKmlResultKmz */
+
+@JsName("exportKml")
+external fun exportKmlAsync(options: ExportKmlOptions): Promise<Any /* exportKmlResultKml | exportKmlResultKmz */>
 
 /**
  * @property [entities] The EntityCollection to export as KML.
  * @property [ellipsoid] The ellipsoid for the output file.
- *   Default value - [Ellipsoid.WGS84]
+ *   Default value - [Ellipsoid.default]
  * @property [modelCallback] A callback that will be called with a [ModelGraphics] instance and should return the URI to use in the KML. Required if a model exists in the entity collection.
  * @property [time] The time value to use to get properties that are not time varying in KML.
  *   Default value - `entities.computeAvailability().start`
@@ -48,7 +54,8 @@ external fun exportKml(options: ExportKmlOptions): Promise<dynamic>
  * @property [kmz] If true KML and external files will be compressed into a kmz file.
  *   Default value - `false`
  */
-external interface ExportKmlOptions {
+@JsPlainObject
+sealed external interface ExportKmlOptions {
     var entities: EntityCollection
     var ellipsoid: Ellipsoid?
     var modelCallback: exportKmlModelCallback?

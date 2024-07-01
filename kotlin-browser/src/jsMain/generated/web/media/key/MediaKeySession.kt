@@ -5,6 +5,7 @@ package web.media.key
 import js.buffer.BufferSource
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.events.Event
 import web.events.EventHandler
 import web.events.EventTarget
@@ -36,12 +37,12 @@ sealed external class MediaKeySession :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeySession/keystatuseschange_event)
      */
-    var onkeystatuseschange: EventHandler<Event, MediaKeySession>?
+    var onkeystatuseschange: EventHandler<Event, MediaKeySession, MediaKeySession>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeySession/message_event)
      */
-    var onmessage: EventHandler<MediaKeyMessageEvent, MediaKeySession>?
+    var onmessage: EventHandler<MediaKeyMessageEvent, MediaKeySession, MediaKeySession>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeySession/sessionId)
@@ -51,12 +52,23 @@ sealed external class MediaKeySession :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeySession/close)
      */
-    fun close(): Promise<Void>
+    @JsAsync
+    suspend fun close()
+
+    @JsName("close")
+    fun closeAsync(): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeySession/generateRequest)
      */
-    fun generateRequest(
+    @JsAsync
+    suspend fun generateRequest(
+        initDataType: String,
+        initData: BufferSource,
+    )
+
+    @JsName("generateRequest")
+    fun generateRequestAsync(
         initDataType: String,
         initData: BufferSource,
     ): Promise<Void>
@@ -64,15 +76,27 @@ sealed external class MediaKeySession :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeySession/load)
      */
-    fun load(sessionId: String): Promise<Boolean>
+    @JsAsync
+    suspend fun load(sessionId: String): Boolean
+
+    @JsName("load")
+    fun loadAsync(sessionId: String): Promise<Boolean>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeySession/remove)
      */
-    fun remove(): Promise<Void>
+    @JsAsync
+    suspend fun remove()
+
+    @JsName("remove")
+    fun removeAsync(): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeySession/update)
      */
-    fun update(response: BufferSource): Promise<Void>
+    @JsAsync
+    suspend fun update(response: BufferSource)
+
+    @JsName("update")
+    fun updateAsync(response: BufferSource): Promise<Void>
 }

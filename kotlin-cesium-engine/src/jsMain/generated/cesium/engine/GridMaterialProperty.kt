@@ -2,17 +2,14 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 /**
  * A [MaterialProperty] that maps to grid [Material] uniforms.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GridMaterialProperty.html">Online Documentation</a>
  */
-external class GridMaterialProperty : MaterialProperty {
+external class GridMaterialProperty :
+    MaterialProperty {
     /**
      * Gets a value indicating if this property is constant.  A property is considered
      * constant if getValue always returns the same result for the current definition.
@@ -78,8 +75,3 @@ external class GridMaterialProperty : MaterialProperty {
         result: Any?,
     ): Any
 }
-
-inline fun GridMaterialProperty(
-    block: GridMaterialProperty.() -> Unit,
-): GridMaterialProperty =
-    GridMaterialProperty().apply(block)

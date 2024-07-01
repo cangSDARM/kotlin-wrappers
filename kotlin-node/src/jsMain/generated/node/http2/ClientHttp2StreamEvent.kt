@@ -3,8 +3,6 @@
 package node.http2
 
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-@seskar.js.JsVirtual
 sealed external interface ClientHttp2StreamEvent {
     sealed interface CONTINUE : node.events.LegacyEventType
     sealed interface HEADERS : node.events.LegacyEventType

@@ -1,29 +1,24 @@
 // Automatically generated - do not modify!
 
+@file:JsModule("@actions/tool-cache")
+
 package actions.tool.cache
 
-import js.promise.await
+import js.promise.Promise
+import seskar.js.JsAsync
 
-suspend fun cacheDir(
+@JsAsync
+external suspend fun cacheDir(
     sourceDir: String,
     tool: String,
     version: String,
-): String =
-    cacheDirAsync(
-        sourceDir = sourceDir,
-        tool = tool,
-        version = version,
-    ).await()
+    arch: String = definedExternally,
+): String
 
-suspend fun cacheDir(
+@JsName("cacheDir")
+external fun cacheDirAsync(
     sourceDir: String,
     tool: String,
     version: String,
-    arch: String,
-): String =
-    cacheDirAsync(
-        sourceDir = sourceDir,
-        tool = tool,
-        version = version,
-        arch = arch,
-    ).await()
+    arch: String = definedExternally,
+): Promise<String>

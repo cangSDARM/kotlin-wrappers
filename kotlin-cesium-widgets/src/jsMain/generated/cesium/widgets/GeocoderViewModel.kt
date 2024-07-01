@@ -2,23 +2,21 @@
 
 @file:JsModule("@cesium/widgets")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.widgets
 
 import cesium.engine.DefaultEvent
 import cesium.engine.GeocoderService
 import cesium.engine.Scene
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * The view model for the [Geocoder] widget.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GeocoderViewModel.html">Online Documentation</a>
  */
-external class GeocoderViewModel(options: ConstructorOptions) {
+external class GeocoderViewModel(
+    options: ConstructorOptions,
+) {
     /**
      * @property [scene] The Scene instance to use.
      * @property [geocoderServices] Geocoder services to use for geocoding queries.
@@ -28,7 +26,8 @@ external class GeocoderViewModel(options: ConstructorOptions) {
      * @property [destinationFound] A callback function that is called after a successful geocode.  If not supplied, the default behavior is to fly the camera to the result destination.
      *   Default value - [GeocoderViewModel.flyToDestination]
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var scene: Scene
         var geocoderServices: ReadonlyArray<GeocoderService>?
         var flightDuration: Double?
@@ -125,8 +124,3 @@ external class GeocoderViewModel(options: ConstructorOptions) {
         var flyToDestination: DestinationFoundFunction
     }
 }
-
-inline fun GeocoderViewModel(
-    block: GeocoderViewModel.ConstructorOptions.() -> Unit,
-): GeocoderViewModel =
-    GeocoderViewModel(options = jso(block))

@@ -2,17 +2,14 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 /**
  * A [MaterialProperty] that maps to polyline dash [Material] uniforms.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/PolylineDashMaterialProperty.html">Online Documentation</a>
  */
-external class PolylineDashMaterialProperty : MaterialProperty {
+external class PolylineDashMaterialProperty :
+    MaterialProperty {
     /**
      * Gets a value indicating if this property is constant.  A property is considered
      * constant if getValue always returns the same result for the current definition.
@@ -72,8 +69,3 @@ external class PolylineDashMaterialProperty : MaterialProperty {
         result: Any?,
     ): Any
 }
-
-inline fun PolylineDashMaterialProperty(
-    block: PolylineDashMaterialProperty.() -> Unit,
-): PolylineDashMaterialProperty =
-    PolylineDashMaterialProperty().apply(block)

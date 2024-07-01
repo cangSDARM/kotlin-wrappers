@@ -1,21 +1,20 @@
 // Automatically generated - do not modify!
 
+@file:JsModule("@actions/glob")
+
 package actions.glob
 
-import js.promise.await
+import js.promise.Promise
+import seskar.js.JsAsync
 
-suspend fun create(
+@JsAsync
+external suspend fun create(
     patterns: String,
-): Globber =
-    createAsync(
-        patterns = patterns,
-    ).await()
+    options: GlobOptions = definedExternally,
+): Globber
 
-suspend fun create(
+@JsName("create")
+external fun createAsync(
     patterns: String,
-    options: GlobOptions,
-): Globber =
-    createAsync(
-        patterns = patterns,
-        options = options,
-    ).await()
+    options: GlobOptions = definedExternally,
+): Promise<Globber>

@@ -2,6 +2,9 @@
 
 package actions.exec
 
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
 sealed external interface ExecOutput {
     /**The exit code of the process */
     var exitCode: Number

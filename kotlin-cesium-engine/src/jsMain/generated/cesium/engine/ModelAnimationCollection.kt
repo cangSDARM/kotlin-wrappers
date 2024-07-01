@@ -5,6 +5,7 @@
 package cesium.engine
 
 import js.array.ReadonlyArray
+import kotlinx.js.JsPlainObject
 
 /**
  * <div class="notice">
@@ -14,7 +15,8 @@ import js.array.ReadonlyArray
  * A collection of active model animations.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/ModelAnimationCollection.html">Online Documentation</a>
  */
-sealed external class ModelAnimationCollection {
+external class ModelAnimationCollection
+private constructor() {
     /**
      * The event fired when an animation is added to the collection.  This can be used, for
      * example, to keep a UI in sync.
@@ -123,7 +125,8 @@ sealed external class ModelAnimationCollection {
      *   Default value - [ModelAnimationLoop.NONE]
      * @property [animationTime] If defined, computes the local animation time for this animation.
      */
-    interface AddOptions {
+    @JsPlainObject
+    sealed interface AddOptions {
         var name: String?
         var index: Int?
         var startTime: JulianDate?
@@ -167,7 +170,8 @@ sealed external class ModelAnimationCollection {
      *   Default value - [ModelAnimationLoop.NONE]
      * @property [animationTime] If defined, computes the local animation time for all of the animations.
      */
-    interface AddAllOptions {
+    @JsPlainObject
+    sealed interface AddAllOptions {
         var startTime: JulianDate?
         var delay: Double?
         var stopTime: JulianDate?

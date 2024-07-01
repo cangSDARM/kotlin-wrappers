@@ -2,6 +2,9 @@
 
 package actions.artifact
 
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
 sealed external interface ContainerEntry {
     var containerId: Number
     var scopeIdentifier: String

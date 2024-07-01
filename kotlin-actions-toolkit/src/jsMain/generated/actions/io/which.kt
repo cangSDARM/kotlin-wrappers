@@ -1,21 +1,20 @@
 // Automatically generated - do not modify!
 
+@file:JsModule("@actions/io")
+
 package actions.io
 
-import js.promise.await
+import js.promise.Promise
+import seskar.js.JsAsync
 
-suspend fun which(
+@JsAsync
+external suspend fun which(
     tool: String,
-): String =
-    whichAsync(
-        tool = tool,
-    ).await()
+    check: Boolean = definedExternally,
+): String
 
-suspend fun which(
+@JsName("which")
+external fun whichAsync(
     tool: String,
-    check: Boolean,
-): String =
-    whichAsync(
-        tool = tool,
-        check = check,
-    ).await()
+    check: Boolean = definedExternally,
+): Promise<String>

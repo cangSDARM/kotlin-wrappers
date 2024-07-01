@@ -2,14 +2,10 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.objects.ReadonlyRecord
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A user defined GLSL shader used with [Model] as well
@@ -62,7 +58,9 @@ import js.objects.jso
  * @param [options] An object with the following options
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/CustomShader.html">Online Documentation</a>
  */
-external class CustomShader(options: ConstructorOptions) {
+external class CustomShader(
+    options: ConstructorOptions,
+) {
     /**
      * @property [mode] The custom shader mode, which determines how the custom shader code is inserted into the fragment shader.
      *   Default value - [CustomShaderMode.MODIFY_MATERIAL]
@@ -74,7 +72,8 @@ external class CustomShader(options: ConstructorOptions) {
      * @property [vertexShaderText] The custom vertex shader as a string of GLSL code. It must include a GLSL function called vertexMain. See the example for the expected signature. If not specified, the custom vertex shader step will be skipped in the computed vertex shader.
      * @property [fragmentShaderText] The custom fragment shader as a string of GLSL code. It must include a GLSL function called fragmentMain. See the example for the expected signature. If not specified, the custom fragment shader step will be skipped in the computed fragment shader.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var mode: CustomShaderMode?
         var lightingModel: LightingModel?
         var translucencyMode: CustomShaderTranslucencyMode?
@@ -140,11 +139,6 @@ external class CustomShader(options: ConstructorOptions) {
      */
     fun setUniform(
         uniformName: String,
-        value: dynamic,
+        value: Any, /* boolean | number | Cartesian2 | Cartesian3 | Cartesian4 | Matrix2 | Matrix3 | Matrix4 | string | Resource | TextureUniform */
     )
 }
-
-inline fun CustomShader(
-    block: CustomShader.ConstructorOptions.() -> Unit,
-): CustomShader =
-    CustomShader(options = jso(block))

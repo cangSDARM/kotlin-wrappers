@@ -2,7 +2,10 @@
 
 package web.gpu
 
-sealed external interface GPUComputePipelineDescriptor :
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
+external interface GPUComputePipelineDescriptor :
     GPUPipelineDescriptorBase {
     var compute: GPUProgrammableStage
 }

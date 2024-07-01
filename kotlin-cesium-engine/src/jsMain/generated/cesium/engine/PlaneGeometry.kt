@@ -2,14 +2,10 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * Describes geometry representing a plane centered at the origin, with a unit width and length.
@@ -20,12 +16,15 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/PlaneGeometry.html">Online Documentation</a>
  */
-external class PlaneGeometry(options: ConstructorOptions? = definedExternally) {
+external class PlaneGeometry(
+    options: ConstructorOptions? = definedExternally,
+) {
     /**
      * @property [vertexFormat] The vertex attributes to be computed.
      *   Default value - [VertexFormat.DEFAULT]
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var vertexFormat: VertexFormat?
     }
 
@@ -75,8 +74,3 @@ external class PlaneGeometry(options: ConstructorOptions? = definedExternally) {
         fun createGeometry(planeGeometry: PlaneGeometry): Geometry?
     }
 }
-
-inline fun PlaneGeometry(
-    block: PlaneGeometry.ConstructorOptions.() -> Unit,
-): PlaneGeometry =
-    PlaneGeometry(options = jso(block))

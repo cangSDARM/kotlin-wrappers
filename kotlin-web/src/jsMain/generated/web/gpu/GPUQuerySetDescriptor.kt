@@ -2,7 +2,10 @@
 
 package web.gpu
 
-sealed external interface GPUQuerySetDescriptor :
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
+external interface GPUQuerySetDescriptor :
     GPUObjectDescriptorBase {
     var type: GPUQueryType
     var count: GPUSize32

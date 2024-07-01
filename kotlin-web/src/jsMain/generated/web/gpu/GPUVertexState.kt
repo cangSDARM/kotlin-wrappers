@@ -3,8 +3,10 @@
 package web.gpu
 
 import js.array.ReadonlyArray
+import kotlinx.js.JsPlainObject
 
-sealed external interface GPUVertexState :
+@JsPlainObject
+external interface GPUVertexState :
     GPUProgrammableStage {
     var buffers: ReadonlyArray<GPUVertexBufferLayout?>?
 }

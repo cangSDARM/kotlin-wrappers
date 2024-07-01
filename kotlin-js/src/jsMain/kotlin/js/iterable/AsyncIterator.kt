@@ -9,10 +9,15 @@
 package js.iterable
 
 import js.promise.Promise
+import seskar.js.JsAsync
 
 @JsExternalInheritorsOnly
 external interface AsyncIterator<out T> {
-    fun next(): Promise<IteratorResult<T, *>>
+    @JsName("next")
+    fun nextAsync(): Promise<IteratorResult<T, *>>
+
+    @JsAsync
+    suspend fun next(): IteratorResult<T, *> = definedExternally
 
     inline operator fun iterator(): SuspendableIterator<T> =
         iteratorFor(this)

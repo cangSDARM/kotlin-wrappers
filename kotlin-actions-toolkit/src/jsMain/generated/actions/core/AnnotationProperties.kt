@@ -2,6 +2,9 @@
 
 package actions.core
 
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
 sealed external interface AnnotationProperties {
     /**
      * A title for the annotation.

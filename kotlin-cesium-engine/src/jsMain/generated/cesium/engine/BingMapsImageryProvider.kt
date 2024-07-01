@@ -7,6 +7,8 @@ package cesium.engine
 import js.array.ReadonlyArray
 import js.core.Void
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * <div class="notice">
@@ -23,7 +25,8 @@ import js.promise.Promise
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/BingMapsImageryProvider.html">Online Documentation</a>
  */
-sealed external class BingMapsImageryProvider {
+external class BingMapsImageryProvider
+private constructor() {
     /**
      * Gets the name of the BingMaps server url hosting the imagery.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/BingMapsImageryProvider.html#url">Online Documentation</a>
@@ -155,7 +158,16 @@ sealed external class BingMapsImageryProvider {
      *   undefined if there are too many active requests to the server, and the request should be retried later.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/BingMapsImageryProvider.html#requestImage">Online Documentation</a>
      */
-    fun requestImage(
+    @JsAsync(optional = true)
+    suspend fun requestImage(
+        x: Double,
+        y: Double,
+        level: Int,
+        request: Request? = definedExternally,
+    ): ImageryTypes?
+
+    @JsName("requestImage")
+    fun requestImageAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -194,14 +206,16 @@ sealed external class BingMapsImageryProvider {
      *   all cultures are supported. See [http://msdn.microsoft.com/en-us/library/hh441729.aspx]
      *   for information on the supported cultures.
      *   Default value - `''`
-     * @property [ellipsoid] The ellipsoid.  If not specified, the WGS84 ellipsoid is used.
+     * @property [ellipsoid] The ellipsoid.  If not specified, the default ellipsoid is used.
+     *   Default value - [Ellipsoid.default]
      * @property [tileDiscardPolicy] The policy that determines if a tile
      *   is invalid and should be discarded.  By default, a [DiscardEmptyTileImagePolicy]
      *   will be used, with the expectation that the Bing Maps server will send a zero-length response for missing tiles.
      *   To ensure that no tiles are discarded, construct and pass a [NeverTileDiscardPolicy] for this parameter.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/BingMapsImageryProvider.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var key: String?
         var tileProtocol: String?
         var mapStyle: BingMapsStyle?
@@ -225,12 +239,26 @@ sealed external class BingMapsImageryProvider {
          * @return A promise that resolves to the created BingMapsImageryProvider
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/BingMapsImageryProvider.html#.fromUrl">Online Documentation</a>
          */
-        fun fromUrl(
+        @JsAsync
+        suspend fun fromUrl(
+            url: Resource,
+            options: ConstructorOptions,
+        ): BingMapsImageryProvider
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
             url: Resource,
             options: ConstructorOptions,
         ): Promise<BingMapsImageryProvider>
 
-        fun fromUrl(
+        @JsAsync
+        suspend fun fromUrl(
+            url: String,
+            options: ConstructorOptions,
+        ): BingMapsImageryProvider
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
             url: String,
             options: ConstructorOptions,
         ): Promise<BingMapsImageryProvider>

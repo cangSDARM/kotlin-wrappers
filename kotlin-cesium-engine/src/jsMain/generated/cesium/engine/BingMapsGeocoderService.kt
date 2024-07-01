@@ -2,26 +2,26 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * Provides geocoding through Bing Maps.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/BingMapsGeocoderService.html">Online Documentation</a>
  */
-external class BingMapsGeocoderService(options: ConstructorOptions) {
+external class BingMapsGeocoderService(
+    options: ConstructorOptions,
+) {
     /**
      * @property [key] A key to use with the Bing Maps geocoding service
      * @property [culture] A Bing Maps [Culture Code](https://docs.microsoft.com/en-us/bingmaps/rest-services/common-parameters-and-types/supported-culture-codes) to return results in a specific culture and language.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var key: String
         var culture: String?
     }
@@ -49,10 +49,9 @@ external class BingMapsGeocoderService(options: ConstructorOptions) {
      * @param [query] The query to be sent to the geocoder service
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/BingMapsGeocoderService.html#geocode">Online Documentation</a>
      */
-    fun geocode(query: String): Promise<ReadonlyArray<GeocoderService.Result>>
-}
+    @JsAsync
+    suspend fun geocode(query: String): ReadonlyArray<GeocoderService.Result>
 
-inline fun BingMapsGeocoderService(
-    block: BingMapsGeocoderService.ConstructorOptions.() -> Unit,
-): BingMapsGeocoderService =
-    BingMapsGeocoderService(options = jso(block))
+    @JsName("geocode")
+    fun geocodeAsync(query: String): Promise<ReadonlyArray<GeocoderService.Result>>
+}

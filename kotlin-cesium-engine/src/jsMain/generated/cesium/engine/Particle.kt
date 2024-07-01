@@ -2,19 +2,17 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A particle emitted by a [ParticleSystem].
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Particle.html">Online Documentation</a>
  */
-external class Particle(options: ConstructorOptions) {
+external class Particle(
+    options: ConstructorOptions,
+) {
     /**
      * @property [mass] The mass of the particle in kilograms.
      *   Default value - `1.0`
@@ -36,7 +34,8 @@ external class Particle(options: ConstructorOptions) {
      * @property [imageSize] The dimensions, width by height, to scale the particle image in pixels.
      *   Default value - [Cartesian2(1.0, 1.0)][Cartesian2]
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var mass: Double?
         var position: Cartesian3?
         var velocity: Cartesian3?
@@ -121,8 +120,3 @@ external class Particle(options: ConstructorOptions) {
      */
     var normalizedAge: Double
 }
-
-inline fun Particle(
-    block: Particle.ConstructorOptions.() -> Unit,
-): Particle =
-    Particle(options = jso(block))

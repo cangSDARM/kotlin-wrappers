@@ -2,15 +2,12 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 import web.blob.Blob
 import web.dom.Document
 import web.dom.Element
@@ -39,7 +36,9 @@ import web.html.HTMLCanvasElement
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/KmlDataSource.html">Online Documentation</a>
  */
-external class KmlDataSource(options: ConstructorOptions? = definedExternally) {
+external class KmlDataSource(
+    options: ConstructorOptions? = definedExternally,
+) {
     /**
      * The current size of this Canvas will be used to populate the Link parameters
      * for client height and width.
@@ -144,22 +143,50 @@ external class KmlDataSource(options: ConstructorOptions? = definedExternally) {
      * @return A promise that will resolve to this instances once the KML is loaded.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/KmlDataSource.html#load">Online Documentation</a>
      */
-    fun load(
+    @JsAsync
+    suspend fun load(
+        data: Resource,
+        options: LoadOptions? = definedExternally,
+    ): KmlDataSource
+
+    @JsName("load")
+    fun loadAsync(
         data: Resource,
         options: LoadOptions? = definedExternally,
     ): Promise<KmlDataSource>
 
-    fun load(
+    @JsAsync
+    suspend fun load(
+        data: String,
+        options: LoadOptions? = definedExternally,
+    ): KmlDataSource
+
+    @JsName("load")
+    fun loadAsync(
         data: String,
         options: LoadOptions? = definedExternally,
     ): Promise<KmlDataSource>
 
-    fun load(
+    @JsAsync
+    suspend fun load(
+        data: Document,
+        options: LoadOptions? = definedExternally,
+    ): KmlDataSource
+
+    @JsName("load")
+    fun loadAsync(
         data: Document,
         options: LoadOptions? = definedExternally,
     ): Promise<KmlDataSource>
 
-    fun load(
+    @JsAsync
+    suspend fun load(
+        data: Blob,
+        options: LoadOptions? = definedExternally,
+    ): KmlDataSource
+
+    @JsName("load")
+    fun loadAsync(
         data: Blob,
         options: LoadOptions? = definedExternally,
     ): Promise<KmlDataSource>
@@ -187,11 +214,12 @@ external class KmlDataSource(options: ConstructorOptions? = definedExternally) {
      * @property [clampToGround] true if we want the geometry features (Polygons, LineStrings and LinearRings) clamped to the ground.
      *   Default value - `false`
      * @property [ellipsoid] The global ellipsoid used for geographical calculations.
-     *   Default value - [Ellipsoid.WGS84]
+     *   Default value - [Ellipsoid.default]
      * @property [screenOverlayContainer] A container for ScreenOverlay images.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/KmlDataSource.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var camera: Camera?
         var canvas: HTMLCanvasElement?
         var credit: Credit?
@@ -209,22 +237,50 @@ external class KmlDataSource(options: ConstructorOptions? = definedExternally) {
          * @return A promise that will resolve to a new KmlDataSource instance once the KML is loaded.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/KmlDataSource.html#.load">Online Documentation</a>
          */
-        fun load(
+        @JsAsync
+        suspend fun load(
+            data: Resource,
+            options: ConstructorOptions? = definedExternally,
+        ): KmlDataSource
+
+        @JsName("load")
+        fun loadAsync(
             data: Resource,
             options: ConstructorOptions? = definedExternally,
         ): Promise<KmlDataSource>
 
-        fun load(
+        @JsAsync
+        suspend fun load(
+            data: String,
+            options: ConstructorOptions? = definedExternally,
+        ): KmlDataSource
+
+        @JsName("load")
+        fun loadAsync(
             data: String,
             options: ConstructorOptions? = definedExternally,
         ): Promise<KmlDataSource>
 
-        fun load(
+        @JsAsync
+        suspend fun load(
+            data: Document,
+            options: ConstructorOptions? = definedExternally,
+        ): KmlDataSource
+
+        @JsName("load")
+        fun loadAsync(
             data: Document,
             options: ConstructorOptions? = definedExternally,
         ): Promise<KmlDataSource>
 
-        fun load(
+        @JsAsync
+        suspend fun load(
+            data: Blob,
+            options: ConstructorOptions? = definedExternally,
+        ): KmlDataSource
+
+        @JsName("load")
+        fun loadAsync(
             data: Blob,
             options: ConstructorOptions? = definedExternally,
         ): Promise<KmlDataSource>
@@ -235,11 +291,12 @@ external class KmlDataSource(options: ConstructorOptions? = definedExternally) {
          * @property [clampToGround] true if we want the geometry features (Polygons, LineStrings and LinearRings) clamped to the ground.
          *   Default value - `false`
          * @property [ellipsoid] The global ellipsoid used for geographical calculations.
-         *   Default value - [Ellipsoid.WGS84]
+         *   Default value - [Ellipsoid.default]
          * @property [screenOverlayContainer] A container for ScreenOverlay images.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/KmlDataSource.html#.LoadOptions">Online Documentation</a>
          */
-        interface LoadOptions {
+        @JsPlainObject
+        sealed interface LoadOptions {
             var sourceUri: String?
             var clampToGround: Boolean?
             var ellipsoid: Ellipsoid?
@@ -247,8 +304,3 @@ external class KmlDataSource(options: ConstructorOptions? = definedExternally) {
         }
     }
 }
-
-inline fun KmlDataSource(
-    block: KmlDataSource.ConstructorOptions.() -> Unit,
-): KmlDataSource =
-    KmlDataSource(options = jso(block))

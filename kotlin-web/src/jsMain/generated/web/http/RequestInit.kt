@@ -2,8 +2,7 @@
 
 package web.http
 
-import js.core.Void
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 import web.abort.AbortSignal
 import web.abort.Abortable
 
@@ -70,9 +69,4 @@ external interface RequestInit :
      * An AbortSignal to set request's signal.
      */
     override var signal: AbortSignal?
-
-    /**
-     * Can only be null. Used to disassociate request from any Window.
-     */
-    var window: Void
 }

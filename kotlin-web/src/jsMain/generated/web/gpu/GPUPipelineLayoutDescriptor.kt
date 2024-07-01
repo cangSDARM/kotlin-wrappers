@@ -3,8 +3,10 @@
 package web.gpu
 
 import js.array.ReadonlyArray
+import kotlinx.js.JsPlainObject
 
-sealed external interface GPUPipelineLayoutDescriptor :
+@JsPlainObject
+external interface GPUPipelineLayoutDescriptor :
     GPUObjectDescriptorBase {
     var bindGroupLayouts: ReadonlyArray<GPUBindGroupLayout>
 }

@@ -5,6 +5,7 @@
 package cesium.engine
 
 import js.array.ReadonlyArray
+import kotlinx.js.JsPlainObject
 
 /**
  * A non-overlapping collection of [TimeInterval] instances sorted by start time.
@@ -14,7 +15,9 @@ import js.array.ReadonlyArray
  * @param [intervals] An array of intervals to add to the collection.
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/TimeIntervalCollection.html">Online Documentation</a>
  */
-external class TimeIntervalCollection(intervals: ReadonlyArray<TimeInterval>? = definedExternally) {
+external class TimeIntervalCollection(
+    intervals: ReadonlyArray<TimeInterval>? = definedExternally,
+) {
     /**
      * Gets an event that is raised whenever the collection of intervals change.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/TimeIntervalCollection.html#changedEvent">Online Documentation</a>
@@ -133,7 +136,8 @@ external class TimeIntervalCollection(intervals: ReadonlyArray<TimeInterval>? = 
      * @property [isStartIncluded] `true` if `options.start` is included in the interval, `false` otherwise.
      * @property [isStopIncluded] `true` if `options.stop` is included in the interval, `false` otherwise.
      */
-    interface FindIntervalOptions {
+    @JsPlainObject
+    sealed interface FindIntervalOptions {
         var start: JulianDate?
         var stop: JulianDate?
         var isStartIncluded: Boolean?
@@ -200,7 +204,8 @@ external class TimeIntervalCollection(intervals: ReadonlyArray<TimeInterval>? = 
          *   Default value - `false`
          * @property [dataCallback] A function that will be return the data that is called with each interval before it is added to the collection. If unspecified, the data will be the index in the collection.
          */
-        interface FromJulianDateArrayOptions {
+        @JsPlainObject
+        sealed interface FromJulianDateArrayOptions {
             var julianDates: ReadonlyArray<JulianDate>
             var isStartIncluded: Boolean?
             var isStopIncluded: Boolean?
@@ -232,7 +237,8 @@ external class TimeIntervalCollection(intervals: ReadonlyArray<TimeInterval>? = 
          *   Default value - `false`
          * @property [dataCallback] A function that will be return the data that is called with each interval before it is added to the collection. If unspecified, the data will be the index in the collection.
          */
-        interface FromIso8601Options {
+        @JsPlainObject
+        sealed interface FromIso8601Options {
             var iso8601: String
             var isStartIncluded: Boolean?
             var isStopIncluded: Boolean?
@@ -264,7 +270,8 @@ external class TimeIntervalCollection(intervals: ReadonlyArray<TimeInterval>? = 
          *   Default value - `false`
          * @property [dataCallback] A function that will be return the data that is called with each interval before it is added to the collection. If unspecified, the data will be the index in the collection.
          */
-        interface FromIso8601DateArrayOptions {
+        @JsPlainObject
+        sealed interface FromIso8601DateArrayOptions {
             var iso8601Dates: ReadonlyArray<String>
             var isStartIncluded: Boolean?
             var isStopIncluded: Boolean?
@@ -299,7 +306,8 @@ external class TimeIntervalCollection(intervals: ReadonlyArray<TimeInterval>? = 
          *   Default value - `false`
          * @property [dataCallback] A function that will be return the data that is called with each interval before it is added to the collection. If unspecified, the data will be the index in the collection.
          */
-        interface FromIso8601DurationArrayOptions {
+        @JsPlainObject
+        sealed interface FromIso8601DurationArrayOptions {
             var epoch: JulianDate
             var iso8601Durations: String
             var relativeToPrevious: Boolean?

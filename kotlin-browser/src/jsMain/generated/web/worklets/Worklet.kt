@@ -4,6 +4,7 @@ package web.worklets
 
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.url.URL
 
 /**
@@ -21,12 +22,26 @@ abstract external class Worklet {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Worklet/addModule)
      */
-    fun addModule(
+    @JsAsync
+    suspend fun addModule(
+        moduleURL: String,
+        options: WorkletOptions = definedExternally,
+    )
+
+    @JsName("addModule")
+    fun addModuleAsync(
         moduleURL: String,
         options: WorkletOptions = definedExternally,
     ): Promise<Void>
 
-    fun addModule(
+    @JsAsync
+    suspend fun addModule(
+        moduleURL: URL,
+        options: WorkletOptions = definedExternally,
+    )
+
+    @JsName("addModule")
+    fun addModuleAsync(
         moduleURL: URL,
         options: WorkletOptions = definedExternally,
     ): Promise<Void>

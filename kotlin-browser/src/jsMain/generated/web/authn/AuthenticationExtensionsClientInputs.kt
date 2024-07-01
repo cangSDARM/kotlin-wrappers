@@ -2,10 +2,10 @@
 
 package web.authn
 
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @JsPlainObject
-sealed external interface AuthenticationExtensionsClientInputs {
+external interface AuthenticationExtensionsClientInputs {
     var appid: String?
     var credProps: Boolean?
     var hmacCreateSecret: Boolean?

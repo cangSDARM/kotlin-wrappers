@@ -5,6 +5,8 @@
 package cesium.engine
 
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * A [DataSource] which processes the GPS Exchange Format (GPX).
@@ -107,8 +109,15 @@ external class GpxDataSource {
      * @return A promise that will resolve to this instances once the GPX is loaded.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GpxDataSource.html#load">Online Documentation</a>
      */
-    fun load(
-        data: dynamic,
+    @JsAsync
+    suspend fun load(
+        data: Any, /* string | Document | Blob */
+        options: LoadOptions? = definedExternally,
+    ): GpxDataSource
+
+    @JsName("load")
+    fun loadAsync(
+        data: Any, /* string | Document | Blob */
         options: LoadOptions? = definedExternally,
     ): Promise<GpxDataSource>
 
@@ -119,7 +128,8 @@ external class GpxDataSource {
      * @property [trackColor] Color to use for track lines.
      * @property [routeColor] Color to use for route lines.
      */
-    interface LoadOptions {
+    @JsPlainObject
+    sealed interface LoadOptions {
         var clampToGround: Boolean?
         var waypointImage: String?
         var trackImage: String?
@@ -134,8 +144,15 @@ external class GpxDataSource {
          * @return A promise that will resolve to a new GpxDataSource instance once the gpx is loaded.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GpxDataSource.html#.load">Online Documentation</a>
          */
-        fun load(
-            data: dynamic,
+        @JsAsync
+        suspend fun load(
+            data: Any, /* string | Document | Blob */
+            options: LoadOptions? = definedExternally,
+        ): GpxDataSource
+
+        @JsName("load")
+        fun loadAsync(
+            data: Any, /* string | Document | Blob */
             options: LoadOptions? = definedExternally,
         ): Promise<GpxDataSource>
 
@@ -146,7 +163,8 @@ external class GpxDataSource {
          * @property [trackColor] Color to use for track lines.
          * @property [routeColor] Color to use for route lines.
          */
-        interface LoadOptions {
+        @JsPlainObject
+        sealed interface LoadOptions {
             var clampToGround: Boolean?
             var waypointImage: String?
             var trackImage: String?

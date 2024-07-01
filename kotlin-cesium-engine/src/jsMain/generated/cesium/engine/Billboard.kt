@@ -2,12 +2,9 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
+import kotlinx.js.JsPlainObject
 import web.html.HTMLCanvasElement
 import web.html.HTMLImageElement
 
@@ -24,7 +21,8 @@ import web.html.HTMLImageElement
  * @param [billboardCollection] Instance of BillboardCollection
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Billboard.html">Online Documentation</a>
  */
-sealed external class Billboard {
+external class Billboard
+private constructor() {
     /**
      * Determines if this billboard will be shown.  Use this to hide or show a billboard, instead
      * of removing it and re-adding it to the collection.
@@ -405,11 +403,12 @@ sealed external class Billboard {
      * @property [disableDepthTestDistance] A number specifying the distance from the camera at which to disable the depth test to, for example, prevent clipping against terrain.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Billboard.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var position: Cartesian3
-        var id: String?
+        var id: Any?
         var show: Boolean?
-        var image: dynamic
+        var image: HTMLCanvasElement?
         var scale: Double?
         var pixelOffset: Cartesian2?
         var eyeOffset: Cartesian3?
@@ -430,10 +429,3 @@ sealed external class Billboard {
         var disableDepthTestDistance: Double?
     }
 }
-
-/**
- * A function that creates an image.
- * @param [id] The identifier of the image to load.
- * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Billboard.html#.CreateImageCallback">Online Documentation</a>
- */
-typealias CreateImageCallback = (id: String) -> dynamic

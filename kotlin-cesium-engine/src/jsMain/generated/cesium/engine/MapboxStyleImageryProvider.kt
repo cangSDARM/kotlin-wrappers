@@ -2,15 +2,12 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * Provides tiled imagery hosted by Mapbox.
@@ -23,7 +20,9 @@ import js.promise.Promise
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/MapboxStyleImageryProvider.html">Online Documentation</a>
  */
-external class MapboxStyleImageryProvider(options: ConstructorOptions) {
+external class MapboxStyleImageryProvider(
+    options: ConstructorOptions,
+) {
     /**
      * Gets the URL of the Mapbox server.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/MapboxStyleImageryProvider.html#url">Online Documentation</a>
@@ -133,7 +132,16 @@ external class MapboxStyleImageryProvider(options: ConstructorOptions) {
      *   undefined if there are too many active requests to the server, and the request should be retried later.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/MapboxStyleImageryProvider.html#requestImage">Online Documentation</a>
      */
-    fun requestImage(
+    @JsAsync(optional = true)
+    suspend fun requestImage(
+        x: Double,
+        y: Double,
+        level: Int,
+        request: Request? = definedExternally,
+    ): ImageryTypes?
+
+    @JsName("requestImage")
+    fun requestImageAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -154,7 +162,17 @@ external class MapboxStyleImageryProvider(options: ConstructorOptions) {
      *   It may also be undefined if picking is not supported.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/MapboxStyleImageryProvider.html#pickFeatures">Online Documentation</a>
      */
-    fun pickFeatures(
+    @JsAsync(optional = true)
+    suspend fun pickFeatures(
+        x: Double,
+        y: Double,
+        level: Int,
+        longitude: Double,
+        latitude: Double,
+    ): ReadonlyArray<ImageryLayerFeatureInfo>?
+
+    @JsName("pickFeatures")
+    fun pickFeaturesAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -173,7 +191,8 @@ external class MapboxStyleImageryProvider(options: ConstructorOptions) {
      * @property [tilesize] The size of the image tiles.
      *   Default value - `512`
      * @property [scaleFactor] Determines if tiles are rendered at a @2x scale factor.
-     * @property [ellipsoid] The ellipsoid.  If not specified, the WGS84 ellipsoid is used.
+     * @property [ellipsoid] The ellipsoid.  If not specified, the default ellipsoid is used.
+     *   Default value - [Ellipsoid.default]
      * @property [minimumLevel] The minimum level-of-detail supported by the imagery provider.  Take care when specifying
      *   this that the number of tiles at the minimum level is small, such as four or less.  A larger number is likely
      *   to result in rendering problems.
@@ -184,7 +203,8 @@ external class MapboxStyleImageryProvider(options: ConstructorOptions) {
      * @property [credit] A credit for the data source, which is displayed on the canvas.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/MapboxStyleImageryProvider.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var url: Resource?
         var username: String?
         var styleId: String
@@ -198,8 +218,3 @@ external class MapboxStyleImageryProvider(options: ConstructorOptions) {
         var credit: Credit?
     }
 }
-
-inline fun MapboxStyleImageryProvider(
-    block: MapboxStyleImageryProvider.ConstructorOptions.() -> Unit,
-): MapboxStyleImageryProvider =
-    MapboxStyleImageryProvider(options = jso(block))

@@ -4,6 +4,7 @@ package web.media.devices
 
 import js.array.ReadonlyArray
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.events.Event
 import web.events.EventHandler
 import web.events.EventTarget
@@ -22,17 +23,25 @@ sealed external class MediaDevices :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaDevices/devicechange_event)
      */
-    var ondevicechange: EventHandler<Event, MediaDevices>?
+    var ondevicechange: EventHandler<Event, MediaDevices, MediaDevices>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaDevices/enumerateDevices)
      */
-    fun enumerateDevices(): Promise<ReadonlyArray<MediaDeviceInfo>>
+    @JsAsync
+    suspend fun enumerateDevices(): ReadonlyArray<MediaDeviceInfo>
+
+    @JsName("enumerateDevices")
+    fun enumerateDevicesAsync(): Promise<ReadonlyArray<MediaDeviceInfo>>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaDevices/getDisplayMedia)
      */
-    fun getDisplayMedia(options: DisplayMediaStreamOptions = definedExternally): Promise<MediaStream>
+    @JsAsync
+    suspend fun getDisplayMedia(options: DisplayMediaStreamOptions = definedExternally): MediaStream
+
+    @JsName("getDisplayMedia")
+    fun getDisplayMediaAsync(options: DisplayMediaStreamOptions = definedExternally): Promise<MediaStream>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaDevices/getSupportedConstraints)
@@ -42,5 +51,9 @@ sealed external class MediaDevices :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaDevices/getUserMedia)
      */
-    fun getUserMedia(constraints: MediaStreamConstraints = definedExternally): Promise<MediaStream>
+    @JsAsync
+    suspend fun getUserMedia(constraints: MediaStreamConstraints = definedExternally): MediaStream
+
+    @JsName("getUserMedia")
+    fun getUserMediaAsync(constraints: MediaStreamConstraints = definedExternally): Promise<MediaStream>
 }

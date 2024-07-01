@@ -2,28 +2,28 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
-import js.objects.jso
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 import web.html.HTMLImageElement
 
 /**
  * Provides functionality for ImageryProviders that have time dynamic imagery
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/TimeDynamicImagery.html">Online Documentation</a>
  */
-external class TimeDynamicImagery(options: ConstructorOptions) {
+external class TimeDynamicImagery(
+    options: ConstructorOptions,
+) {
     /**
      * @property [clock] A Clock instance that is used when determining the value for the time dimension. Required when `options.times` is specified.
      * @property [times] TimeIntervalCollection with its `data` property being an object containing time dynamic dimension and their values.
      * @property [requestImageFunction] A function that will request imagery tiles.
      * @property [reloadFunction] A function that will be called when all imagery tiles need to be reloaded.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var clock: Clock
         var times: TimeIntervalCollection
         var requestImageFunction: Function<*>
@@ -58,7 +58,16 @@ external class TimeDynamicImagery(options: ConstructorOptions) {
      *   undefined if the tile is not in the cache.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/TimeDynamicImagery.html#getFromCache">Online Documentation</a>
      */
-    fun getFromCache(
+    @JsAsync(optional = true)
+    suspend fun getFromCache(
+        x: Double,
+        y: Double,
+        level: Int,
+        request: Request? = definedExternally,
+    ): HTMLImageElement?
+
+    @JsName("getFromCache")
+    fun getFromCacheAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -81,8 +90,3 @@ external class TimeDynamicImagery(options: ConstructorOptions) {
         request: Request? = definedExternally,
     )
 }
-
-inline fun TimeDynamicImagery(
-    block: TimeDynamicImagery.ConstructorOptions.() -> Unit,
-): TimeDynamicImagery =
-    TimeDynamicImagery(options = jso(block))

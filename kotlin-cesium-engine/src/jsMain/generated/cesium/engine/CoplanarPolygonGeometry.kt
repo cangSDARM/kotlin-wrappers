@@ -2,14 +2,10 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A description of a polygon composed of arbitrary coplanar positions.
@@ -26,7 +22,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/CoplanarPolygonGeometry.html">Online Documentation</a>
  */
-external class CoplanarPolygonGeometry(options: ConstructorOptions) {
+external class CoplanarPolygonGeometry(
+    options: ConstructorOptions,
+) {
     /**
      * @property [polygonHierarchy] A polygon hierarchy that can include holes.
      * @property [stRotation] The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise.
@@ -34,10 +32,11 @@ external class CoplanarPolygonGeometry(options: ConstructorOptions) {
      * @property [vertexFormat] The vertex attributes to be computed.
      *   Default value - [VertexFormat.DEFAULT]
      * @property [ellipsoid] The ellipsoid to be used as a reference.
-     *   Default value - [Ellipsoid.WGS84]
+     *   Default value - [Ellipsoid.default]
      * @property [textureCoordinates] Texture coordinates as a [PolygonHierarchy] of [Cartesian2] points.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var polygonHierarchy: PolygonHierarchy
         var stRotation: Double?
         var vertexFormat: VertexFormat?
@@ -78,10 +77,11 @@ external class CoplanarPolygonGeometry(options: ConstructorOptions) {
          * @property [stRotation] The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise.
          *   Default value - `0.0`
          * @property [ellipsoid] The ellipsoid to be used as a reference.
-         *   Default value - [Ellipsoid.WGS84]
+         *   Default value - [Ellipsoid.default]
          * @property [textureCoordinates] Texture coordinates as a [PolygonHierarchy] of [Cartesian2] points.
          */
-        interface FromPositionsOptions {
+        @JsPlainObject
+        sealed interface FromPositionsOptions {
             var positions: ReadonlyArray<Cartesian3>
             var vertexFormat: VertexFormat?
             var stRotation: Double?
@@ -128,8 +128,3 @@ external class CoplanarPolygonGeometry(options: ConstructorOptions) {
         fun createGeometry(polygonGeometry: CoplanarPolygonGeometry): Geometry?
     }
 }
-
-inline fun CoplanarPolygonGeometry(
-    block: CoplanarPolygonGeometry.ConstructorOptions.() -> Unit,
-): CoplanarPolygonGeometry =
-    CoplanarPolygonGeometry(options = jso(block))

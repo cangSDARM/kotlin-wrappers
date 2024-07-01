@@ -2,13 +2,9 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A Material defines surface appearance through a combination of diffuse, specular,
@@ -38,7 +34,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Material.html">Online Documentation</a>
  */
-external class Material(options: ConstructorOptions? = definedExternally) {
+external class Material(
+    options: ConstructorOptions? = definedExternally,
+) {
     /**
      * @property [strict] Throws errors for issues that would normally be ignored, including unused uniforms or materials.
      *   Default value - `false`
@@ -52,9 +50,10 @@ external class Material(options: ConstructorOptions? = definedExternally) {
      * @property [fabric] The fabric JSON used to generate the material.
      *   ructor
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var strict: Boolean?
-        var translucent: dynamic
+        var translucent: Boolean /* | Function */?
         var minificationFilter: TextureMinificationFilter?
         var magnificationFilter: TextureMagnificationFilter?
         var fabric: Any
@@ -89,7 +88,7 @@ external class Material(options: ConstructorOptions? = definedExternally) {
      * the geometry is expected to appear translucent.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Material.html#translucent">Online Documentation</a>
      */
-    var translucent: dynamic
+    var translucent: Boolean /* | Function */
 
     /**
      * Gets whether or not this material is translucent.
@@ -299,8 +298,3 @@ external class Material(options: ConstructorOptions? = definedExternally) {
         val ElevationBandType: String
     }
 }
-
-inline fun Material(
-    block: Material.ConstructorOptions.() -> Unit,
-): Material =
-    Material(options = jso(block))

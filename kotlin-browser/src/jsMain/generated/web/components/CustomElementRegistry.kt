@@ -3,6 +3,7 @@
 package web.components
 
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.dom.Node
 import web.html.HTMLElement
 import web.html.HtmlTagName
@@ -38,5 +39,9 @@ sealed external class CustomElementRegistry {
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CustomElementRegistry/whenDefined)
      */
-    fun <T : HTMLElement> whenDefined(name: HtmlTagName<T>): Promise<CustomElementConstructor<T>>
+    @JsAsync
+    suspend fun <T : HTMLElement> whenDefined(name: HtmlTagName<T>): CustomElementConstructor<T>
+
+    @JsName("whenDefined")
+    fun <T : HTMLElement> whenDefinedAsync(name: HtmlTagName<T>): Promise<CustomElementConstructor<T>>
 }

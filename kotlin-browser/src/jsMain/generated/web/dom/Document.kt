@@ -4,7 +4,9 @@ package web.dom
 
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.animations.DocumentTimeline
+import web.cssom.ViewTransition
 import web.events.Event
 import web.events.EventHandler
 import web.fonts.FontFaceSource
@@ -195,22 +197,22 @@ open external class Document :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/fullscreenchange_event)
      */
-    var onfullscreenchange: EventHandler<Event, Document>?
+    var onfullscreenchange: EventHandler<Event, Document, Node>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/fullscreenerror_event)
      */
-    var onfullscreenerror: EventHandler<Event, Document>?
+    var onfullscreenerror: EventHandler<Event, Document, Node>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/pointerlockchange_event)
      */
-    var onpointerlockchange: EventHandler<Event, Document>?
+    var onpointerlockchange: EventHandler<Event, Document, Document>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/pointerlockerror_event)
      */
-    var onpointerlockerror: EventHandler<Event, Document>?
+    var onpointerlockerror: EventHandler<Event, Document, Document>?
 
     /**
      * Fires when the state of the object has changed.
@@ -218,12 +220,12 @@ open external class Document :
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/readystatechange_event)
      */
-    var onreadystatechange: EventHandler<Event, Document>?
+    var onreadystatechange: EventHandler<Event, Document, Document>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/visibilitychange_event)
      */
-    var onvisibilitychange: EventHandler<Event, Document>?
+    var onvisibilitychange: EventHandler<Event, Document, Document>?
     override val ownerDocument: Void
 
     /**
@@ -431,12 +433,20 @@ open external class Document :
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/exitFullscreen)
      */
-    fun exitFullscreen(): Promise<Void>
+    @JsAsync
+    suspend fun exitFullscreen()
+
+    @JsName("exitFullscreen")
+    fun exitFullscreenAsync(): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/exitPictureInPicture)
      */
-    fun exitPictureInPicture(): Promise<Void>
+    @JsAsync
+    suspend fun exitPictureInPicture()
+
+    @JsName("exitPictureInPicture")
+    fun exitPictureInPictureAsync(): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/exitPointerLock)
@@ -506,7 +516,11 @@ open external class Document :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/hasStorageAccess)
      */
-    fun hasStorageAccess(): Promise<Boolean>
+    @JsAsync
+    suspend fun hasStorageAccess(): Boolean
+
+    @JsName("hasStorageAccess")
+    fun hasStorageAccessAsync(): Promise<Boolean>
 
     /**
      * Returns a copy of node. If deep is true, the copy also includes the node's descendants.
@@ -549,7 +563,16 @@ open external class Document :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/requestStorageAccess)
      */
-    fun requestStorageAccess(): Promise<Void>
+    @JsAsync
+    suspend fun requestStorageAccess()
+
+    @JsName("requestStorageAccess")
+    fun requestStorageAccessAsync(): Promise<Void>
+
+    /**
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/startViewTransition)
+     */
+    fun startViewTransition(callbackOptions: UpdateCallback = definedExternally): ViewTransition
 
     /**
      * Writes one or more HTML expressions to a document in the specified window.

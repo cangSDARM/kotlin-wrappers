@@ -1,6 +1,6 @@
 package react
 
-typealias Cleanup = () -> Unit
+import react.internal.createEffectCallback
 
 /**
  * Only works inside [fc]

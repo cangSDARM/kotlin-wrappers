@@ -2,15 +2,12 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.core.Void
-import js.objects.jso
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * A GroundPolylinePrimitive represents a polyline draped over the terrain or 3D Tiles in the [Scene].
@@ -63,7 +60,9 @@ import js.promise.Promise
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GroundPolylinePrimitive.html">Online Documentation</a>
  */
-external class GroundPolylinePrimitive(options: ConstructorOptions? = definedExternally) {
+external class GroundPolylinePrimitive(
+    options: ConstructorOptions? = definedExternally,
+) {
     /**
      * @property [geometryInstances] GeometryInstances containing GroundPolylineGeometry
      * @property [appearance] The Appearance used to render the polyline. Defaults to a white color [Material] on a [PolylineMaterialAppearance].
@@ -84,7 +83,8 @@ external class GroundPolylinePrimitive(options: ConstructorOptions? = definedExt
      * @property [debugShowShadowVolume] For debugging only. Determines if the shadow volume for each geometry in the primitive is drawn. Must be `true` on creation to have effect.
      *   Default value - `false`
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var geometryInstances: GeometryInstance?
         var appearance: Appearance?
         var show: Boolean?
@@ -231,7 +231,11 @@ external class GroundPolylinePrimitive(options: ConstructorOptions? = definedExt
          * @return A promise that will resolve once the terrain heights have been loaded.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GroundPolylinePrimitive.html#.initializeTerrainHeights">Online Documentation</a>
          */
-        fun initializeTerrainHeights(): Promise<Void>
+        @JsAsync
+        suspend fun initializeTerrainHeights()
+
+        @JsName("initializeTerrainHeights")
+        fun initializeTerrainHeightsAsync(): Promise<Void>
 
         /**
          * Checks if the given Scene supports GroundPolylinePrimitives.
@@ -243,8 +247,3 @@ external class GroundPolylinePrimitive(options: ConstructorOptions? = definedExt
         fun isSupported(scene: Scene): Boolean
     }
 }
-
-inline fun GroundPolylinePrimitive(
-    block: GroundPolylinePrimitive.ConstructorOptions.() -> Unit,
-): GroundPolylinePrimitive =
-    GroundPolylinePrimitive(options = jso(block))

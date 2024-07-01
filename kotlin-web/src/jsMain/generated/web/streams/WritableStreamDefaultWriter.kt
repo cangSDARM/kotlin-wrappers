@@ -5,6 +5,7 @@ package web.streams
 import js.core.Void
 import js.errors.JsError
 import js.promise.Promise
+import seskar.js.JsAsync
 
 /**
  * This Streams API interface is the object returned by WritableStream.getWriter() and once created locks the < writer to the WritableStream ensuring that no other streams can write to the underlying sink.
@@ -32,12 +33,20 @@ external class WritableStreamDefaultWriter<W>(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/abort)
      */
-    fun abort(reason: JsError = definedExternally): Promise<Void>
+    @JsAsync
+    suspend fun abort(reason: JsError? = definedExternally)
+
+    @JsName("abort")
+    fun abortAsync(reason: JsError? = definedExternally): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/close)
      */
-    fun close(): Promise<Void>
+    @JsAsync
+    suspend fun close()
+
+    @JsName("close")
+    fun closeAsync(): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/releaseLock)
@@ -47,5 +56,9 @@ external class WritableStreamDefaultWriter<W>(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/write)
      */
-    fun write(chunk: W = definedExternally): Promise<Void>
+    @JsAsync
+    suspend fun write(chunk: W = definedExternally)
+
+    @JsName("write")
+    fun writeAsync(chunk: W = definedExternally): Promise<Void>
 }

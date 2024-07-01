@@ -2,15 +2,14 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.buffer.ArrayBuffer
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 import web.blob.Blob
+import web.canvas.CanvasImageSource
 import web.xml.XMLDocument
 
 /**
@@ -51,7 +50,9 @@ import web.xml.XMLDocument
  * @param [options] A url or an object describing initialization options
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html">Online Documentation</a>
  */
-external class Resource(options: dynamic) {
+external class Resource(
+    options: Any, /* string | Resource.ConstructorOptions */
+) {
     /**
      * Additional HTTP headers that will be sent with the request.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#headers">Online Documentation</a>
@@ -199,7 +200,8 @@ external class Resource(options: dynamic) {
      * @property [preserveQueryParameters] If true, this will keep all query parameters from the current resource and derived resource. If false, derived parameters will replace those of the current resource.
      *   Default value - `false`
      */
-    interface GetDerivedResourceOptions {
+    @JsPlainObject
+    sealed interface GetDerivedResourceOptions {
         var url: String?
         var queryParameters: Any?
         var templateValues: Any?
@@ -250,7 +252,11 @@ external class Resource(options: dynamic) {
      * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#fetchArrayBuffer">Online Documentation</a>
      */
-    fun fetchArrayBuffer(): Promise<ArrayBuffer>?
+    @JsAsync(optional = true)
+    suspend fun fetchArrayBuffer(): ArrayBuffer?
+
+    @JsName("fetchArrayBuffer")
+    fun fetchArrayBufferAsync(): Promise<ArrayBuffer>?
 
     /**
      * Asynchronously loads the given resource as a blob.  Returns a promise that will resolve to
@@ -268,7 +274,11 @@ external class Resource(options: dynamic) {
      * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#fetchBlob">Online Documentation</a>
      */
-    fun fetchBlob(): Promise<Blob>?
+    @JsAsync(optional = true)
+    suspend fun fetchBlob(): Blob?
+
+    @JsName("fetchBlob")
+    fun fetchBlobAsync(): Promise<Blob>?
 
     /**
      * Asynchronously loads the given image resource.  Returns a promise that will resolve to
@@ -290,7 +300,11 @@ external class Resource(options: dynamic) {
      * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#fetchImage">Online Documentation</a>
      */
-    fun fetchImage(options: FetchImageOptions? = definedExternally): dynamic
+    @JsAsync(optional = true)
+    suspend fun fetchImage(options: FetchImageOptions? = definedExternally): CanvasImageSource?
+
+    @JsName("fetchImage")
+    fun fetchImageAsync(options: FetchImageOptions? = definedExternally): Promise<CanvasImageSource>?
 
     /**
      * @property [preferBlob] If true, we will load the image via a blob.
@@ -302,7 +316,8 @@ external class Resource(options: dynamic) {
      * @property [skipColorSpaceConversion] If true, any custom gamma or color profiles in the image will be ignored. Only applies if the browser supports `createImageBitmap`.
      *   Default value - `false`
      */
-    interface FetchImageOptions {
+    @JsPlainObject
+    sealed interface FetchImageOptions {
         var preferBlob: Boolean?
         var preferImageBitmap: Boolean?
         var flipY: Boolean?
@@ -331,7 +346,11 @@ external class Resource(options: dynamic) {
      * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#fetchText">Online Documentation</a>
      */
-    fun fetchText(): Promise<String>?
+    @JsAsync(optional = true)
+    suspend fun fetchText(): String?
+
+    @JsName("fetchText")
+    fun fetchTextAsync(): Promise<String>?
 
     /**
      * Asynchronously loads the given resource as JSON.  Returns a promise that will resolve to
@@ -350,7 +369,11 @@ external class Resource(options: dynamic) {
      * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#fetchJson">Online Documentation</a>
      */
-    fun fetchJson(): Promise<Any>?
+    @JsAsync(optional = true)
+    suspend fun fetchJson(): Any?
+
+    @JsName("fetchJson")
+    fun fetchJsonAsync(): Promise<Any>?
 
     /**
      * Asynchronously loads the given resource as XML.  Returns a promise that will resolve to
@@ -370,7 +393,11 @@ external class Resource(options: dynamic) {
      * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#fetchXML">Online Documentation</a>
      */
-    fun fetchXML(): Promise<XMLDocument>?
+    @JsAsync(optional = true)
+    suspend fun fetchXML(): XMLDocument?
+
+    @JsName("fetchXML")
+    fun fetchXMLAsync(): Promise<XMLDocument>?
 
     /**
      * Requests a resource using JSONP.
@@ -387,7 +414,11 @@ external class Resource(options: dynamic) {
      * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#fetchJsonp">Online Documentation</a>
      */
-    fun fetchJsonp(callbackParameterName: String? = definedExternally): Promise<Any>?
+    @JsAsync(optional = true)
+    suspend fun fetchJsonp(callbackParameterName: String? = definedExternally): Any?
+
+    @JsName("fetchJsonp")
+    fun fetchJsonpAsync(callbackParameterName: String? = definedExternally): Promise<Any>?
 
     /**
      * Asynchronously loads the given resource.  Returns a promise that will resolve to
@@ -406,14 +437,19 @@ external class Resource(options: dynamic) {
      * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#fetch">Online Documentation</a>
      */
-    fun fetch(options: FetchOptions? = definedExternally): Promise<Any>?
+    @JsAsync(optional = true)
+    suspend fun fetch(options: FetchOptions? = definedExternally): Any?
+
+    @JsName("fetch")
+    fun fetchAsync(options: FetchOptions? = definedExternally): Promise<Any>?
 
     /**
      * @property [responseType] The type of response.  This controls the type of item returned.
      * @property [headers] Additional HTTP headers to send with the request, if any.
      * @property [overrideMimeType] Overrides the MIME type returned by the server.
      */
-    interface FetchOptions {
+    @JsPlainObject
+    sealed interface FetchOptions {
         var responseType: String?
         var headers: Any?
         var overrideMimeType: String?
@@ -435,14 +471,19 @@ external class Resource(options: dynamic) {
      * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#delete">Online Documentation</a>
      */
-    fun delete(options: DeleteOptions? = definedExternally): Promise<Any>?
+    @JsAsync(optional = true)
+    suspend fun delete(options: DeleteOptions? = definedExternally): Any?
+
+    @JsName("delete")
+    fun deleteAsync(options: DeleteOptions? = definedExternally): Promise<Any>?
 
     /**
      * @property [responseType] The type of response.  This controls the type of item returned.
      * @property [headers] Additional HTTP headers to send with the request, if any.
      * @property [overrideMimeType] Overrides the MIME type returned by the server.
      */
-    interface DeleteOptions {
+    @JsPlainObject
+    sealed interface DeleteOptions {
         var responseType: String?
         var headers: Any?
         var overrideMimeType: String?
@@ -464,14 +505,19 @@ external class Resource(options: dynamic) {
      * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#head">Online Documentation</a>
      */
-    fun head(options: HeadOptions? = definedExternally): Promise<Any>?
+    @JsAsync(optional = true)
+    suspend fun head(options: HeadOptions? = definedExternally): Any?
+
+    @JsName("head")
+    fun headAsync(options: HeadOptions? = definedExternally): Promise<Any>?
 
     /**
      * @property [responseType] The type of response.  This controls the type of item returned.
      * @property [headers] Additional HTTP headers to send with the request, if any.
      * @property [overrideMimeType] Overrides the MIME type returned by the server.
      */
-    interface HeadOptions {
+    @JsPlainObject
+    sealed interface HeadOptions {
         var responseType: String?
         var headers: Any?
         var overrideMimeType: String?
@@ -493,14 +539,19 @@ external class Resource(options: dynamic) {
      * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#options">Online Documentation</a>
      */
-    fun options(options: OptionsOptions? = definedExternally): Promise<Any>?
+    @JsAsync(optional = true)
+    suspend fun options(options: OptionsOptions? = definedExternally): Any?
+
+    @JsName("options")
+    fun optionsAsync(options: OptionsOptions? = definedExternally): Promise<Any>?
 
     /**
      * @property [responseType] The type of response.  This controls the type of item returned.
      * @property [headers] Additional HTTP headers to send with the request, if any.
      * @property [overrideMimeType] Overrides the MIME type returned by the server.
      */
-    interface OptionsOptions {
+    @JsPlainObject
+    sealed interface OptionsOptions {
         var responseType: String?
         var headers: Any?
         var overrideMimeType: String?
@@ -523,7 +574,14 @@ external class Resource(options: dynamic) {
      * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#post">Online Documentation</a>
      */
-    fun post(
+    @JsAsync(optional = true)
+    suspend fun post(
+        data: Any,
+        options: PostOptions? = definedExternally,
+    ): Any?
+
+    @JsName("post")
+    fun postAsync(
         data: Any,
         options: PostOptions? = definedExternally,
     ): Promise<Any>?
@@ -534,7 +592,8 @@ external class Resource(options: dynamic) {
      * @property [headers] Additional HTTP headers to send with the request, if any.
      * @property [overrideMimeType] Overrides the MIME type returned by the server.
      */
-    interface PostOptions {
+    @JsPlainObject
+    sealed interface PostOptions {
         var data: Any?
         var responseType: String?
         var headers: Any?
@@ -558,7 +617,14 @@ external class Resource(options: dynamic) {
      * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#put">Online Documentation</a>
      */
-    fun put(
+    @JsAsync(optional = true)
+    suspend fun put(
+        data: Any,
+        options: PutOptions? = definedExternally,
+    ): Any?
+
+    @JsName("put")
+    fun putAsync(
         data: Any,
         options: PutOptions? = definedExternally,
     ): Promise<Any>?
@@ -568,7 +634,8 @@ external class Resource(options: dynamic) {
      * @property [headers] Additional HTTP headers to send with the request, if any.
      * @property [overrideMimeType] Overrides the MIME type returned by the server.
      */
-    interface PutOptions {
+    @JsPlainObject
+    sealed interface PutOptions {
         var responseType: String?
         var headers: Any?
         var overrideMimeType: String?
@@ -591,7 +658,14 @@ external class Resource(options: dynamic) {
      * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#patch">Online Documentation</a>
      */
-    fun patch(
+    @JsAsync(optional = true)
+    suspend fun patch(
+        data: Any,
+        options: PatchOptions? = definedExternally,
+    ): Any?
+
+    @JsName("patch")
+    fun patchAsync(
         data: Any,
         options: PatchOptions? = definedExternally,
     ): Promise<Any>?
@@ -601,7 +675,8 @@ external class Resource(options: dynamic) {
      * @property [headers] Additional HTTP headers to send with the request, if any.
      * @property [overrideMimeType] Overrides the MIME type returned by the server.
      */
-    interface PatchOptions {
+    @JsPlainObject
+    sealed interface PatchOptions {
         var responseType: String?
         var headers: Any?
         var overrideMimeType: String?
@@ -623,7 +698,8 @@ external class Resource(options: dynamic) {
      *   Default value - `true`
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var url: String
         var queryParameters: Any?
         var templateValues: Any?
@@ -648,7 +724,11 @@ external class Resource(options: dynamic) {
          * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#.fetchArrayBuffer">Online Documentation</a>
          */
-        fun fetchArrayBuffer(options: FetchArrayBufferOptions): Promise<ArrayBuffer>?
+        @JsAsync(optional = true)
+        suspend fun fetchArrayBuffer(options: FetchArrayBufferOptions): ArrayBuffer?
+
+        @JsName("fetchArrayBuffer")
+        fun fetchArrayBufferAsync(options: FetchArrayBufferOptions): Promise<ArrayBuffer>?
 
         /**
          * @property [url] The url of the resource.
@@ -662,7 +742,8 @@ external class Resource(options: dynamic) {
          *   Default value - `0`
          * @property [request] A Request object that will be used. Intended for internal use only.
          */
-        interface FetchArrayBufferOptions {
+        @JsPlainObject
+        sealed interface FetchArrayBufferOptions {
             var url: String
             var queryParameters: Any?
             var templateValues: Any?
@@ -679,7 +760,11 @@ external class Resource(options: dynamic) {
          * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#.fetchBlob">Online Documentation</a>
          */
-        fun fetchBlob(options: FetchBlobOptions): Promise<Blob>?
+        @JsAsync(optional = true)
+        suspend fun fetchBlob(options: FetchBlobOptions): Blob?
+
+        @JsName("fetchBlob")
+        fun fetchBlobAsync(options: FetchBlobOptions): Promise<Blob>?
 
         /**
          * @property [url] The url of the resource.
@@ -693,7 +778,8 @@ external class Resource(options: dynamic) {
          *   Default value - `0`
          * @property [request] A Request object that will be used. Intended for internal use only.
          */
-        interface FetchBlobOptions {
+        @JsPlainObject
+        sealed interface FetchBlobOptions {
             var url: String
             var queryParameters: Any?
             var templateValues: Any?
@@ -710,7 +796,11 @@ external class Resource(options: dynamic) {
          * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#.fetchImage">Online Documentation</a>
          */
-        fun fetchImage(options: FetchImageOptions): dynamic
+        @JsAsync(optional = true)
+        suspend fun fetchImage(options: FetchImageOptions): CanvasImageSource?
+
+        @JsName("fetchImage")
+        fun fetchImageAsync(options: FetchImageOptions): Promise<CanvasImageSource>?
 
         /**
          * @property [url] The url of the resource.
@@ -732,7 +822,8 @@ external class Resource(options: dynamic) {
          * @property [skipColorSpaceConversion] If true, any custom gamma or color profiles in the image will be ignored. Only applies when requesting an image and the browser supports `createImageBitmap`.
          *   Default value - `false`
          */
-        interface FetchImageOptions {
+        @JsPlainObject
+        sealed interface FetchImageOptions {
             var url: String
             var queryParameters: Any?
             var templateValues: Any?
@@ -753,7 +844,11 @@ external class Resource(options: dynamic) {
          * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#.fetchText">Online Documentation</a>
          */
-        fun fetchText(options: FetchTextOptions): Promise<String>?
+        @JsAsync(optional = true)
+        suspend fun fetchText(options: FetchTextOptions): String?
+
+        @JsName("fetchText")
+        fun fetchTextAsync(options: FetchTextOptions): Promise<String>?
 
         /**
          * @property [url] The url of the resource.
@@ -767,7 +862,8 @@ external class Resource(options: dynamic) {
          *   Default value - `0`
          * @property [request] A Request object that will be used. Intended for internal use only.
          */
-        interface FetchTextOptions {
+        @JsPlainObject
+        sealed interface FetchTextOptions {
             var url: String
             var queryParameters: Any?
             var templateValues: Any?
@@ -784,7 +880,11 @@ external class Resource(options: dynamic) {
          * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#.fetchJson">Online Documentation</a>
          */
-        fun fetchJson(options: FetchJsonOptions): Promise<Any>?
+        @JsAsync(optional = true)
+        suspend fun fetchJson(options: FetchJsonOptions): Any?
+
+        @JsName("fetchJson")
+        fun fetchJsonAsync(options: FetchJsonOptions): Promise<Any>?
 
         /**
          * @property [url] The url of the resource.
@@ -798,7 +898,8 @@ external class Resource(options: dynamic) {
          *   Default value - `0`
          * @property [request] A Request object that will be used. Intended for internal use only.
          */
-        interface FetchJsonOptions {
+        @JsPlainObject
+        sealed interface FetchJsonOptions {
             var url: String
             var queryParameters: Any?
             var templateValues: Any?
@@ -815,7 +916,11 @@ external class Resource(options: dynamic) {
          * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#.fetchXML">Online Documentation</a>
          */
-        fun fetchXML(options: FetchXMLOptions): Promise<XMLDocument>?
+        @JsAsync(optional = true)
+        suspend fun fetchXML(options: FetchXMLOptions): XMLDocument?
+
+        @JsName("fetchXML")
+        fun fetchXMLAsync(options: FetchXMLOptions): Promise<XMLDocument>?
 
         /**
          * @property [url] The url of the resource.
@@ -829,7 +934,8 @@ external class Resource(options: dynamic) {
          *   Default value - `0`
          * @property [request] A Request object that will be used. Intended for internal use only.
          */
-        interface FetchXMLOptions {
+        @JsPlainObject
+        sealed interface FetchXMLOptions {
             var url: String
             var queryParameters: Any?
             var templateValues: Any?
@@ -846,7 +952,11 @@ external class Resource(options: dynamic) {
          * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#.fetchJsonp">Online Documentation</a>
          */
-        fun fetchJsonp(options: FetchJsonpOptions): Promise<Any>?
+        @JsAsync(optional = true)
+        suspend fun fetchJsonp(options: FetchJsonpOptions): Any?
+
+        @JsName("fetchJsonp")
+        fun fetchJsonpAsync(options: FetchJsonpOptions): Promise<Any>?
 
         /**
          * @property [url] The url of the resource.
@@ -862,7 +972,8 @@ external class Resource(options: dynamic) {
          * @property [callbackParameterName] The callback parameter name that the server expects.
          *   Default value - `'callback'`
          */
-        interface FetchJsonpOptions {
+        @JsPlainObject
+        sealed interface FetchJsonpOptions {
             var url: String
             var queryParameters: Any?
             var templateValues: Any?
@@ -880,7 +991,11 @@ external class Resource(options: dynamic) {
          * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#.fetch">Online Documentation</a>
          */
-        fun fetch(options: FetchOptions): Promise<Any>?
+        @JsAsync(optional = true)
+        suspend fun fetch(options: FetchOptions): Any?
+
+        @JsName("fetch")
+        fun fetchAsync(options: FetchOptions): Promise<Any>?
 
         /**
          * @property [url] The url of the resource.
@@ -896,7 +1011,8 @@ external class Resource(options: dynamic) {
          * @property [responseType] The type of response.  This controls the type of item returned.
          * @property [overrideMimeType] Overrides the MIME type returned by the server.
          */
-        interface FetchOptions {
+        @JsPlainObject
+        sealed interface FetchOptions {
             var url: String
             var queryParameters: Any?
             var templateValues: Any?
@@ -915,7 +1031,11 @@ external class Resource(options: dynamic) {
          * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#.delete">Online Documentation</a>
          */
-        fun delete(options: DeleteOptions): Promise<Any>?
+        @JsAsync(optional = true)
+        suspend fun delete(options: DeleteOptions): Any?
+
+        @JsName("delete")
+        fun deleteAsync(options: DeleteOptions): Promise<Any>?
 
         /**
          * @property [url] The url of the resource.
@@ -932,7 +1052,8 @@ external class Resource(options: dynamic) {
          * @property [responseType] The type of response.  This controls the type of item returned.
          * @property [overrideMimeType] Overrides the MIME type returned by the server.
          */
-        interface DeleteOptions {
+        @JsPlainObject
+        sealed interface DeleteOptions {
             var url: String
             var data: Any?
             var queryParameters: Any?
@@ -952,7 +1073,11 @@ external class Resource(options: dynamic) {
          * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#.head">Online Documentation</a>
          */
-        fun head(options: HeadOptions): Promise<Any>?
+        @JsAsync(optional = true)
+        suspend fun head(options: HeadOptions): Any?
+
+        @JsName("head")
+        fun headAsync(options: HeadOptions): Promise<Any>?
 
         /**
          * @property [url] The url of the resource.
@@ -968,7 +1093,8 @@ external class Resource(options: dynamic) {
          * @property [responseType] The type of response.  This controls the type of item returned.
          * @property [overrideMimeType] Overrides the MIME type returned by the server.
          */
-        interface HeadOptions {
+        @JsPlainObject
+        sealed interface HeadOptions {
             var url: String
             var queryParameters: Any?
             var templateValues: Any?
@@ -987,7 +1113,11 @@ external class Resource(options: dynamic) {
          * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#.options">Online Documentation</a>
          */
-        fun options(options: OptionsOptions): Promise<Any>?
+        @JsAsync(optional = true)
+        suspend fun options(options: OptionsOptions): Any?
+
+        @JsName("options")
+        fun optionsAsync(options: OptionsOptions): Promise<Any>?
 
         /**
          * @property [url] The url of the resource.
@@ -1003,7 +1133,8 @@ external class Resource(options: dynamic) {
          * @property [responseType] The type of response.  This controls the type of item returned.
          * @property [overrideMimeType] Overrides the MIME type returned by the server.
          */
-        interface OptionsOptions {
+        @JsPlainObject
+        sealed interface OptionsOptions {
             var url: String
             var queryParameters: Any?
             var templateValues: Any?
@@ -1022,7 +1153,11 @@ external class Resource(options: dynamic) {
          * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#.post">Online Documentation</a>
          */
-        fun post(options: PostOptions): Promise<Any>?
+        @JsAsync(optional = true)
+        suspend fun post(options: PostOptions): Any?
+
+        @JsName("post")
+        fun postAsync(options: PostOptions): Promise<Any>?
 
         /**
          * @property [url] The url of the resource.
@@ -1039,7 +1174,8 @@ external class Resource(options: dynamic) {
          * @property [responseType] The type of response.  This controls the type of item returned.
          * @property [overrideMimeType] Overrides the MIME type returned by the server.
          */
-        interface PostOptions {
+        @JsPlainObject
+        sealed interface PostOptions {
             var url: String
             var data: Any
             var queryParameters: Any?
@@ -1059,7 +1195,11 @@ external class Resource(options: dynamic) {
          * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#.put">Online Documentation</a>
          */
-        fun put(options: PutOptions): Promise<Any>?
+        @JsAsync(optional = true)
+        suspend fun put(options: PutOptions): Any?
+
+        @JsName("put")
+        fun putAsync(options: PutOptions): Promise<Any>?
 
         /**
          * @property [url] The url of the resource.
@@ -1076,7 +1216,8 @@ external class Resource(options: dynamic) {
          * @property [responseType] The type of response.  This controls the type of item returned.
          * @property [overrideMimeType] Overrides the MIME type returned by the server.
          */
-        interface PutOptions {
+        @JsPlainObject
+        sealed interface PutOptions {
             var url: String
             var data: Any
             var queryParameters: Any?
@@ -1096,7 +1237,11 @@ external class Resource(options: dynamic) {
          * @return a promise that will resolve to the requested data when loaded. Returns undefined if `request.throttle` is true and the request does not have high enough priority.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#.patch">Online Documentation</a>
          */
-        fun patch(options: PatchOptions): Promise<Any>?
+        @JsAsync(optional = true)
+        suspend fun patch(options: PatchOptions): Any?
+
+        @JsName("patch")
+        fun patchAsync(options: PatchOptions): Promise<Any>?
 
         /**
          * @property [url] The url of the resource.
@@ -1113,7 +1258,8 @@ external class Resource(options: dynamic) {
          * @property [responseType] The type of response.  This controls the type of item returned.
          * @property [overrideMimeType] Overrides the MIME type returned by the server.
          */
-        interface PatchOptions {
+        @JsPlainObject
+        sealed interface PatchOptions {
             var url: String
             var data: Any
             var queryParameters: Any?
@@ -1134,11 +1280,3 @@ external class Resource(options: dynamic) {
         val DEFAULT: Resource
     }
 }
-
-/**
- * A function that returns the value of the property.
- * @param [resource] The resource that failed to load.
- * @param [error] The error that occurred during the loading of the resource.
- * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/Resource.html#.RetryCallback">Online Documentation</a>
- */
-typealias RetryCallback = (resource: Resource?, error: RequestErrorEvent?) -> dynamic

@@ -5,6 +5,7 @@ package web.gpu
 import js.buffer.ArrayBuffer
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 
 sealed external class GPUBuffer :
     GPUObjectBase {
@@ -12,6 +13,14 @@ sealed external class GPUBuffer :
     val size: GPUSize64Out
     val usage: GPUUsage
     val mapState: GPUBufferMapState
+
+    @JsAsync
+    suspend fun map(
+        mode: GPUMapMode,
+        offset: GPUSize64 = definedExternally,
+        size: GPUSize64 = definedExternally,
+    )
+
     fun mapAsync(
         mode: GPUMapMode,
         offset: GPUSize64 = definedExternally,

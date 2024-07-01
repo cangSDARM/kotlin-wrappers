@@ -5,6 +5,7 @@ package web.idb
 import js.array.ReadonlyArray
 import js.core.JsLong
 import js.promise.Promise
+import seskar.js.JsAsync
 
 /**
  * In the following code snippet, we make a request to open a database, and include handlers for the success and error cases. For a full working example, see our To-do Notifications app (view example live.)
@@ -27,7 +28,11 @@ sealed external class IDBFactory {
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBFactory/databases)
      */
-    fun databases(): Promise<ReadonlyArray<IDBDatabaseInfo>>
+    @JsAsync
+    suspend fun databases(): ReadonlyArray<IDBDatabaseInfo>
+
+    @JsName("databases")
+    fun databasesAsync(): Promise<ReadonlyArray<IDBDatabaseInfo>>
 
     /**
      * Attempts to delete the named database. If the database already exists and there are open connections that don't close in response to a versionchange event, the request will be blocked until all they close. If the request is successful request's result will be null.

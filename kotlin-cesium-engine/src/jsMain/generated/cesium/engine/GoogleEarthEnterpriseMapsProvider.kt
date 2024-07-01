@@ -7,6 +7,8 @@ package cesium.engine
 import js.array.ReadonlyArray
 import js.core.Void
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * <div class="notice">
@@ -31,7 +33,8 @@ import js.promise.Promise
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseMapsProvider.html">Online Documentation</a>
  */
-sealed external class GoogleEarthEnterpriseMapsProvider {
+external class GoogleEarthEnterpriseMapsProvider
+private constructor() {
     /**
      * Gets the URL of the Google Earth MapServer.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseMapsProvider.html#url">Online Documentation</a>
@@ -161,7 +164,16 @@ sealed external class GoogleEarthEnterpriseMapsProvider {
      *   undefined if there are too many active requests to the server, and the request should be retried later.
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseMapsProvider.html#requestImage">Online Documentation</a>
      */
-    fun requestImage(
+    @JsAsync(optional = true)
+    suspend fun requestImage(
+        x: Double,
+        y: Double,
+        level: Int,
+        request: Request? = definedExternally,
+    ): ImageryTypes?
+
+    @JsName("requestImage")
+    fun requestImageAsync(
         x: Double,
         y: Double,
         level: Int,
@@ -214,10 +226,12 @@ sealed external class GoogleEarthEnterpriseMapsProvider {
      * @property [tileDiscardPolicy] The policy that determines if a tile
      *   is invalid and should be discarded. To ensure that no tiles are discarded, construct and pass
      *   a [NeverTileDiscardPolicy] for this parameter.
-     * @property [ellipsoid] The ellipsoid.  If not specified, the WGS84 ellipsoid is used.
+     * @property [ellipsoid] The ellipsoid.  If not specified, the default ellipsoid is used.
+     *   Default value - [Ellipsoid.default]
      * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseMapsProvider.html#.ConstructorOptions">Online Documentation</a>
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var channel: Int
         var path: String?
         var maximumLevel: Int?
@@ -235,12 +249,26 @@ sealed external class GoogleEarthEnterpriseMapsProvider {
          * @return The created GoogleEarthEnterpriseMapsProvider.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/GoogleEarthEnterpriseMapsProvider.html#.fromUrl">Online Documentation</a>
          */
-        fun fromUrl(
+        @JsAsync
+        suspend fun fromUrl(
+            url: Resource,
+            options: ConstructorOptions? = definedExternally,
+        ): GoogleEarthEnterpriseMapsProvider
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
             url: Resource,
             options: ConstructorOptions? = definedExternally,
         ): Promise<GoogleEarthEnterpriseMapsProvider>
 
-        fun fromUrl(
+        @JsAsync
+        suspend fun fromUrl(
+            url: String,
+            options: ConstructorOptions? = definedExternally,
+        ): GoogleEarthEnterpriseMapsProvider
+
+        @JsName("fromUrl")
+        fun fromUrlAsync(
             url: String,
             options: ConstructorOptions? = definedExternally,
         ): Promise<GoogleEarthEnterpriseMapsProvider>

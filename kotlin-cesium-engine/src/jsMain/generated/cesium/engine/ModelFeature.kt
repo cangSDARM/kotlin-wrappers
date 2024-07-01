@@ -5,6 +5,7 @@
 package cesium.engine
 
 import js.array.ReadonlyArray
+import kotlinx.js.JsPlainObject
 
 /**
  * A feature of a [Model].
@@ -25,12 +26,14 @@ import js.array.ReadonlyArray
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/ModelFeature.html">Online Documentation</a>
  */
-sealed external class ModelFeature {
+external class ModelFeature
+private constructor() {
     /**
      * @property [model] The model the feature belongs to.
      * @property [featureId] The unique integral identifier for this feature.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var model: Model
         var featureId: Int
     }

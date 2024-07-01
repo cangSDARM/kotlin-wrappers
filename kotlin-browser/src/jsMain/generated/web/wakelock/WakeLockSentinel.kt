@@ -4,6 +4,7 @@ package web.wakelock
 
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.events.Event
 import web.events.EventHandler
 import web.events.EventTarget
@@ -18,7 +19,7 @@ sealed external class WakeLockSentinel :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WakeLockSentinel/release_event)
      */
-    var onrelease: EventHandler<Event, WakeLockSentinel>?
+    var onrelease: EventHandler<Event, WakeLockSentinel, WakeLockSentinel>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WakeLockSentinel/released)
@@ -33,5 +34,9 @@ sealed external class WakeLockSentinel :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WakeLockSentinel/release)
      */
-    fun release(): Promise<Void>
+    @JsAsync
+    suspend fun release()
+
+    @JsName("release")
+    fun releaseAsync(): Promise<Void>
 }

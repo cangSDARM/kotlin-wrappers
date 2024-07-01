@@ -4,6 +4,7 @@ package web.media.streams
 
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.events.Event
 import web.events.EventHandler
 import web.events.EventTarget
@@ -48,17 +49,17 @@ sealed external class MediaStreamTrack :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaStreamTrack/ended_event)
      */
-    var onended: EventHandler<Event, MediaStreamTrack>?
+    var onended: EventHandler<Event, MediaStreamTrack, MediaStreamTrack>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaStreamTrack/mute_event)
      */
-    var onmute: EventHandler<Event, MediaStreamTrack>?
+    var onmute: EventHandler<Event, MediaStreamTrack, MediaStreamTrack>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaStreamTrack/unmute_event)
      */
-    var onunmute: EventHandler<Event, MediaStreamTrack>?
+    var onunmute: EventHandler<Event, MediaStreamTrack, MediaStreamTrack>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaStreamTrack/readyState)
@@ -68,7 +69,11 @@ sealed external class MediaStreamTrack :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaStreamTrack/applyConstraints)
      */
-    fun applyConstraints(constraints: MediaTrackConstraints = definedExternally): Promise<Void>
+    @JsAsync
+    suspend fun applyConstraints(constraints: MediaTrackConstraints = definedExternally)
+
+    @JsName("applyConstraints")
+    fun applyConstraintsAsync(constraints: MediaTrackConstraints = definedExternally): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaStreamTrack/clone)

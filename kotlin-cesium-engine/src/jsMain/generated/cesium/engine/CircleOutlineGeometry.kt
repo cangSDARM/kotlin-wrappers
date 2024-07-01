@@ -2,14 +2,10 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A description of the outline of a circle on the ellipsoid.
@@ -23,12 +19,14 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/CircleOutlineGeometry.html">Online Documentation</a>
  */
-external class CircleOutlineGeometry(options: ConstructorOptions) {
+external class CircleOutlineGeometry(
+    options: ConstructorOptions,
+) {
     /**
      * @property [center] The circle's center point in the fixed frame.
      * @property [radius] The radius in meters.
      * @property [ellipsoid] The ellipsoid the circle will be on.
-     *   Default value - [Ellipsoid.WGS84]
+     *   Default value - [Ellipsoid.default]
      * @property [height] The distance in meters between the circle and the ellipsoid surface.
      *   Default value - `0.0`
      * @property [granularity] The angular distance between points on the circle in radians.
@@ -38,7 +36,8 @@ external class CircleOutlineGeometry(options: ConstructorOptions) {
      * @property [numberOfVerticalLines] Number of lines to draw between the top and bottom of an extruded circle.
      *   Default value - `16`
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var center: Cartesian3
         var radius: Double
         var ellipsoid: Ellipsoid?
@@ -94,8 +93,3 @@ external class CircleOutlineGeometry(options: ConstructorOptions) {
         fun createGeometry(circleGeometry: CircleOutlineGeometry): Geometry?
     }
 }
-
-inline fun CircleOutlineGeometry(
-    block: CircleOutlineGeometry.ConstructorOptions.() -> Unit,
-): CircleOutlineGeometry =
-    CircleOutlineGeometry(options = jso(block))

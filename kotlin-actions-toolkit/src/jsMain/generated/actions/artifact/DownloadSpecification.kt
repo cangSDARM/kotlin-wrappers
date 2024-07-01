@@ -3,7 +3,9 @@
 package actions.artifact
 
 import js.array.ReadonlyArray
+import kotlinx.js.JsPlainObject
 
+@JsPlainObject
 sealed external interface DownloadSpecification {
     var rootDownloadLocation: String
     var directoryStructure: ReadonlyArray<String>

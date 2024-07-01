@@ -3,8 +3,10 @@
 package actions.exec
 
 import js.objects.Record
+import kotlinx.js.JsPlainObject
 import node.buffer.Buffer
 
+@JsPlainObject
 sealed external interface ExecOptions {
     /** optional working directory.  defaults to current */
     var cwd: String?

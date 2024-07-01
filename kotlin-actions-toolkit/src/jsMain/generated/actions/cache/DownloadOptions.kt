@@ -2,6 +2,9 @@
 
 package actions.cache
 
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
 sealed external interface DownloadOptions {
     /**
      * Indicates whether to use the Azure Blob SDK to download caches

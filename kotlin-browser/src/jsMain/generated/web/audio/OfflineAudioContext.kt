@@ -4,6 +4,7 @@ package web.audio
 
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.events.EventHandler
 
 /**
@@ -11,7 +12,7 @@ import web.events.EventHandler
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/OfflineAudioContext)
  */
-external class OfflineAudioContext(
+open external class OfflineAudioContext(
     contextOptions: OfflineAudioContextOptions,
 ) : BaseAudioContext {
     constructor(
@@ -28,20 +29,32 @@ external class OfflineAudioContext(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/OfflineAudioContext/complete_event)
      */
-    var oncomplete: EventHandler<OfflineAudioCompletionEvent, OfflineAudioContext>?
+    var oncomplete: EventHandler<OfflineAudioCompletionEvent, OfflineAudioContext, OfflineAudioContext>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/OfflineAudioContext/resume)
      */
-    fun resume(): Promise<Void>
+    @JsAsync
+    suspend fun resume()
+
+    @JsName("resume")
+    fun resumeAsync(): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/OfflineAudioContext/startRendering)
      */
-    fun startRendering(): Promise<AudioBuffer>
+    @JsAsync
+    suspend fun startRendering(): AudioBuffer
+
+    @JsName("startRendering")
+    fun startRenderingAsync(): Promise<AudioBuffer>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/OfflineAudioContext/suspend)
      */
-    fun suspend(suspendTime: Double): Promise<Void>
+    @JsAsync
+    suspend fun suspend(suspendTime: Double)
+
+    @JsName("suspend")
+    fun suspendAsync(suspendTime: Double): Promise<Void>
 }

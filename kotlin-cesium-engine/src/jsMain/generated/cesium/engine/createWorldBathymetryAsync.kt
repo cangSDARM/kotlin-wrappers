@@ -5,6 +5,8 @@
 package cesium.engine
 
 import js.promise.Promise
+import kotlinx.js.JsPlainObject
+import seskar.js.JsAsync
 
 /**
  * Creates a [CesiumTerrainProvider] instance for the [Cesium World Bathymetry](https://cesium.com/content/#cesium-world-bathymetry).
@@ -33,12 +35,16 @@ import js.promise.Promise
  * @return A promise that resolves to the created CesiumTerrainProvider
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/global.html#createWorldBathymetryAsync">Online Documentation</a>
  */
+@JsAsync
+external suspend fun createWorldBathymetry(options: CreateWorldBathymetryAsyncOptions? = definedExternally): CesiumTerrainProvider
+
 external fun createWorldBathymetryAsync(options: CreateWorldBathymetryAsyncOptions? = definedExternally): Promise<CesiumTerrainProvider>
 
 /**
  * @property [requestVertexNormals] Flag that indicates if the client should request additional lighting information from the server if available.
  *   Default value - `false`
  */
-external interface CreateWorldBathymetryAsyncOptions {
+@JsPlainObject
+sealed external interface CreateWorldBathymetryAsyncOptions {
     var requestVertexNormals: Boolean?
 }

@@ -5,6 +5,7 @@ package web.fs
 import js.core.JsLong
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.streams.WritableStream
 
 /**
@@ -17,15 +18,27 @@ sealed external class FileSystemWritableFileStream :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemWritableFileStream/seek)
      */
-    fun seek(position: JsLong): Promise<Void>
+    @JsAsync
+    suspend fun seek(position: JsLong)
+
+    @JsName("seek")
+    fun seekAsync(position: JsLong): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemWritableFileStream/truncate)
      */
-    fun truncate(size: JsLong): Promise<Void>
+    @JsAsync
+    suspend fun truncate(size: JsLong)
+
+    @JsName("truncate")
+    fun truncateAsync(size: JsLong): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemWritableFileStream/write)
      */
-    fun write(data: FileSystemWriteChunkType): Promise<Void>
+    @JsAsync
+    suspend fun write(data: FileSystemWriteChunkType)
+
+    @JsName("write")
+    fun writeAsync(data: FileSystemWriteChunkType): Promise<Void>
 }

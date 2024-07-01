@@ -5,6 +5,7 @@ package web.serviceworker
 import js.array.ReadonlyArray
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.url.URL
 
 /**
@@ -16,21 +17,42 @@ sealed external class Clients {
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clients/claim)
      */
-    fun claim(): Promise<Void>
+    @JsAsync
+    suspend fun claim()
+
+    @JsName("claim")
+    fun claimAsync(): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clients/get)
      */
-    operator fun get(id: String): Promise<Client?>
+    @JsAsync
+    suspend fun get(id: String): Client?
+
+    @JsName("get")
+    fun getAsync(id: String): Promise<Client?>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clients/matchAll)
      */
-    fun <T : ClientQueryOptions> matchAll(options: T = definedExternally): Promise<ReadonlyArray<Client /* | WindowClient */>>
+    @JsAsync
+    suspend fun <T : ClientQueryOptions> matchAll(options: T = definedExternally): ReadonlyArray<Client /* | WindowClient */>
+
+    @JsName("matchAll")
+    fun <T : ClientQueryOptions> matchAllAsync(options: T = definedExternally): Promise<ReadonlyArray<Client /* | WindowClient */>>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clients/openWindow)
      */
-    fun openWindow(url: String): Promise<WindowClient?>
-    fun openWindow(url: URL): Promise<WindowClient?>
+    @JsAsync
+    suspend fun openWindow(url: String): WindowClient?
+
+    @JsName("openWindow")
+    fun openWindowAsync(url: String): Promise<WindowClient?>
+
+    @JsAsync
+    suspend fun openWindow(url: URL): WindowClient?
+
+    @JsName("openWindow")
+    fun openWindowAsync(url: URL): Promise<WindowClient?>
 }

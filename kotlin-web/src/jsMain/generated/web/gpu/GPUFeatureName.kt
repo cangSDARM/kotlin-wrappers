@@ -3,9 +3,7 @@
 package web.gpu
 
 import seskar.js.JsValue
-import seskar.js.JsVirtual
 
-@JsVirtual
 sealed external interface GPUFeatureName {
     companion object {
         @JsValue("depth-clip-control")
@@ -34,6 +32,15 @@ sealed external interface GPUFeatureName {
 
         @JsValue("shader-f16")
         val shaderF16: GPUFeatureName
+
+        @JsValue("rg11b10ufloat-renderable")
+        val rg11b10ufloatRenderable: GPUFeatureName
+
+        @JsValue("bgra8unorm-storage")
+        val bgra8unormStorage: GPUFeatureName
+
+        @JsValue("float32-filterable")
+        val float32Filterable: GPUFeatureName
 
         @JsValue("mappable-primary-buffers")
         val mappablePrimaryBuffers: GPUFeatureName

@@ -2,14 +2,10 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A Hermite spline is a cubic interpolating spline. Points, incoming tangents, outgoing tangents, and times
@@ -47,7 +43,9 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/HermiteSpline.html">Online Documentation</a>
  */
-external class HermiteSpline(options: ConstructorOptions) {
+external class HermiteSpline(
+    options: ConstructorOptions,
+) {
     /**
      * @property [times] An array of strictly increasing, unit-less, floating-point times at each point.
      *   The values are in no way connected to the clock time. They are the parameterization for the curve.
@@ -55,7 +53,8 @@ external class HermiteSpline(options: ConstructorOptions) {
      * @property [inTangents] The array of incoming tangents at each control point.
      * @property [outTangents] The array of outgoing tangents at each control point.
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var times: ReadonlyArray<Double>
         var points: ReadonlyArray<Cartesian3>
         var inTangents: ReadonlyArray<Cartesian3>
@@ -161,7 +160,8 @@ external class HermiteSpline(options: ConstructorOptions) {
          * @property [points] The array of control points.
          * @property [tangents] The array of tangents at the control points.
          */
-        interface CreateC1Options {
+        @JsPlainObject
+        sealed interface CreateC1Options {
             var times: ReadonlyArray<Double>
             var points: ReadonlyArray<Cartesian3>
             var tangents: ReadonlyArray<Cartesian3>
@@ -186,13 +186,14 @@ external class HermiteSpline(options: ConstructorOptions) {
          * @return A hermite spline, or a linear spline if less than 3 control points were given.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/HermiteSpline.html#.createNaturalCubic">Online Documentation</a>
          */
-        fun createNaturalCubic(options: CreateNaturalCubicOptions): dynamic
+        fun createNaturalCubic(options: CreateNaturalCubicOptions): Any /* HermiteSpline | LinearSpline */
 
         /**
          * @property [times] The array of control point times.
          * @property [points] The array of control points.
          */
-        interface CreateNaturalCubicOptions {
+        @JsPlainObject
+        sealed interface CreateNaturalCubicOptions {
             var times: ReadonlyArray<Double>
             var points: ReadonlyArray<Cartesian3>
         }
@@ -218,7 +219,7 @@ external class HermiteSpline(options: ConstructorOptions) {
          * @return A hermite spline, or a linear spline if less than 3 control points were given.
          * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/HermiteSpline.html#.createClampedCubic">Online Documentation</a>
          */
-        fun createClampedCubic(options: CreateClampedCubicOptions): dynamic
+        fun createClampedCubic(options: CreateClampedCubicOptions): Any /* HermiteSpline | LinearSpline */
 
         /**
          * @property [times] The array of control point times.
@@ -226,7 +227,8 @@ external class HermiteSpline(options: ConstructorOptions) {
          * @property [firstTangent] The outgoing tangent of the first control point.
          * @property [lastTangent] The incoming tangent of the last control point.
          */
-        interface CreateClampedCubicOptions {
+        @JsPlainObject
+        sealed interface CreateClampedCubicOptions {
             var times: ReadonlyArray<Double>
             var points: ReadonlyArray<Cartesian3 /* or number */>
             var firstTangent: Cartesian3
@@ -234,8 +236,3 @@ external class HermiteSpline(options: ConstructorOptions) {
         }
     }
 }
-
-inline fun HermiteSpline(
-    block: HermiteSpline.ConstructorOptions.() -> Unit,
-): HermiteSpline =
-    HermiteSpline(options = jso(block))

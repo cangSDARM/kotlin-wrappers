@@ -4,6 +4,7 @@ package web.codecs
 
 import js.core.Void
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.events.Event
 import web.events.EventHandler
 import web.events.EventTarget
@@ -13,14 +14,14 @@ import web.events.EventTarget
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder)
  */
-external class VideoEncoder(
+open external class VideoEncoder(
     init: VideoEncoderInit,
 ) : EventTarget {
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder/encodeQueueSize)
      */
     val encodeQueueSize: Int
-    var ondequeue: EventHandler<Event, VideoEncoder>?
+    var ondequeue: EventHandler<Event, VideoEncoder, VideoEncoder>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder/state)
@@ -45,7 +46,11 @@ external class VideoEncoder(
         options: VideoEncoderEncodeOptions = definedExternally,
     )
 
-    fun flush(): Promise<Void>
+    @JsAsync
+    suspend fun flush()
+
+    @JsName("flush")
+    fun flushAsync(): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder/reset)
@@ -53,6 +58,10 @@ external class VideoEncoder(
     fun reset()
 
     companion object {
-        fun isConfigSupported(config: VideoEncoderConfig): Promise<VideoEncoderSupport>
+        @JsAsync
+        suspend fun isConfigSupported(config: VideoEncoderConfig): VideoEncoderSupport
+
+        @JsName("isConfigSupported")
+        fun isConfigSupportedAsync(config: VideoEncoderConfig): Promise<VideoEncoderSupport>
     }
 }

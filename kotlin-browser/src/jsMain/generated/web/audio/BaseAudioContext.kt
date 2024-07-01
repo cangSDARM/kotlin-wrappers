@@ -6,6 +6,7 @@ import js.array.ReadonlyArray
 import js.buffer.ArrayBuffer
 import js.promise.Promise
 import js.typedarrays.Float32Array
+import seskar.js.JsAsync
 import web.events.Event
 import web.events.EventHandler
 import web.events.EventTarget
@@ -40,7 +41,7 @@ sealed external class BaseAudioContext :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/BaseAudioContext/statechange_event)
      */
-    var onstatechange: EventHandler<Event, BaseAudioContext>?
+    var onstatechange: EventHandler<Event, BaseAudioContext, BaseAudioContext>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/BaseAudioContext/sampleRate)
@@ -157,7 +158,15 @@ sealed external class BaseAudioContext :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/BaseAudioContext/decodeAudioData)
      */
-    fun decodeAudioData(
+    @JsAsync
+    suspend fun decodeAudioData(
+        audioData: ArrayBuffer,
+        successCallback: DecodeSuccessCallback? = definedExternally,
+        errorCallback: DecodeErrorCallback? = definedExternally,
+    ): AudioBuffer
+
+    @JsName("decodeAudioData")
+    fun decodeAudioDataAsync(
         audioData: ArrayBuffer,
         successCallback: DecodeSuccessCallback? = definedExternally,
         errorCallback: DecodeErrorCallback? = definedExternally,

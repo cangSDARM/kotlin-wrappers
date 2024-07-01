@@ -6,6 +6,7 @@ import js.array.ReadonlyArray
 import js.core.Void
 import js.promise.Promise
 import js.promise.PromiseLike
+import seskar.js.JsAsync
 import web.events.EventHandler
 import web.events.EventTarget
 
@@ -15,7 +16,7 @@ import web.events.EventTarget
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest)
  */
-external class PaymentRequest(
+open external class PaymentRequest(
     methodData: ReadonlyArray<PaymentMethodData>,
     details: PaymentDetailsInit,
 ) : EventTarget {
@@ -27,21 +28,38 @@ external class PaymentRequest(
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/paymentmethodchange_event)
      */
-    var onpaymentmethodchange: EventHandler<PaymentMethodChangeEvent, PaymentRequest>?
+    var onpaymentmethodchange: EventHandler<PaymentMethodChangeEvent, PaymentRequest, PaymentRequest>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/abort)
      */
-    fun abort(): Promise<Void>
+    @JsAsync
+    suspend fun abort()
+
+    @JsName("abort")
+    fun abortAsync(): Promise<Void>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/canMakePayment)
      */
-    fun canMakePayment(): Promise<Boolean>
+    @JsAsync
+    suspend fun canMakePayment(): Boolean
+
+    @JsName("canMakePayment")
+    fun canMakePaymentAsync(): Promise<Boolean>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/show)
      */
-    fun show(detailsPromise: PaymentDetailsUpdate = definedExternally): Promise<PaymentResponse>
-    fun show(detailsPromise: PromiseLike<PaymentDetailsUpdate>): Promise<PaymentResponse>
+    @JsAsync
+    suspend fun show(detailsPromise: PaymentDetailsUpdate = definedExternally): PaymentResponse
+
+    @JsName("show")
+    fun showAsync(detailsPromise: PaymentDetailsUpdate = definedExternally): Promise<PaymentResponse>
+
+    @JsAsync
+    suspend fun show(detailsPromise: PromiseLike<PaymentDetailsUpdate>): PaymentResponse
+
+    @JsName("show")
+    fun showAsync(detailsPromise: PromiseLike<PaymentDetailsUpdate>): Promise<PaymentResponse>
 }

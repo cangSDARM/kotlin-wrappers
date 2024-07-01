@@ -3,9 +3,7 @@
 package web.gpu
 
 import seskar.js.JsValue
-import seskar.js.JsVirtual
 
-@JsVirtual
 sealed external interface GPUVertexFormat {
     companion object {
         @JsValue("uint8x2")
@@ -97,5 +95,8 @@ sealed external interface GPUVertexFormat {
 
         @JsValue("sint32x4")
         val sint32x4: GPUVertexFormat
+
+        @JsValue("unorm10-10-10-2")
+        val unorm1010102: GPUVertexFormat
     }
 }

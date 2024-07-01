@@ -2,6 +2,9 @@
 
 package actions.cache
 
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
 sealed external interface UploadOptions {
     /**
      * Number of parallel cache upload

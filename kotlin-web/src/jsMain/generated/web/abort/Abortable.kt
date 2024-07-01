@@ -2,6 +2,9 @@
 
 package web.abort
 
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
 @JsExternalInheritorsOnly
 external interface Abortable {
     /**

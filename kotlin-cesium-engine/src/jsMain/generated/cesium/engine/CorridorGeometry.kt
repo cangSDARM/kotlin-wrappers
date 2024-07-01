@@ -2,14 +2,10 @@
 
 @file:JsModule("@cesium/engine")
 
-@file:Suppress(
-    "NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE",
-)
-
 package cesium.engine
 
 import js.array.ReadonlyArray
-import js.objects.jso
+import kotlinx.js.JsPlainObject
 
 /**
  * A description of a corridor. Corridor geometry can be rendered with both [Primitive] and [GroundPrimitive].
@@ -22,12 +18,14 @@ import js.objects.jso
  * ```
  * @see <a href="https://cesium.com/docs/cesiumjs-ref-doc/CorridorGeometry.html">Online Documentation</a>
  */
-external class CorridorGeometry(options: ConstructorOptions) {
+external class CorridorGeometry(
+    options: ConstructorOptions,
+) {
     /**
      * @property [positions] An array of positions that define the center of the corridor.
      * @property [width] The distance between the edges of the corridor in meters.
      * @property [ellipsoid] The ellipsoid to be used as a reference.
-     *   Default value - [Ellipsoid.WGS84]
+     *   Default value - [Ellipsoid.default]
      * @property [granularity] The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer.
      *   Default value - [Math.RADIANS_PER_DEGREE]
      * @property [height] The distance in meters between the ellipsoid surface and the positions.
@@ -38,7 +36,8 @@ external class CorridorGeometry(options: ConstructorOptions) {
      * @property [cornerType] Determines the style of the corners.
      *   Default value - [CornerType.ROUNDED]
      */
-    interface ConstructorOptions {
+    @JsPlainObject
+    sealed interface ConstructorOptions {
         var positions: ReadonlyArray<Cartesian3>
         var width: Double
         var ellipsoid: Ellipsoid?
@@ -101,11 +100,12 @@ external class CorridorGeometry(options: ConstructorOptions) {
          * @property [positions] An array of positions that define the center of the corridor.
          * @property [width] The distance between the edges of the corridor in meters.
          * @property [ellipsoid] The ellipsoid to be used as a reference.
-         *   Default value - [Ellipsoid.WGS84]
+         *   Default value - [Ellipsoid.default]
          * @property [cornerType] Determines the style of the corners.
          *   Default value - [CornerType.ROUNDED]
          */
-        interface ComputeRectangleOptions {
+        @JsPlainObject
+        sealed interface ComputeRectangleOptions {
             var positions: ReadonlyArray<Cartesian3>
             var width: Double
             var ellipsoid: Ellipsoid?
@@ -121,8 +121,3 @@ external class CorridorGeometry(options: ConstructorOptions) {
         fun createGeometry(corridorGeometry: CorridorGeometry): Geometry?
     }
 }
-
-inline fun CorridorGeometry(
-    block: CorridorGeometry.ConstructorOptions.() -> Unit,
-): CorridorGeometry =
-    CorridorGeometry(options = jso(block))

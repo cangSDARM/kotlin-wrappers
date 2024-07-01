@@ -3,6 +3,7 @@
 package web.midi
 
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.events.EventHandler
 import web.events.EventTarget
 
@@ -36,7 +37,7 @@ sealed external class MIDIPort :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIPort/statechange_event)
      */
-    var onstatechange: EventHandler<MIDIConnectionEvent, MIDIPort>?
+    var onstatechange: EventHandler<MIDIConnectionEvent, MIDIPort, MIDIPort>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIPort/state)
@@ -56,10 +57,18 @@ sealed external class MIDIPort :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIPort/close)
      */
-    fun close(): Promise<MIDIPort>
+    @JsAsync
+    suspend fun close(): MIDIPort
+
+    @JsName("close")
+    fun closeAsync(): Promise<MIDIPort>
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIPort/open)
      */
-    fun open(): Promise<MIDIPort>
+    @JsAsync
+    suspend fun open(): MIDIPort
+
+    @JsName("open")
+    fun openAsync(): Promise<MIDIPort>
 }

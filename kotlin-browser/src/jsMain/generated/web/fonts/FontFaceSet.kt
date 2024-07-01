@@ -9,6 +9,7 @@ package web.fonts
 import js.array.ReadonlyArray
 import js.collections.MutableSetLike
 import js.promise.Promise
+import seskar.js.JsAsync
 import web.events.EventHandler
 import web.events.EventTarget
 
@@ -21,17 +22,17 @@ sealed external interface FontFaceSet :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFaceSet/loading_event)
      */
-    var onloading: EventHandler<FontFaceSetLoadEvent, FontFaceSet>?
+    var onloading: EventHandler<FontFaceSetLoadEvent, FontFaceSet, FontFaceSet>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFaceSet/loadingdone_event)
      */
-    var onloadingdone: EventHandler<FontFaceSetLoadEvent, FontFaceSet>?
+    var onloadingdone: EventHandler<FontFaceSetLoadEvent, FontFaceSet, FontFaceSet>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFaceSet/loadingerror_event)
      */
-    var onloadingerror: EventHandler<FontFaceSetLoadEvent, FontFaceSet>?
+    var onloadingerror: EventHandler<FontFaceSetLoadEvent, FontFaceSet, FontFaceSet>?
 
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFaceSet/ready)
@@ -54,7 +55,14 @@ sealed external interface FontFaceSet :
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFaceSet/load)
      */
-    fun load(
+    @JsAsync
+    suspend fun load(
+        font: String,
+        text: String = definedExternally,
+    ): ReadonlyArray<FontFace>
+
+    @JsName("load")
+    fun loadAsync(
         font: String,
         text: String = definedExternally,
     ): Promise<ReadonlyArray<FontFace>>
